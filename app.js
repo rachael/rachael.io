@@ -25,6 +25,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 
+// Resume download
+app.get('/resume', function(req, res, next) {
+  res.download(__dirname + '/public/resume-2016-06-07.pdf', 'resume-rachael-passov.pdf');
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
