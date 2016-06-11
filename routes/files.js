@@ -1,14 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
-// Resume download
+// Resume
 router.get('/resume', function(req, res, next) {
-  res.download(__dirname + '/../public/files/resume-2016-06-07.pdf', 'resume-rachael-passov.pdf');
+  res.redirect('/files/resume.pdf');
 });
 
-// vCard download
+// vCard
 router.get('/vcard', function(req, res, next) {
-  res.download(__dirname + '/../public/files/Rachael Passov.vcf');
+  res.redirect('/files/Rachael Passov.vcf');
 });
 
 module.exports = router;
