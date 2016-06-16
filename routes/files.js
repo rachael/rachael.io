@@ -3,17 +3,12 @@ var router = express.Router();
 
 // Resume
 router.get('/resume', function(req, res, next) {
-  res.redirect('/files/resume.pdf');
+  res.redirect('/resume.pdf');
 });
 
 // vCard
 router.get('/vcard', function(req, res, next) {
-  res.redirect('/files/Rachael Passov.vcf');
-});
-
-// Keybase
-router.get('/keybase.txt', function(req, res, next) {
-  res.redirect('/files/keybase.txt');
+  res.redirect('/Rachael Passov.vcf');
 });
 
 module.exports = router;
