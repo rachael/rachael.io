@@ -122,21 +122,24 @@ pre {
 }
 
 .error-theme .content {
-    padding: 2rem 3rem;
     border: 1px solid #c72500;
 }
 
-.error-theme .content:hover {
+.dev-theme .content {
+    padding: 2rem 3rem;
+}
+
+.dev-theme .content:hover {
     opacity: 1;
 }
 
 @media(min-width: 50rem) {
-    .error-theme .main-container {
+    .dev-theme .main-container {
         width: 90vw;
         height: 80vh;
     }
 
-    .error-theme .content:hover {
+    .dev-theme .content:hover {
         transform: none;
     }
 }

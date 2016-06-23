@@ -45,7 +45,7 @@ if (app.get('env') === 'development') {
     res.render('error.pug', {
       message: err.message,
       error: err,
-      theme: 'error-theme'
+      theme: 'error-theme dev-theme'
     });
   });
 }
