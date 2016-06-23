@@ -1,17 +1,29 @@
 {
   "name": "rachael.io",
-  "version": "0.0.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "My personal website. - Rachael Passov <rae@rachael.io>",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./bin/www"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/rachael/rachael.io.git"
+  },
+  "author": "Rachael Passov <github@rachael.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rachael/rachael.io/issues"
+  },
+  "homepage": "https://rachael.io",
   "dependencies": {
-    "body-parser": "~1.13.2",
-    "cookie-parser": "~1.3.5",
-    "debug": "~2.2.0",
-    "express": "~4.13.1",
-    "jade": "~1.11.0",
-    "morgan": "~1.6.1",
-    "serve-favicon": "~2.3.0"
+    "body-parser": "^1.15.2",
+    "compression": "^1.6.2",
+    "consolidate": "^0.14.1",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.4.2",
+    "express": "^4.14.0",
+    "morgan": "^1.7.0",
+    "pug": "^2.0.0-beta3"
   }
 }
