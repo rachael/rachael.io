@@ -1,3 +1,3 @@
-[submodule "submodules/angular-dynamic-html"]
-	path = submodules/angular-dynamic-html
-	url = https://github.com/rachael/angular-dynamic-html.git
+[submodule "submodules/dynamic-bind-html"]
+	path = submodules/dynamic-bind-html
+	url = https://github.com/rachael/dynamic-bind-html.git
