@@ -1,14 +1,14 @@
 var express = require('express');
-var app = express();
+var router = express.Router();
 
 // Resume
-app.get('/resume', function(req, res, next) {
+router.get('/resume', function(req, res, next) {
   res.redirect('/resume.pdf');
 });
 
 // vCard
-app.get('/vcard', function(req, res, next) {
+router.get('/vcard', function(req, res, next) {
   res.redirect('/Rachael Passov.vcf');
 });
 
-module.exports = app;
+module.exports = router;
