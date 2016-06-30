@@ -1,5 +1,5 @@
 --require should
---reporter nyan
+--reporter mocha-circleci-reporter
 --ui bdd
 --colors
 --check-leaks

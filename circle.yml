@@ -1,13 +1,13 @@
+machine:
+  environment:
+    MOCHA_FILE: "$CIRCLE_TEST_REPORTS/test-results.xml"
+
 dependencies:
   post:
     - >
       if [ -n "${UPDATE_COMMON_FILES}" ]; then
         ./bin/update_common_files;
       fi
-
-test:
-  pre:
-    - npm i -D
 
 deployment:
   common-files:
