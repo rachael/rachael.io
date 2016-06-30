@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "My personal website. - Rachael Passov <rae@rachael.io>",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./node_modules/rachael-io-common/bin/www"
+    "start": "node ./node_modules/rachael-io-common/bin/www",
+    "debug": "DEBUG=express:* npm start",
+    "test": "mocha test",
+    "test-debug": "DEBUG=express:* npm test"
   },
   "repository": {
     "type": "git",
@@ -26,5 +28,10 @@
     "morgan": "^1.7.0",
     "pug": "^2.0.0-beta3",
     "rachael-io-common": "^1.0.3"
+  },
+  "devDependencies": {
+    "mocha": "^2.5.3",
+    "should": "^9.0.2",
+    "supertest": "^1.2.0"
   }
 }
