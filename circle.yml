@@ -5,6 +5,10 @@ dependencies:
         ./bin/update_common_files;
       fi
 
+test:
+  pre:
+    - npm i -D
+
 deployment:
   common-files:
     branch: master
