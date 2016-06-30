@@ -1,0 +1,4 @@
+#!/bin/bash
+
+git remote add dokku dokku@rachael.io:rachael.io
+git push dokku master

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+git add package.json
+git commit -m "Updated package.json / rachael-io-common (automated build)"
