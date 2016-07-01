@@ -9,7 +9,9 @@
   ],
   "scripts": {
     "dokku": {
-      "predeploy": "npm test"
+      "predeploy": "npm update rachael-io-common \
+                    && npm install --only=dev \
+                    && npm test"
     }
   },
   "repository": "https://github.com/rachael/rachael.io",
