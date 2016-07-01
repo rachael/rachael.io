@@ -3,25 +3,11 @@ machine:
     MOCHA_FILE: "$CIRCLE_TEST_REPORTS/test-results.xml"
 
 dependencies:
-  post:
-    - >
-      if [ -n "${UPDATE_COMMON_FILES}" ]; then
-        ./bin/update_common_files;
-      fi
+  pre:
+    - rm -rf node_modules/rachael-io-common
 
 deployment:
-  common-files:
-    branch: master
-    commands:
-      - >
-        if [ -n "${UPDATE_COMMON_FILES}" ]; then
-          ./bin/commit_common_files;
-          ./bin/deploy_master;
-        fi
   dokku:
     branch: master
     commands:
-      - >
-        if [ ! -n "${UPDATE_COMMON_FILES}" ]; then
-          ./bin/deploy_dokku;
-        fi
+      - ./bin/deploy_dokku
