@@ -2,6 +2,11 @@
   "name": "rachael.io",
   "version": "1.0.0",
   "description": "My personal website. - Rachael Passov <rae@rachael.io>",
+  "keywords": [
+    "nodejs",
+    "express",
+    "dokku"
+  ],
   "scripts": {
     "start": "node ./node_modules/rachael-io-common/bin/www",
     "debug": "DEBUG=express:* npm start",
@@ -28,7 +33,7 @@
     "express": "^4.14.0",
     "morgan": "^1.7.0",
     "pug": "^2.0.0-beta3",
-    "rachael-io-common": "^1.0.3"
+    "rachael-io-common": ">=1.0.0"
   },
   "devDependencies": {
     "mocha": "^2.5.3",

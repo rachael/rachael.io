@@ -1,1 +1,17 @@
-{}
+{
+  "name": "rachael.io",
+  "version": "1.0.0",
+  "description": "My personal website. - Rachael Passov <rae@rachael.io>",
+  "keywords": [
+    "nodejs",
+    "express",
+    "dokku"
+  ],
+  "scripts": {
+    "dokku": {
+      "predeploy": "npm test"
+    }
+  },
+  "repository": "https://github.com/rachael/rachael.io",
+  "license": "MIT"
+}
