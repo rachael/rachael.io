@@ -1,6 +1,6 @@
 {
   "name": "rachael.io",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "My personal website. - Rachael Passov <rae@rachael.io>",
   "keywords": [
     "nodejs",
@@ -9,7 +9,11 @@
   ],
   "scripts": {
     "dokku": {
-      "predeploy": "npm test"
+      "predeploy": "rm -r /app/node_modules/rachael-io-common ;
+                    npm install ;
+                    npm install --only=dev
+                    && npm test
+                    && npm prune"
     }
   },
   "repository": "https://github.com/rachael/rachael.io",
