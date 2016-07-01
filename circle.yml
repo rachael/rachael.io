@@ -2,6 +2,10 @@ machine:
   environment:
     MOCHA_FILE: "$CIRCLE_TEST_REPORTS/test-results.xml"
 
+dependencies:
+  pre:
+    - rm -rf node_modules/rachael-io-common
+
 deployment:
   dokku:
     branch: master
