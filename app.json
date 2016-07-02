@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "dokku": {
-      "predeploy": "npm update"
+      "predeploy": "rm -r /app/node_modules/npm; npm install; /app/node_modules/.bin/npm update || (rv=$?; cat /app/npm-debug.log; exit $rv)"
     }
   },
   "repository": "https://github.com/rachael/rachael.io",
