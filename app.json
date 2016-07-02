@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "dokku": {
-      "predeploy": "touch /app/package.json"
+      "predeploy": "npm update"
     }
   },
   "repository": "https://github.com/rachael/rachael.io",
