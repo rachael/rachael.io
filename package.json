@@ -32,6 +32,7 @@
     "ejs": "^2.4.2",
     "express": "^4.14.0",
     "morgan": "^1.7.0",
+    "npm": "rachael/npm",
     "pug": "^2.0.0-beta3",
     "rachael-io-common": "rachael/rachael-io-common"
   },
