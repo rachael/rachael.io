@@ -9,11 +9,7 @@
   ],
   "scripts": {
     "dokku": {
-      "predeploy": "rm -r /app/node_modules/rachael-io-common ;
-                    npm install ;
-                    npm install --only=dev
-                    && npm test
-                    && npm prune"
+      "predeploy": "rm -r /app/node_modules/rachael-io-common; npm i; npm i --only=dev; npm test; npm prune"
     }
   },
   "repository": "https://github.com/rachael/rachael.io",
