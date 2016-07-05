@@ -5,8 +5,8 @@ var path = require('path');
 
 require('rachael-io-common/common')(app);
 
-var routes = require('./routes/index');
-var files = require('./routes/files');
+var routes = require('../routes/index');
+var files = require('../routes/files');
 
 app.use(express.static('public'));
 app.use('/', routes);
