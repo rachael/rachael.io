@@ -99,6 +99,7 @@ var jsCompilePipeline = () => combine(
   sourcemaps.init(),
   babel({ presets: ['es2015'] }),
   uglify(),
+  rename({ extname: '.min.js' }),
   sourcemaps.write()
 );
 
