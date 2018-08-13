@@ -2,6 +2,9 @@
   "name": "rachael.io",
   "version": "1.1.0",
   "description": "My personal website. - Rachael Passov <rae@rachael.io>",
+  "engines": {
+    "node": "6.9.5"
+  },
   "keywords": [
     "nodejs",
     "express",
