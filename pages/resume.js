@@ -1,4 +1,4 @@
-import StaticFileRedirect from 'components/StaticFileRedirect';
+import { StaticFileRedirect } from 'components/page';
 
 function Resume() {
   return StaticFileRedirect({
