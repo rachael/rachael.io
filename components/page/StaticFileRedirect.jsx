@@ -1,6 +1,13 @@
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 
+/*
+  A URL prettifier component that can be used to redirect from a next.js page
+  with a pretty URL to a static file with an uglier name instantly on render.
+
+  Includes the ability to provide a backup component to render if the static
+  file will not render on its own.
+*/
 function StaticFileRedirect({
   staticFileUrl,
   renderComponent = null

@@ -1,19 +1,13 @@
-import Head from 'next/head'
-import styles from 'styles/Home.module.scss'
+import { Profile, ProfileImg } from 'components/home'
+import { Layout } from 'components/page'
+
+import styles from 'styles/page/Layout.module.scss'
 
 export default function Home() {
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>rachael.io</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-      </main>
-
-      <footer className={styles.footer}>
-      </footer>
-    </div>
+    <Layout>
+      <ProfileImg />
+      <Profile />
+    </Layout>
   )
 }
