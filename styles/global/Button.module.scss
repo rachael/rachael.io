@@ -1,0 +1,39 @@
+@import 'styles/variables';
+
+.button {
+  position: relative;
+  display: inline-block;
+  margin: 0 1rem 1rem 0;
+  padding: 0.5em 1em;
+  background: none;
+  border: 1px solid $text-color;
+  font-weight: 300;
+  text-transform: uppercase;
+  outline: none;
+  cursor: pointer;
+  user-select: none;
+  transition: color 300ms;
+
+  &:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 0%;
+    top: 50%;
+    left: 0;
+    z-index: -1;
+    background: $button-hover-background;
+    opacity: 0;
+    transform: translateY(-50%);
+    transition: height 300ms, opacity 300ms;
+  }
+
+  &:hover {
+    color: $button-hover-color;
+
+    &:after {
+      height: calc(100% + 1px);
+      opacity: 1;
+    }
+  }
+}

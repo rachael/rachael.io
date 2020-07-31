@@ -5,6 +5,10 @@ import { useRouter } from 'next/router';
   A URL prettifier component that can be used to redirect from a next.js page
   with a pretty URL to a static file with an uglier name instantly on render.
 
+  Does not prevent redirect loops on back, so for internal Links recommend
+  linking directly to the static file. This is more for visiting the URL
+  directly from an external link.
+
   Includes the ability to provide a backup component to render if the static
   file will not render on its own.
 */
@@ -15,7 +19,7 @@ function StaticFileRedirect({
   const router = useRouter()
   // Make sure we're in the browser
   if (typeof window !== 'undefined') {
-    router.push(staticFileUrl);
+    router.replace(staticFileUrl);
     return renderComponent;
   }
   return renderComponent;

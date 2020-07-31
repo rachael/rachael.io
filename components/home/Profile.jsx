@@ -1,12 +1,18 @@
+import { Button } from 'components/global'
+
 import styles from 'styles/home/Profile.module.scss'
 
-function ProfileImg() {
+function Profile() {
   return (
     <div className={styles.profile}>
       <h1 className={styles['profile-name']}>Rachael Passov</h1>
       <h2 className={styles['profile-description']}>UX Designer / Frontend Engineer</h2>
+      <div>
+        <Button href='/resume.pdf'>Resume</Button>
+        <Button href='https://github.rachael.io'>Github</Button>
+      </div>
     </div>
   )
 }
 
-export default ProfileImg
+export default Profile
