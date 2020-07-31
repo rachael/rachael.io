@@ -7,15 +7,18 @@ function Layout({
    ...props
   }) {
   return (
-    <div className={styles.container}>
-      <Header title={title} />
+    <>
+      <div className={styles['background-image']} />
+      <div className={styles.container}>
+        <Header title={title} />
 
-      <main className={styles.main}>
-        {props.children}
-      </main>
+        <main className={styles.main}>
+          {props.children}
+        </main>
 
-      <Footer footerText={footerText} />
-    </div>
+        <Footer footerText={footerText} />
+      </div>
+    </>
   )
 }
 
