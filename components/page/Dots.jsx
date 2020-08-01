@@ -1,3 +1,5 @@
+import { CSSTransition } from 'react-transition-group';
+
 import styles from 'styles/page/Dots.module.scss'
 
 // minimum and maximum number of dots on each side
@@ -29,6 +31,7 @@ function getRandomInt(min, max) {
 function generateDot(dotType, seed) {
   const dotWidth = getRandomInt(1, numDotWidthSteps);
   return <div
+    key={`${dotType} ${seed}`}
     className={`
       ${styles.dot}
       ${styles[dotType]}
@@ -73,9 +76,19 @@ function generateDots() {
  */
 function Dots() {
   return (
-    <div className={styles.dots}>
-      {generateDots()}
-    </div>
+    <CSSTransition
+      classNames={{
+        appear: styles['dots-appear'],
+        appearActive: styles['dots-appear-active'],
+        appearDone: styles['dots-appear-done']
+      }}
+      in
+      appear
+    >
+      <div className={styles.dots}>
+        {generateDots()}
+      </div>
+    </CSSTransition>
   )
 }
 

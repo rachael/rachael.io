@@ -15,6 +15,11 @@
   transition: opacity 400ms;
 }
 
+// no transition delay on page load, it looks like loading stutter
+.dots-appear-active .dot {
+  transition-delay: 0ms !important;
+}
+
 @each $i, $value in $dot-colors {
   .dot-color-#{$i} {
     background: rgba($value, 0.3);
@@ -39,7 +44,8 @@
 }
 
 @media (min-width: 800px) {
-  .dot {
+  .dots-appear-active .dot,
+  .dots-appear-done .dot {
     visibility: visible;
     opacity: 1;
   }
