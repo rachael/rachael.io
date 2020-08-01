@@ -1,4 +1,4 @@
-import { Footer, Header } from '.'
+import { Dots, Footer, Header } from '.'
 import styles from 'styles/page/Layout.module.scss'
 
 function Layout({
@@ -18,6 +18,7 @@ function Layout({
 
         <Footer footerText={footerText} />
       </div>
+      <Dots />
     </>
   )
 }
