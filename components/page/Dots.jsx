@@ -73,6 +73,11 @@ function generateDots() {
 /**
  * Displays randomly generated decorative dots along the left and right edge of
  * the main container.
+ *
+ * Dots are a random size and position, and appear with a randomized transition
+ * delay on resize from small screens.
+ *
+ * Dots do not appear on small screens.
  */
 function Dots() {
   return (
@@ -84,6 +89,7 @@ function Dots() {
       }}
       in
       appear
+      timeout={400}
     >
       <div className={styles.dots}>
         {generateDots()}

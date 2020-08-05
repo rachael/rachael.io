@@ -1,5 +1,20 @@
 @import 'styles/variables';
 
+/**
+ * Dots module for styling the decorative dots along the left and right edge of
+ * the screen.
+ *
+ * Dots do not appear on small screens and begin to increase in size on large
+ * screens.
+ */
+
+// empirically determined screen sizes for dot visibility and increasing width
+$dots-screen-appear: 800px;
+$dots-screen-lg: 1000px;
+$dots-screen-xl: 1300px;
+$dots-lg-size-increase: 6vw;
+$dots-xl-size-increase: 10vw;
+
 .dots {
   height: 100vh;
 }
@@ -12,7 +27,11 @@
   opacity: 0;
   filter: blur(1px);
   backdrop-filter: blur(1px);
-  transition: opacity 400ms;
+  transition: opacity 400ms,
+              width 400ms,
+              height 400ms,
+              left 400ms,
+              right 400ms;
 }
 
 // no transition delay on page load, it looks like loading stutter
@@ -40,13 +59,47 @@
     &.dot-right {
       right: calc(17.5% - #{$i/2}rem);
     }
+
+    // on large screens (>1000px) start to grow dots as a function of vw
+    @media (min-width: $dots-screen-lg) {
+      width: calc(#{$i}rem + #{$dots-lg-size-increase});
+      height: calc(#{$i}rem + #{$dots-lg-size-increase});
+
+      &.dot-left {
+        left: calc(17.5% - #{$i/2}rem - #{$dots-lg-size-increase/2});
+      }
+
+      &.dot-right {
+        right: calc(17.5% - #{$i/2}rem - #{$dots-lg-size-increase/2});
+      }
+    }
+
+    @media (min-width: $dots-screen-xl) {
+      width: calc(#{$i}rem + #{$dots-xl-size-increase});
+      height: calc(#{$i}rem + #{$dots-xl-size-increase});
+
+      &.dot-left {
+        left: calc(17.5% - #{$i/2}rem - #{$dots-xl-size-increase/2});
+      }
+
+      &.dot-right {
+        right: calc(17.5% - #{$i/2}rem - #{$dots-xl-size-increase/2});
+      }
+    }
   }
 }
 
-@media (min-width: 800px) {
+@media (min-width: $dots-screen-appear) {
   .dots-appear-active .dot,
   .dots-appear-done .dot {
     visibility: visible;
     opacity: 1;
+  }
+}
+
+// no transition delay for large screens, dots are not appearing/disappearing
+@media (min-width: $dots-screen-lg) {
+  .dot {
+    transition-delay: 0ms !important;
   }
 }
