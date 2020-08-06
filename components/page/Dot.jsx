@@ -18,7 +18,7 @@ class Dot extends Component {
     this.width = 0;
     // extra width, in rem, added by transparent "halo" so dotRun animation
     // begins when mouse is still outside Dot.
-    this.haloWidth = 4;
+    this.haloWidth = 6;
 
     this.ref = React.createRef();
 
@@ -56,11 +56,31 @@ class Dot extends Component {
       // random position from 0 to 100vh
       dotPositionY: getRandomInt(0, 100),
     }, () => {
-      this.baseOffsetY = this.ref.current.offsetTop + this.ref.current.offsetHeight/2;
-      this.baseOffsetX = this.ref.current.offsetLeft + this.ref.current.offsetWidth/2 + (this.state.baseTransformX * 16);
-      // width: offset width + halo width + (1px blur radius * 2)
-      this.width = this.ref.current.offsetWidth + (this.haloWidth * 16) + 2;
+      this.setWidthAndOffset(true);
     });
+  }
+
+  /**
+   * Set internal values to track offset of the centerpoint of the Dot circle.
+   * Used as the anchor point when calculating run vector in dotRun().
+   */
+  setOffset() {
+    this.baseOffsetY = this.ref.current.offsetTop + this.ref.current.offsetHeight/2;
+    this.baseOffsetX = this.ref.current.offsetLeft + this.ref.current.offsetWidth/2 + (this.state.baseTransformX * 16);
+  }
+
+  /**
+   * Set internal values to track element width and centerpoint offset.
+   * Calculate offset if initial render or if the width has changed due to a
+   * resize. This prevents Dots from "jumping" around when moused over after a
+   * resize.
+   * @param {bool} initialRender true if initial render, forces calculating offset
+   */
+  setWidthAndOffset(initialRender) {
+    let oldWidth = this.width;
+    // width: offset width + halo width + (1px blur radius * 2)
+    this.width = this.ref.current.offsetWidth + (this.haloWidth * 16) + 2;
+    if(initialRender || oldWidth !== this.width) this.setOffset();
   }
 
   /**
@@ -69,8 +89,12 @@ class Dot extends Component {
    * @param  {event} e A mousemove event
    */
   dotRun = (e) => {
+    this.setWidthAndOffset();
+
     let vectorX = this.baseOffsetX - e.clientX;
     let vectorY = this.baseOffsetY - e.clientY;
+    // return if vectorX === vectorY === 0 to avoid centerpoint "jump"
+    if(vectorX === 0 && vectorY === 0) return;
     // normalize vector
     [vectorX, vectorY] = normalizeVector(vectorX, vectorY);
     // scale vector as a function of mouse distance from dot edge:
@@ -80,8 +104,10 @@ class Dot extends Component {
     const force = distance * 0.2;
     vectorX *= force;
     vectorY *= force;
+
     // only animate if vector changes
     if (vectorX === this.state.runningX && vectorY === this.state.runningY) return;
+
     this.setState({
       runningX: vectorX,
       runningY: vectorY,
