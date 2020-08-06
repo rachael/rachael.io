@@ -15,6 +15,10 @@ $dots-screen-xl: 1300px;
 $dots-lg-size-increase: 6vw;
 $dots-xl-size-increase: 10vw;
 
+// "halo" that controls where the dot begins running away from the mouse on
+// large screens
+$dot-halo-width: 4rem;
+
 .dots {
   height: 100vh;
 }
@@ -32,6 +36,17 @@ $dots-xl-size-increase: 10vw;
               height 400ms,
               left 400ms,
               right 400ms;
+
+  &:after {
+    content: "";
+    position: absolute;
+    width: calc(100% + #{$dot-halo-width});
+    height: calc(100% + #{$dot-halo-width});
+    top: -#{$dot-halo-width/2};
+    left: -#{$dot-halo-width/2};
+    border-radius: 50%;
+    background: transparent;
+  }
 }
 
 // no transition delay on page load, it looks like loading stutter

@@ -16,6 +16,9 @@ class Dot extends Component {
     this.baseOffsetX = 0;
     // circle width, set in componentDidMount
     this.width = 0;
+    // extra width, in rem, added by transparent "halo" so dotRun animation
+    // begins when mouse is still outside Dot.
+    this.haloWidth = 4;
 
     this.ref = React.createRef();
 
@@ -55,7 +58,8 @@ class Dot extends Component {
     }, () => {
       this.baseOffsetY = this.ref.current.offsetTop + this.ref.current.offsetHeight/2;
       this.baseOffsetX = this.ref.current.offsetLeft + this.ref.current.offsetWidth/2 + (this.state.baseTransformX * 16);
-      this.width = this.ref.current.offsetWidth;
+      // width: offset width + halo width + (1px blur radius * 2)
+      this.width = this.ref.current.offsetWidth + (this.haloWidth * 16) + 2;
     });
   }
 
@@ -73,7 +77,7 @@ class Dot extends Component {
     // mouse closer to dot center => dot "runs" further away
     // mouse further from dot center => dot "runs" away less
     const distance = distanceFromCircle(e.clientX, e.clientY, this.baseOffsetX, this.baseOffsetY, this.width/2);
-    const force = distance * 0.05;
+    const force = distance * 0.2;
     vectorX *= force;
     vectorY *= force;
     // only animate if vector changes
