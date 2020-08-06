@@ -89,6 +89,16 @@ $dots-xl-size-increase: 10vw;
   }
 }
 
+/**
+ *  Generate transform for 5 possible dot position x axis variations to slightly
+ *  vary the position of each dot.
+ */
+@for $i from -2 through 2 {
+  .dot-position-#{i + 2} {
+    transform: translateX(#{$i}rem);
+  }
+}
+
 @media (min-width: $dots-screen-appear) {
   .dots-appear-active .dot,
   .dots-appear-done .dot {
