@@ -32,7 +32,7 @@
 }
 
 .main {
-  padding: 5rem 0;
+  padding: 1rem 0;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -65,12 +65,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 70%;
+
+  a {
+    margin: 0 1em;
+  }
 }
 
 // background-image 100px opacity transition buffer
 @media (min-width: 700px) {
   .background-image {
-    background: url('/profile_lg.png');
+    background: url('/profile_bg.png');
     background-size: cover;
     filter: blur(8px);
   }
@@ -91,3 +96,15 @@
     background-color: rgba($background-color, 0.9);
   }
 }
+
+// @keyframes backgroundAnimation {
+// 	from { transform: translateY(-300vh); }
+// 	to { transform: translateY(0); }
+// }
+//
+// @media (min-width: 1400px) {
+//   .background-image {
+//     height: 400vh;
+//     animation: backgroundAnimation 300s linear infinite;
+//   }
+// }

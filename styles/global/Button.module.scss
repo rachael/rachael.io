@@ -1,5 +1,7 @@
 @import 'styles/variables';
 
+$transition-duration: 600ms;
+
 .button {
   position: relative;
   display: inline-block;
@@ -12,7 +14,7 @@
   outline: none;
   cursor: pointer;
   user-select: none;
-  transition: color 300ms;
+  transition: color $transition-duration;
 
   &:after {
     content: '';
@@ -25,7 +27,7 @@
     background: $button-hover-background;
     opacity: 0;
     transform: translateY(-50%);
-    transition: height 300ms, opacity 300ms;
+    transition: height $transition-duration, opacity $transition-duration;
   }
 
   &:hover {

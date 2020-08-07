@@ -5,7 +5,7 @@ import styles from 'styles/page/Layout.module.scss'
 
 function Layout({
   title,
-  footerText,
+  footer,
    ...props
   }) {
   return (
@@ -35,12 +35,14 @@ function Layout({
                 appear
                 timeout={400}
               >
-                <div className={styles.content}>
-                  {props.children}
-                </div>
+                <>
+                  <div className={styles.content}>
+                    {props.children}
+                  </div>
+                  <Footer>{footer}</Footer>
+                </>
               </CSSTransition>
             </main>
-            <Footer footerText={footerText} />
           </div>
           <Dots />
         </div>

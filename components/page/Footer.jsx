@@ -1,9 +1,9 @@
 import styles from 'styles/page/Layout.module.scss'
 
-function Footer({ text }) {
+function Footer({ ...props }) {
   return (
     <footer className={styles.footer}>
-      {text}
+      {props.children}
     </footer>
   )
 }
