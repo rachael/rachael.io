@@ -42,6 +42,7 @@
   background-color: $background-color;
   overflow-y: auto;
   z-index: 0;
+  box-shadow: 0 0 3px 1px $background-color;
   transition: background-color 400ms;
 }
 
