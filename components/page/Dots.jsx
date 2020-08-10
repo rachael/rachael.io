@@ -122,7 +122,7 @@ class Dots extends Component {
       // Does not work because events on overlapped dots are still blocked:
       // dot.dispatchEvent(event);
       for(let dotRef of this.dotRefs) {
-        if(dotRef.current.ref.current === dot) {
+        if(dotRef.current && dotRef.current.ref.current === dot) {
           dotRef.current.dotRun(event, dot);
         }
       }

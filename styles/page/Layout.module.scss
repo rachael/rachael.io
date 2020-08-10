@@ -24,15 +24,23 @@
 // Background image: positioned slightly larger than screen to avoid blur
 // vignette effect.
 // Do not load background image on small devices.
+@keyframes backgroundAnimation {
+	from { transform: translateY(-150vh); }
+	to { transform: translateY(0); }
+}
+
 .background-image {
   position: absolute;
-  height: 102vh;
+  height: 252vh;
   width: 102vw;
   top: -1vh;
   left: -1vw;
   z-index: 1;
   opacity: 0;
   transition: opacity 400ms;
+  will-change: transform;
+  animation: backgroundAnimation 260s linear infinite;
+  animation-play-state: paused;
 }
 
 .main {
@@ -103,6 +111,10 @@
 @media (min-width: 800px) {
   .background-image {
     opacity: 1;
+
+    &.background-scroll {
+      animation-play-state: running;
+    }
   }
 
   .main {
@@ -112,24 +124,5 @@
   .footer {
     height: 2em;
     opacity: 1;
-  }
-}
-
-// background animation
-@keyframes backgroundAnimation {
-	from { transform: translateY(-200vh); }
-	to { transform: translateY(0); }
-}
-
-@media (min-width: 800px) {
-  .background-image {
-    height: 400vh;
-    will-change: transform;
-    animation: backgroundAnimation 300s linear infinite;
-    animation-play-state: paused;
-
-    &.background-scroll {
-      animation-play-state: running;
-    }
   }
 }
