@@ -49,7 +49,7 @@ class Dot extends Component {
       // Randomly translateX each dot to vary dot position along edge, in rem
       baseTransformX: getRandomInt(-2, 2),
       // Transition delay makes dots appear randomly on resize sm -> md
-      baseTransitionDelay: getRandomInt(400, 800),
+      baseTransitionDelay: getRandomInt(0, 400),
       // dot width and color, controlled by Dots css module
       dotWidth: getRandomInt(1, numDotWidthSteps),
       dotColor: getRandomInt(1, numDotColors),

@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+import { useSelector } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
 import { Dots, Footer, Header } from '.'
 
@@ -7,7 +9,15 @@ function Layout({
   title,
   footer,
    ...props
-  }) {
+}) {
+  // wiggle demo -- controls whether dots are rendered or not
+  const wiggle = useSelector(state => state.wiggle);
+  // background scroll effect
+  const backgroundScroll = useSelector(state => state.backgroundScroll);
+  const backgroundClass = classNames(
+    `${styles['background-image']}`,
+    { [styles['background-scroll']]: backgroundScroll }
+  );
   return (
     <>
       <Header title={title} />
@@ -22,7 +32,7 @@ function Layout({
         timeout={400}
       >
         <div className={styles.layout}>
-          <div className={styles['background-image']} />
+          <div className={backgroundClass} />
           <div className={styles.container}>
             <main className={styles.main}>
               <CSSTransition
@@ -44,7 +54,7 @@ function Layout({
               </CSSTransition>
             </main>
           </div>
-          <Dots />
+          <Dots renderDots={wiggle} />
         </div>
       </CSSTransition>
     </>

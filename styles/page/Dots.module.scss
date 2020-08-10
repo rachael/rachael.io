@@ -27,9 +27,10 @@ $dot-halo-width: 6rem;
   position: absolute;
   visibility: hidden;
   top: 0;
+  z-index: 3;
   border-radius: 50%;
   opacity: 0;
-  filter: blur(1px);
+  filter: blur(4px);
   backdrop-filter: blur(1px);
   transition: opacity 400ms,
               width 400ms,
@@ -47,11 +48,6 @@ $dot-halo-width: 6rem;
     border-radius: 50%;
     background: transparent;
   }
-}
-
-// no transition delay on page load, it looks like loading stutter
-.dots-appear-active .dot {
-  transition-delay: 0ms !important;
 }
 
 @each $i, $value in $dot-colors {
@@ -115,16 +111,16 @@ $dot-halo-width: 6rem;
 }
 
 @media (min-width: $dots-screen-appear) {
-  .dots-appear-active .dot,
-  .dots-appear-done .dot {
+  .dot-enter-active,
+  .dot-enter-done,
+  .dot-exit {
     visibility: visible;
     opacity: 1;
   }
-}
 
-// no transition delay for large screens, dots are not appearing/disappearing
-@media (min-width: $dots-screen-lg) {
-  .dot {
-    transition-delay: 0ms !important;
+  .dot-exit-active,
+  .dot-exit-done {
+    visibility: visible;
+    opacity: 0;
   }
 }

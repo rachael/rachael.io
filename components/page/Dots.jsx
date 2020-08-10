@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CSSTransition } from 'react-transition-group';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import { Dot } from '.';
 
@@ -42,19 +42,31 @@ class Dots extends Component {
   }
 
   /**
-   * Generate one dot, either a 'dot-left' or a 'dot-right'
+   * Generate one dot, either a 'dot-left' or a 'dot-right', wrapped in a
+   * CSSTransition that will animate entering and leaving
    * @param  {ref} ref        React ref for ref forwarding
    * @param  {string} dotType either 'dot-left' or 'dot-right'
    * @param  {number} seed    step number of dot generation loop
    * @return {element}        a Dot element
    */
   generateDot(ref, dotType, seed) {
-    return <Dot
+    return <CSSTransition
       key={`${dotType}-${seed}`}
-      ref={ref}
-      dotType={dotType}
-      seed={seed}
-    />
+      classNames={{
+        enterActive: styles['dot-enter-active'],
+        enterDone: styles['dot-enter-done'],
+        exit: styles['dot-exit'],
+        exitActive: styles['dot-exit-active'],
+        exitDone: styles['dot-exit-done'],
+      }}
+      timeout={800}
+    >
+      <Dot
+        ref={ref}
+        dotType={dotType}
+        seed={seed}
+      />
+    </CSSTransition>
   }
 
   /**
@@ -118,25 +130,17 @@ class Dots extends Component {
   }
 
   render() {
+    const dots = this.props.renderDots ? this.generateDots() : (
+      <div key='dots-empty'/>
+    );
     return (
-      <CSSTransition
-        classNames={{
-          appear: styles['dots-appear'],
-          appearActive: styles['dots-appear-active'],
-          appearDone: styles['dots-appear-done']
-        }}
-        in
-        appear
-        timeout={400}
+      <TransitionGroup
+        key='dots'
+        className={styles.dots}
+        onMouseMove={this.passMouseMoveToDots}
       >
-        <div
-          key="dots"
-          className={styles.dots}
-          onMouseMove={this.passMouseMoveToDots}
-        >
-          {this.generateDots()}
-        </div>
-      </CSSTransition>
+        {dots}
+      </TransitionGroup>
     )
   }
 }

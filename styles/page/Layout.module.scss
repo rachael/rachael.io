@@ -1,5 +1,8 @@
 @import 'styles/variables';
 
+/*******************************************************************************
+* Mobile screen styles (< 800px)
+*******************************************************************************/
 .layout {
   min-height: 100vh;
   opacity: 0;
@@ -27,6 +30,7 @@
   width: 102vw;
   top: -1vh;
   left: -1vw;
+  z-index: 1;
   opacity: 0;
   transition: opacity 400ms;
 }
@@ -41,8 +45,8 @@
   color: $text-color;
   background-color: $background-color;
   overflow-y: auto;
-  z-index: 0;
-  box-shadow: 0 0 3px 1px $background-color;
+  z-index: 2;
+  box-shadow: 0 0 7px 10px rgba($background-color, 0.9);
   transition: background-color 400ms;
 }
 
@@ -60,18 +64,26 @@
   opacity: 1;
 }
 
+// Do not display footer on mobile
 .footer {
+  height: 0;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 70%;
+  opacity: 0;
+  transition: height 400ms, opacity 400ms;
+  overflow: hidden;
 
   a {
     margin: 0 1em;
   }
 }
 
+/*******************************************************************************
+* Non-mobile screen styles (> 800px)
+*******************************************************************************/
 // background-image 100px opacity transition buffer
 @media (min-width: 700px) {
   .background-image {
@@ -87,6 +99,7 @@
   }
 }
 
+// > 800px background and container styles
 @media (min-width: 800px) {
   .background-image {
     opacity: 1;
@@ -95,16 +108,28 @@
   .main {
     background-color: rgba($background-color, 0.9);
   }
+
+  .footer {
+    height: 2em;
+    opacity: 1;
+  }
 }
 
-// @keyframes backgroundAnimation {
-// 	from { transform: translateY(-300vh); }
-// 	to { transform: translateY(0); }
-// }
-//
-// @media (min-width: 1400px) {
-//   .background-image {
-//     height: 400vh;
-//     animation: backgroundAnimation 300s linear infinite;
-//   }
-// }
+// background animation
+@keyframes backgroundAnimation {
+	from { transform: translateY(-200vh); }
+	to { transform: translateY(0); }
+}
+
+@media (min-width: 800px) {
+  .background-image {
+    height: 400vh;
+    will-change: transform;
+    animation: backgroundAnimation 300s linear infinite;
+    animation-play-state: paused;
+
+    &.background-scroll {
+      animation-play-state: running;
+    }
+  }
+}
