@@ -21,28 +21,29 @@
   align-items: center;
 }
 
-// Background image: positioned slightly larger than screen to avoid blur
-// vignette effect.
-// Do not load background image on small devices.
+// Scrolling background image
+// Do not load background image or play animation on small devices
 @keyframes backgroundAnimation {
-	from { transform: translateY(-150vh); }
+	from { transform: translateY(-120vh); }
 	to { transform: translateY(0); }
 }
 
 .background-image {
   position: absolute;
-  height: 252vh;
-  width: 102vw;
-  top: -1vh;
-  left: -1vw;
+  height: 300vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
   z-index: 1;
   opacity: 0;
   transition: opacity 400ms;
-  will-change: transform;
-  animation: backgroundAnimation 260s linear infinite;
+  animation: backgroundAnimation 200s linear infinite;
   animation-play-state: paused;
+  animation-direction: alternate;
+  will-change: transform;
 }
 
+// Main container and content
 .main {
   padding: 1rem 0;
   flex: 1;
@@ -72,6 +73,7 @@
   opacity: 1;
 }
 
+// Footer
 // Do not display footer on mobile
 .footer {
   height: 0;
@@ -95,9 +97,8 @@
 // background-image 100px opacity transition buffer
 @media (min-width: 700px) {
   .background-image {
-    background: url('/profile_bg.png');
+    background: url('/bg_postits_blur.png');
     background-size: cover;
-    filter: blur(8px);
   }
 
   // Container width for large screens.
