@@ -12,7 +12,7 @@ export default function Home() {
 
   const footer = (
     <>
-      <a href='#' onClick={() => dispatch(wiggle(!wiggleEnabled))}>wiggle</a>
+      <a className='link' href='#' onClick={() => dispatch(wiggle(!wiggleEnabled))}>wiggle</a>
     </>
   );
 
