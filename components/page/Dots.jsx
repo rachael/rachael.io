@@ -131,7 +131,12 @@ class Dots extends Component {
 
   render() {
     const dots = this.props.renderDots ? this.generateDots() : (
-      <div key='dots-empty'/>
+      <CSSTransition
+        key='dots-empty'
+        timeout={0}
+      >
+        <></>
+      </CSSTransition>
     );
     return (
       <TransitionGroup
