@@ -3,16 +3,11 @@ import { createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 import reducer from 'redux/reducers'
+import initialState from 'redux/initialState'
 
 // https://github.com/vercel/next.js/blob/master/examples/with-redux/store.js
 
 let store
-
-const initialState = {
-  lastUpdate: 0,
-  light: false,
-  count: 0,
-}
 
 function initStore(preloadedState = initialState) {
   return createStore(
