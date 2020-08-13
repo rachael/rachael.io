@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { distanceFromCircle, getRandomInt, normalizeVector } from 'lib/math';
 
-import styles from 'styles/page/Dots.module.scss'
+import styles from 'styles/page/Dots.module.scss';
 
 /**
  * A decorative Dot, created by Dots which generates a random number of Dots
@@ -32,7 +32,7 @@ class Dot extends Component {
       dotPositionY: 0,
       runningX: 0,
       runningY: 0,
-    }
+    };
   }
 
   /**

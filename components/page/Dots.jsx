@@ -5,7 +5,7 @@ import { Dot } from '.';
 
 import { getRandomInt } from 'lib/math';
 
-import styles from 'styles/page/Dots.module.scss'
+import styles from 'styles/page/Dots.module.scss';
 
 /**
  * Displays randomly generated decorative dots along the left and right edge of
@@ -146,8 +146,8 @@ class Dots extends Component {
       >
         {dots}
       </TransitionGroup>
-    )
+    );
   }
 }
 
-export default Dots
+export default Dots;

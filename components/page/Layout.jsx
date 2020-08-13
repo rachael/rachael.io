@@ -1,9 +1,9 @@
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
-import { Dots, Footer, Header } from '.'
+import { Dots, Footer, Header } from '.';
 
-import styles from 'styles/page/Layout.module.scss'
+import styles from 'styles/page/Layout.module.scss';
 
 function Layout({
   title,
@@ -58,7 +58,7 @@ function Layout({
         </div>
       </CSSTransition>
     </>
-  )
+  );
 }
 
-export default Layout
+export default Layout;
