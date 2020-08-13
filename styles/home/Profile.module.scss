@@ -28,6 +28,7 @@
   border-radius: 50%;
   background: url('/profile_sm.png');
   background-size: contain;
+  transition: width 400ms, height 400ms;
 
   &:after {
     content: "";
@@ -42,8 +43,10 @@
   }
 }
 
-@media(min-width: 600px) {
+@media(min-width: 800px) {
   .profile-img {
+    height: 15rem;
+    width: 15rem;
     background: url('/profile_lg.png');
     background-size: contain;
   }
