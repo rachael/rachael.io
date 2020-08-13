@@ -40,7 +40,6 @@
   animation: backgroundAnimation 200s linear infinite;
   animation-play-state: paused;
   animation-direction: alternate;
-  will-change: transform;
 }
 
 // Main container and content
@@ -59,6 +58,32 @@
   transition: background-color 400ms;
 }
 
+@keyframes bgpulse {
+  0% {
+    transform: scaleY(0.9);
+  }
+
+  20% {
+    transform: scaleY(0.95);
+  }
+
+  40% {
+    transform: scaleY(0.8);
+  }
+
+  60% {
+    transform: scaleY(0.9);
+  }
+
+  80% {
+    transform: scaleY(0.85);
+  }
+
+  100% {
+    transform: scaleY(1);
+  }
+}
+
 .content {
   flex: 1;
   display: flex;
@@ -67,6 +92,29 @@
   align-items: center;
   opacity: 0;
   transition: opacity 400ms;
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    width: 100vw;
+    height: calc(50vh - 15rem);
+    background: $text-color;
+    animation: bgpulse 20s ease-out infinite;
+    animation-direction: alternate;
+    transition: opacity 400ms, height 400ms;
+  }
+
+  &:before {
+    top: 0;
+    transform-origin: top;
+  }
+
+  &:after {
+    bottom: 0;
+    transform-origin: bottom;
+    animation-delay: -1s;
+  }
 }
 
 .content-appear-done {
@@ -120,6 +168,13 @@
 
   .main {
     background-color: rgba($background-color, 0.9);
+  }
+
+  .content:before,
+  .content:after {
+    opacity: 0;
+    height: 0;
+    animation-play-state: paused;
   }
 
   .footer {
