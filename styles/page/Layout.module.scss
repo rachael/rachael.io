@@ -4,6 +4,9 @@
 * Mobile screen styles (< 800px)
 *******************************************************************************/
 .layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   min-height: 100vh;
   opacity: 0;
   transition: opacity 400ms;
@@ -11,14 +14,6 @@
 
 .layout-appear-done {
   opacity: 1;
-}
-
-.container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 // Scrolling background image
@@ -37,28 +32,57 @@
   z-index: 1;
   opacity: 0;
   transition: opacity 400ms;
-  animation: backgroundAnimation 200s linear infinite;
+  animation: backgroundAnimation 90s linear infinite;
   animation-play-state: paused;
   animation-direction: alternate;
 }
 
 // Main container and content
-.main {
-  padding: 1rem 0;
-  flex: 1;
+.container {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  width: 100%;
+  height: 100vh;
   color: $text-color;
   background-color: $background-color;
-  overflow-y: auto;
-  z-index: 2;
   box-shadow: 0 0 7px 10px rgba($background-color, 0.9);
+  z-index: 2;
+  overflow-x: auto;
   transition: background-color 400ms;
+
+  @media(min-width: $content-min-width) {
+    align-items: center;
+  }
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: calc(50vh - 17rem);
+    left: 0;
+    background: $text-color;
+    animation: bgPulse 20s ease-out infinite;
+    animation-direction: alternate;
+    pointer-events: none;
+    transition: opacity 400ms;
+    will-change: transform, opacity;
+  }
+
+  &:before {
+    top: 0;
+    transform-origin: top;
+  }
+
+  &:after {
+    bottom: 0;
+    transform-origin: bottom;
+    animation-delay: -1s;
+  }
 }
 
-@keyframes bgpulse {
+@keyframes bgPulse {
   0% {
     transform: scaleY(0.9);
   }
@@ -88,33 +112,14 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: $content-min-width;
+  padding: 2rem 0;
   opacity: 0;
+  overflow: auto;
   transition: opacity 400ms;
-
-  &:before,
-  &:after {
-    content: '';
-    position: absolute;
-    width: 100vw;
-    height: calc(50vh - 15rem);
-    background: $text-color;
-    animation: bgpulse 20s ease-out infinite;
-    animation-direction: alternate;
-    transition: opacity 400ms, height 400ms;
-  }
-
-  &:before {
-    top: 0;
-    transform-origin: top;
-  }
-
-  &:after {
-    bottom: 0;
-    transform-origin: bottom;
-    animation-delay: -1s;
-  }
 }
 
 .content-appear-done {
@@ -143,21 +148,15 @@
 * Non-mobile screen styles (> 800px)
 *******************************************************************************/
 // background-image 100px opacity transition buffer
-@media (min-width: 700px) {
+@media (min-width: #{$large-screen-size - 100}) {
   .background-image {
     background: url('/bg_postits_blur.png');
     background-size: cover;
   }
-
-  // Container width for large screens.
-  // Set during buffer to prevent width jump during background fade.
-  .main {
-    width: 65%;
-  }
 }
 
 // > 800px background and container styles
-@media (min-width: 800px) {
+@media (min-width: $large-screen-size) {
   .background-image {
     opacity: 1;
 
@@ -166,19 +165,19 @@
     }
   }
 
-  .main {
+  .container {
+    width: 65%;
     background-color: rgba($background-color, 0.9);
-  }
 
-  .content:before,
-  .content:after {
-    opacity: 0;
-    height: 0;
-    animation-play-state: paused;
+    &:before,
+    &:after {
+      opacity: 0;
+      animation-play-state: paused;
+    }
   }
 
   .footer {
-    height: 2em;
+    height: 3em;
     opacity: 1;
   }
 }

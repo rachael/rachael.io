@@ -33,27 +33,25 @@ function Layout({
       >
         <div className={styles.layout}>
           <div className={backgroundClass} />
-          <div className={styles.container}>
-            <main className={styles.main}>
-              <CSSTransition
-                classNames={{
-                  appear: styles['content-appear'],
-                  appearActive: styles['content-appear-active'],
-                  appearDone: styles['content-appear-done'],
-                }}
-                in
-                appear
-                timeout={400}
-              >
-                <>
-                  <div className={styles.content}>
-                    {props.children}
-                  </div>
-                  <Footer>{footer}</Footer>
-                </>
-              </CSSTransition>
-            </main>
-          </div>
+          <main className={styles.container}>
+            <CSSTransition
+              classNames={{
+                appear: styles['content-appear'],
+                appearActive: styles['content-appear-active'],
+                appearDone: styles['content-appear-done'],
+              }}
+              in
+              appear
+              timeout={400}
+            >
+              <>
+                <div className={styles.content}>
+                  {props.children}
+                </div>
+                <Footer>{footer}</Footer>
+              </>
+            </CSSTransition>
+          </main>
           <Dots renderDots={wiggle} />
         </div>
       </CSSTransition>

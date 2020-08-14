@@ -1,18 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Rowdies:wght@700&display=swap');
 @import 'variables';
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300');
 
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 100;
+  font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   overflow: hidden;
+}
+
+h1,
+h2 {
+  font-family: 'Rowdies', cursive;
+  font-weight: 700;
 }
 
 a {
