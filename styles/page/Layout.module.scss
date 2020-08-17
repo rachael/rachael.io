@@ -8,12 +8,6 @@
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  opacity: 0;
-  transition: opacity 400ms;
-}
-
-.layout-appear-done {
-  opacity: 1;
 }
 
 // Scrolling background image
@@ -116,13 +110,7 @@
   width: 100%;
   min-width: $content-min-width;
   padding: 2rem 0;
-  opacity: 0;
   overflow: auto;
-  transition: opacity 400ms;
-}
-
-.content-appear-done {
-  opacity: 1;
 }
 
 // Footer

@@ -1,9 +1,13 @@
 import classNames from 'classnames';
-import { useSelector } from 'react-redux';
-import { CSSTransition } from 'react-transition-group';
-import { Dots, Footer, Header } from '.';
+import { motion } from 'framer-motion';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { wiggle } from 'redux/actions';
+import initialState from 'redux/initialState';
 
 import styles from 'styles/page/Layout.module.scss';
+
+import { Dots, Footer, Header } from '.';
 
 function Layout({
   title,
@@ -11,7 +15,8 @@ function Layout({
    ...props
 }) {
   // wiggle demo -- controls whether dots are rendered or not
-  const wiggle = useSelector(state => state.wiggle);
+  const dispatch = useDispatch();
+  const wiggleEnabled = useSelector(state => state.wiggle);
   // background scroll effect
   const backgroundScroll = useSelector(state => state.backgroundScroll);
   const backgroundClass = classNames(
@@ -19,44 +24,51 @@ function Layout({
     { [styles['background-scroll']]: backgroundScroll }
   );
   return (
-    <>
+    <motion.div
+      key="layout"
+      className={styles.layout}
+      initial={{opacity: 0}}
+      animate={{opacity: 1}}
+      exit={{opacity: 0}}
+      transition={{duration: .4}}
+    >
       <Header title={title} />
-      <CSSTransition
-        classNames={{
-          appear: styles['layout-appear'],
-          appearActive: styles['layout-appear-active'],
-          appearDone: styles['layout-appear-done'],
-        }}
-        in
-        appear
-        timeout={400}
+      <div className={backgroundClass} />
+      <motion.div
+        key="container"
+        className={styles.container}
+        initial={{opacity: 0}}
+        animate={{opacity: 1}}
+        exit={{opacity: 0}}
+        transition={{duration: .4, delay: .3}}
       >
-        <div className={styles.layout}>
-          <div className={backgroundClass} />
-          <main className={styles.container}>
-            <CSSTransition
-              classNames={{
-                appear: styles['content-appear'],
-                appearActive: styles['content-appear-active'],
-                appearDone: styles['content-appear-done'],
-              }}
-              in
-              appear
-              timeout={400}
-            >
-              <>
-                <div className={styles.content}>
-                  {props.children}
-                </div>
-                <Footer>{footer}</Footer>
-              </>
-            </CSSTransition>
-          </main>
-          <Dots renderDots={wiggle} />
-        </div>
-      </CSSTransition>
-    </>
+        <motion.div
+          key="content"
+          className={styles.content}
+          initial={{opacity: 0}}
+          animate={{opacity: 1}}
+          exit={{opacity: 0}}
+          transition={{duration: .4, delay: .8}}
+        >
+          {props.children}
+        </motion.div>
+        <Footer>
+          <a className='link' href='#' onClick={() => dispatch(wiggle(!wiggleEnabled))}>wiggle</a>
+        </Footer>
+      </motion.div>
+      <Dots renderDots={wiggleEnabled} />
+    </motion.div>
   );
+}
+
+export function getStaticProps() {
+  // Note that in this case we're returning the state directly, without creating
+  // the store first (like in /pages/ssr.js), this approach can be better and easier
+  return {
+    props: {
+      initialReduxState: initialState,
+    },
+  }
 }
 
 export default Layout;
