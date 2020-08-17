@@ -37,9 +37,9 @@
 .profile-img {
   flex-shrink: 0;
   position: relative;
-  height: 10rem;
-  width: 10rem;
-  margin: 1rem;
+  height: 15rem;
+  width: 15rem;
+  margin: 1.5rem;
   border-radius: 50%;
   background: url('/profile_sm.png');
   background-size: contain;
@@ -54,13 +54,40 @@
     left: -4px;
     border-radius: 50%;
     border: 4px solid $profile-border-color;
-    animation: profilePulse 16s ease infinite;
-    animation-direction: alternate;
+    animation: profileBreathe 16s 400ms infinite alternate;
     will-change: transform;
+  }
+
+  &:hover:after {
+    animation: profileBreathe 16s 400ms infinite alternate,
+               fadeIn 600ms 400ms,
+               profilePulse 400ms;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
   }
 }
 
 @keyframes profilePulse {
+  0% {
+    opacity: 1;
+    transform: scale(1)
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(3);
+  }
+}
+
+@keyframes profileBreathe {
   0% {
     transform: scale(1.04);
   }
@@ -144,24 +171,35 @@
   }
 
   .profile-img {
-    height: 15rem;
-    width: 15rem;
     margin: 2rem;
-  }
-
-  .profile-name {
-
   }
 }
 
-// Maximum text size
-@media(min-width: 1160px) {
-  // .profile-name {
-  //   font-size: 5.1rem;
-  // }
+// Large profile image on large screens
+// 950px -- the point where the profile image start to appear too small
+@media(min-width: 950px) {
+  .profile-img {
+    height: 26vw;
+    width: 26vw;
+  }
+}
 
+// Maximum description size
+@media(min-width: 1160px) {
   .profile-description-line1,
   .profile-description-line2 {
     font-size: 2.8rem;
+  }
+}
+
+// Maximum name/image size
+@media(min-width: 1400px) {
+  .profile-name {
+    font-size: 6.1rem;
+  }
+
+  .profile-img {
+    height: 23rem;
+    width: 23rem;
   }
 }
