@@ -27,7 +27,7 @@ function Layout({
     visible: {
       opacity: 1,
       transition: {
-        duration: 0.3,
+        duration: 0.4,
       }
     },
     hidden: {
@@ -38,8 +38,8 @@ function Layout({
     visible: {
       opacity: 1,
       transition: {
-        delay: 0.3,
-        duration: 0.3,
+        delay: 0.4,
+        duration: 0.4,
       }
     },
     hidden: {
