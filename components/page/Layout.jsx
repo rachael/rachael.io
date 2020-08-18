@@ -19,9 +19,15 @@ function Layout({
   // background scroll effect
   const backgroundScroll = useSelector(state => state.backgroundScroll);
   const backgroundClass = classNames(
-    `${styles['background-image']}`,
+    styles['background-image'],
     { [styles['background-scroll']]: backgroundScroll }
   );
+  // content animating -- hides overflow and expands container during animations
+  const contentAnimating = useSelector(state => state.contentAnimating);
+  const contentClasses = classNames(
+    styles.content,
+    { [styles['content-animating']]: contentAnimating }
+  )
   // content appear animation
   const layoutVariants = {
     visible: {
@@ -81,7 +87,7 @@ function Layout({
       >
         <motion.div
           key="content"
-          className={styles.content}
+          className={contentClasses}
           variants={contentVariants}
         >
           {props.children}

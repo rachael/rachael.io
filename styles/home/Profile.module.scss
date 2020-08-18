@@ -46,7 +46,7 @@
   position: relative;
   height: 15rem;
   width: 15rem;
-  margin: 1.5rem;
+  margin-bottom: 1.5rem;
   transition: width 400ms, height 400ms, margin 400ms;
 
   img {
@@ -72,6 +72,12 @@
     animation: profileBreathe 16s 400ms infinite alternate,
                fadeIn 800ms 400ms,
                profilePulse 400ms;
+  }
+
+  &.pulse:after {
+    animation: profileBreathe 16s 400ms infinite alternate,
+               fadeIn 800ms 800ms,
+               profilePulse 800ms;
   }
 }
 
@@ -185,7 +191,7 @@
     width: 40vh;
     min-height: 15rem;
     min-width: 15rem;
-    margin: 4vh;
+    margin: 3vh 0 4vh 0;
   }
 }
 

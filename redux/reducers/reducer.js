@@ -11,6 +11,11 @@ import initialState from 'redux/initialState';
 // create a simple reducer
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case 'SET_CONTENT_ANIMATING':
+            return {
+              ...state,
+              contentAnimating: action.payload,
+            };
         case 'WIGGLE':
             return {
               ...state,

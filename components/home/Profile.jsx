@@ -10,6 +10,7 @@ function Profile() {
     visible: {
       opacity: 1,
       transition: {
+        delay: 1.6,
         duration: 0.4,
         when: "beforeChildren",
         staggerChildren: 0.3,
@@ -22,6 +23,22 @@ function Profile() {
       },
     },
   };
+  const buttonVariants = {
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.4,
+        when: "beforeChildren",
+        staggerChildren: 0.3,
+      },
+    },
+    hidden: {
+      opacity: 0,
+      transition: {
+        when: "afterChildren",
+      },
+    },
+  }
   const profileItemVariants = {
     visible: {
       opacity: 1,
@@ -40,8 +57,8 @@ function Profile() {
         <h2 className={styles['profile-description-line1']}>UX Designer /</h2>
         <h2 className={styles['profile-description-line2']}>Frontend Engineer</h2>
       </motion.div>
-      <motion.div variants={profileVariants}>
-        <Button href='/Rachael Passov - Resume.pdf' as="rachael.io :: Resume" variants={profileItemVariants}>Resume</Button>
+      <motion.div variants={buttonVariants}>
+        <Button href='/Rachael Passov - Resume.pdf' variants={profileItemVariants}>Resume</Button>
         <Button href='https://github.rachael.io' variants={profileItemVariants}>Github</Button>
       </motion.div>
     </motion.div>

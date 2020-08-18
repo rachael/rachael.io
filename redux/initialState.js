@@ -1,4 +1,5 @@
 export default {
-  wiggle: false,
   backgroundScroll: true,
+  contentAnimating: true,
+  wiggle: false,
 };
