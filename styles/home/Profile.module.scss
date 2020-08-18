@@ -40,10 +40,13 @@
   height: 15rem;
   width: 15rem;
   margin: 1.5rem;
-  border-radius: 50%;
-  background: url('/profile_sm.png');
-  background-size: contain;
   transition: width 400ms, height 400ms, margin 400ms;
+
+  img {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+  }
 
   &:after {
     content: "";
