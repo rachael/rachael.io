@@ -11,7 +11,6 @@ import { Dots, Footer, Header } from '.';
 
 function Layout({
   title,
-  footer,
    ...props
 }) {
   // wiggle demo -- controls whether dots are rendered or not

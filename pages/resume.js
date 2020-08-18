@@ -1,8 +1,9 @@
-import { StaticFileRedirect } from 'components/page';
+import { Header, StaticFileRedirect } from 'components/page';
 
 function Resume() {
   return StaticFileRedirect({
-    staticFileUrl: '/resume.pdf',
+    staticFileUrl: '/Rachael Passov - Resume.pdf',
+    renderComponent: <Header title="Resume" />,
   })
 }
 
