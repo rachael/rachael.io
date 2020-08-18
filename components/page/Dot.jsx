@@ -45,9 +45,16 @@ class Dot extends Component {
     // number of dot widths possible, from Dots css module
     const numDotWidthSteps = 6;
 
+    // Randomly translateX each dot to vary dot position along edge, in rem
+    let baseTransformX;
+    if(this.props.dotType === 'dot-left') {
+      baseTransformX = getRandomInt(-4, 0);
+    } else {
+      baseTransformX = getRandomInt(0, 4);
+    }
     this.setState({
       // Randomly translateX each dot to vary dot position along edge, in rem
-      baseTransformX: getRandomInt(-2, 2),
+      baseTransformX,
       // Transition delay makes dots appear randomly on resize sm -> md
       baseTransitionDelay: getRandomInt(0, 400),
       // dot width and color, controlled by Dots css module
