@@ -23,32 +23,67 @@ function Layout({
     `${styles['background-image']}`,
     { [styles['background-scroll']]: backgroundScroll }
   );
+  // content appear animation
+  const layoutVariants = {
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.3,
+      }
+    },
+    hidden: {
+      opacity: 0,
+    }
+  };
+  const containerVariants = {
+    visible: {
+      opacity: 1,
+      transition: {
+        delay: 0.3,
+        duration: 0.3,
+      }
+    },
+    hidden: {
+      opacity: 0,
+    }
+  };
+  const contentVariants = {
+    visible: {
+      opacity: 1,
+      transition: {
+        delay: 0.4,
+        duration: 0.4,
+        when: "beforeChildren",
+        staggerChildren: 0.4,
+      },
+    },
+    hidden: {
+      opacity: 0,
+      transition: {
+        when: "afterChildren",
+      },
+    },
+  };
   return (
     <motion.div
       key="layout"
       className={styles.layout}
-      initial={{opacity: 0}}
-      animate={{opacity: 1}}
-      exit={{opacity: 0}}
-      transition={{duration: .4}}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+      variants={layoutVariants}
     >
       <Header title={title} />
       <div className={backgroundClass} />
       <motion.div
         key="container"
         className={styles.container}
-        initial={{opacity: 0}}
-        animate={{opacity: 1}}
-        exit={{opacity: 0}}
-        transition={{duration: .4, delay: .3}}
+        variants={containerVariants}
       >
         <motion.div
           key="content"
           className={styles.content}
-          initial={{opacity: 0}}
-          animate={{opacity: 1}}
-          exit={{opacity: 0}}
-          transition={{duration: .4, delay: .8}}
+          variants={contentVariants}
         >
           {props.children}
         </motion.div>

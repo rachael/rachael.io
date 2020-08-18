@@ -20,6 +20,13 @@
   text-align: center;
 }
 
+.profile-description {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .profile-description-line1,
 .profile-description-line2 {
   font-size: 1.1rem;
