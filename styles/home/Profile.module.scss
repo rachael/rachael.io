@@ -179,8 +179,9 @@
 // 950px -- the point where the profile image start to appear too small
 @media(min-width: 950px) {
   .profile-img {
-    height: 26vw;
-    width: 26vw;
+    height: 40vh;
+    width: 40vh;
+    margin: 4vh;
   }
 }
 
@@ -192,14 +193,9 @@
   }
 }
 
-// Maximum name/image size
+// Maximum name size
 @media(min-width: 1400px) {
   .profile-name {
     font-size: 6.1rem;
-  }
-
-  .profile-img {
-    height: 23rem;
-    width: 23rem;
   }
 }
