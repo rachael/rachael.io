@@ -87,6 +87,54 @@
              profilePulse 400ms;
 }
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes profilePulse {
+  0% {
+    opacity: 1;
+    transform: scale(1)
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(3);
+  }
+}
+
+@keyframes profileBreathe {
+  0% {
+    transform: scale(1.04);
+  }
+
+  20% {
+    transform: scale(1.1);
+  }
+
+  40% {
+    transform: scale(1.07);
+  }
+
+  60% {
+    transform: scale(1.11);
+  }
+
+  80% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1.09);
+  }
+}
+
 // Button hover effects
 .profile-img {
   img {
@@ -134,54 +182,6 @@
     .profile-img-resume {
       opacity: 1;
     }
-  }
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes profilePulse {
-  0% {
-    opacity: 1;
-    transform: scale(1)
-  }
-
-  100% {
-    opacity: 0;
-    transform: scale(3);
-  }
-}
-
-@keyframes profileBreathe {
-  0% {
-    transform: scale(1.04);
-  }
-
-  20% {
-    transform: scale(1.1);
-  }
-
-  40% {
-    transform: scale(1.07);
-  }
-
-  60% {
-    transform: scale(1.11);
-  }
-
-  80% {
-    transform: scale(1.05);
-  }
-
-  100% {
-    transform: scale(1.09);
   }
 }
 
