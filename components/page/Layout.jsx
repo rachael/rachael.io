@@ -27,7 +27,7 @@ function Layout({
   const contentAnimating = useSelector(state => state.contentAnimating);
   const contentClasses = classNames(
     styles.content,
-    { [styles['content-animating']]: contentAnimating }
+    { ['content-animating']: contentAnimating }
   )
   // content appear animation
   const layoutVariants = {

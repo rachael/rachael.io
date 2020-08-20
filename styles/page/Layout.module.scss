@@ -112,7 +112,7 @@
   padding: 2rem 0;
   overflow: auto;
 
-  &.content-animating {
+  &:global(.content-animating) {
     flex: 1;
     margin: 0;
     overflow: hidden;

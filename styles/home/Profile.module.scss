@@ -75,7 +75,7 @@
   }
 }
 
-.content:not(.content-animating) .profile-img:hover:after {
+:not(:global(.content-animating)) > .profile-img:hover:after {
   animation: profileBreathe 16s 400ms infinite alternate,
              fadeIn 800ms 400ms,
              profilePulse 400ms;
