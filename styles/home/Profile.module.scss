@@ -75,10 +75,55 @@
   }
 }
 
+// Profile image pulse on hover uses global class to avoid messing up initial
+// content animation.
 :not(:global(.content-animating)) > .profile-img:hover:after {
   animation: profileBreathe 16s 400ms infinite alternate,
              fadeIn 800ms 400ms,
              profilePulse 400ms;
+}
+
+// Button hover effects
+.profile-img {
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .profile-img-github,
+  .profile-img-resume {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    opacity: 0;
+    border-radius: 50%;
+    font-family: 'Sacramento', cursive;
+    font-weight: 700;
+    font-size: 2.5rem;
+
+    p {
+      margin: 0.4rem 0;
+    }
+  }
+
+  &.hover-github {
+    .profile-img-github {
+      opacity: 1;
+    }
+  }
+
+  &.hover-resume {
+    .profile-img-resume {
+      opacity: 1;
+    }
+  }
 }
 
 @keyframes fadeIn {

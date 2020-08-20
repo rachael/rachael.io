@@ -1,10 +1,14 @@
 import { motion } from 'framer-motion';
+import { useDispatch } from 'react-redux';
 
 import { Button } from 'components/global';
+import { setHoverGithub, setHoverResume } from 'redux/actions';
 
 import styles from 'styles/home/Profile.module.scss';
 
 function Profile() {
+  const dispatch = useDispatch();
+
   // content appear animation
   const profileVariants = {
     visible: {
@@ -58,8 +62,20 @@ function Profile() {
         <h2 className={styles['profile-description-line2']}>Frontend Engineer</h2>
       </motion.div>
       <motion.div variants={buttonVariants}>
-        <Button href='/Rachael Passov - Resume.pdf' variants={profileItemVariants}>Resume</Button>
-        <Button href='https://github.rachael.io' variants={profileItemVariants}>Github</Button>
+        <Button
+          href='/Rachael Passov - Resume.pdf'
+          onMouseEnter={() => dispatch(setHoverResume(true))}
+          onMouseLeave={() => dispatch(setHoverResume(false))}
+        >
+            Resume
+        </Button>
+        <Button
+          href='https://github.rachael.io'
+          onMouseEnter={() => dispatch(setHoverGithub(true))}
+          onMouseLeave={() => dispatch(setHoverGithub(false))}
+        >
+            Github
+        </Button>
       </motion.div>
     </motion.div>
   );

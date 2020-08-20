@@ -11,6 +11,16 @@ import initialState from 'redux/initialState';
 // create a simple reducer
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case 'SET_HOVER_GITHUB':
+          return {
+            ...state,
+            hoverGithub: action.payload,
+          };
+        case 'SET_HOVER_RESUME':
+          return {
+            ...state,
+            hoverResume: action.payload,
+          }
         case 'SET_CONTENT_ANIMATING':
             return {
               ...state,

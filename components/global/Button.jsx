@@ -9,7 +9,7 @@ function Button({
   ...props
 }) {
   const button = (
-    <a className={styles.button} href={href}>{props.children}</a>
+    <a className={styles.button} href={href} {...props}>{props.children}</a>
   );
 
   if(href[0] === '/') {

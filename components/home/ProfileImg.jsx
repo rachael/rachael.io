@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import { motion, useMotionValue } from 'framer-motion';
+import { AnimatePresence, motion, useMotionValue } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { setContentAnimating } from 'redux/actions';
 
@@ -32,10 +32,22 @@ function ProfileImg() {
     }
   });
 
+  const hoverGithub = useSelector(state => state.hoverGithub);
+  const hoverResume = useSelector(state => state.hoverResume);
+
   const imgClasses = classNames(
     styles['profile-img'],
-    { [styles['pulse']]: visiblePulseNow }
+    {
+      [styles['pulse']]: visiblePulseNow,
+      [styles['hover-github']]: hoverGithub,
+      [styles['hover-resume']]: hoverResume,
+    }
   );
+
+  let imgSrc = '/profile_sm.png';
+  if (hoverGithub || hoverResume) {
+    imgSrc = '/profile_sm_blur.png';
+  }
 
   // content appear animation
   const imgVariants = {
@@ -53,13 +65,99 @@ function ProfileImg() {
       }
     },
   };
+  const overlayVariants = {
+    hidden: {
+      opacity: 0,
+    },
+    visible: {
+      opacity: 1,
+      transition: {
+        when: 'beforeChildren',
+        staggerChildren: 0.4,
+      },
+    },
+  };
+  const overlayItemVariants = {
+    hidden: {
+      opacity: 0,
+    },
+    visible: {
+      opacity: 1,
+    },
+  };
+
+  const profileImgGithub = (
+    <motion.div
+      key="profile-img-github"
+      className={styles['profile-img-github']}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+      variants={overlayVariants}
+    >
+      <motion.p
+        key="Portfolio"
+        variants={overlayItemVariants}
+      >
+        Portfolio
+      </motion.p>
+      <motion.p
+        key="Projects"
+        variants={overlayItemVariants}
+      >
+        Projects
+      </motion.p>
+    </motion.div>
+  );
+
+  const profileImgResume = (
+    <motion.div
+      key="profile-img-resume"
+      className={styles['profile-img-resume']}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+      variants={overlayVariants}
+    >
+      <motion.p
+        key="Contact"
+        variants={overlayItemVariants}
+      >
+        Contact
+      </motion.p>
+      <motion.p
+        key="Skills"
+        variants={overlayItemVariants}
+      >
+        Skills
+      </motion.p>
+      <motion.p
+        key="Experience"
+        variants={overlayItemVariants}
+      >
+        Experience
+      </motion.p>
+    </motion.div>
+  );
+
   return (
     <motion.div
       className={imgClasses}
       variants={imgVariants}
       style={{ scale }}
     >
-      <img src="/profile_sm.png" alt="Profile picture" />
+      <AnimatePresence>
+        <motion.img
+          key={imgSrc}
+          src={imgSrc}
+          alt="Profile picture"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        />
+        {hoverGithub && profileImgGithub}
+        {hoverResume && profileImgResume}
+      </AnimatePresence>
     </motion.div>
   );
 }
