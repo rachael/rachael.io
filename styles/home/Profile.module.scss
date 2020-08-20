@@ -117,6 +117,13 @@
     }
   }
 
+  &.hover-github,
+  &.hover-resume {
+    img {
+      filter: blur(1px);
+    }
+  }
+
   &.hover-github {
     .profile-img-github {
       opacity: 1;
