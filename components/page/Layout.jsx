@@ -13,7 +13,7 @@ function Layout({
   title,
    ...props
 }) {
-  // wiggle demo -- controls whether dots are rendered or not
+  // wiggle demo: controls whether dots are rendered or not
   const dispatch = useDispatch();
   const wiggleEnabled = useSelector(state => state.wiggle);
   // background scroll effect
@@ -22,7 +22,8 @@ function Layout({
     styles['background-image'],
     { [styles['background-scroll']]: backgroundScroll }
   );
-  // content animating -- hides overflow and expands container during animations
+  // content animating: hides overflow and expands container during animations.
+  // must set to false inside content to enable scroll.
   const contentAnimating = useSelector(state => state.contentAnimating);
   const contentClasses = classNames(
     styles.content,
@@ -46,6 +47,7 @@ function Layout({
       transition: {
         delay: 0.4,
         duration: 0.4,
+        staggerChildren: 2,
       }
     },
     hidden: {
@@ -92,7 +94,7 @@ function Layout({
         >
           {props.children}
         </motion.div>
-        <Footer>
+        <Footer key="footer">
           <a className='link' href='#' onClick={() => dispatch(wiggle(!wiggleEnabled))}>wiggle</a>
         </Footer>
       </motion.div>

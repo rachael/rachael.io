@@ -68,17 +68,17 @@
     will-change: transform, opacity;
   }
 
-  &:hover:after {
-    animation: profileBreathe 16s 400ms infinite alternate,
-               fadeIn 800ms 400ms,
-               profilePulse 400ms;
-  }
-
   &.pulse:after {
     animation: profileBreathe 16s 400ms infinite alternate,
                fadeIn 800ms 800ms,
                profilePulse 800ms;
   }
+}
+
+.content:not(.content-animating) .profile-img:hover:after {
+  animation: profileBreathe 16s 400ms infinite alternate,
+             fadeIn 800ms 400ms,
+             profilePulse 400ms;
 }
 
 @keyframes fadeIn {
