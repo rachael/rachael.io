@@ -119,8 +119,9 @@
 }
 
 // Footer
-// Do not display footer on mobile
+// Do not display footer on mobile. !important to override animation library.
 .footer {
+  display: none !important;
   height: 0;
   width: 100%;
   display: flex;
@@ -170,6 +171,7 @@
   }
 
   .footer {
+    display: flex !important;
     height: 3em;
     opacity: 1;
   }
