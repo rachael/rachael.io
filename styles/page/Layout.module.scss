@@ -55,6 +55,7 @@
     width: 100%;
     height: calc(50vh - 17rem);
     left: 0;
+    z-index: 1;
     background: $text-color;
     animation: bgPulse 20s ease-out infinite;
     animation-direction: alternate;
@@ -127,7 +128,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 70%;
+  font-size: 50%;
   opacity: 0;
   transition: opacity 400ms;
   overflow: hidden;
