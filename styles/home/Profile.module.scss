@@ -38,7 +38,7 @@
 }
 
 .profile-description-line2 {
-  margin: 0 -1.8rem 1.5rem 0;
+  margin: 0 -1.5rem 1.5rem 0;
 }
 
 .profile-img {
@@ -202,7 +202,7 @@
   }
 
   .profile-description-line2 {
-    margin-right: -12vw;
+    margin-right: -6vw;
   }
 }
 
@@ -223,7 +223,7 @@
   }
 
   .profile-description-line2 {
-    margin-right: -2em;
+    margin-right: -1.5em;
   }
 }
 
@@ -249,11 +249,6 @@
     min-width: 15rem;
     margin: 3vh 0 4vh 0;
   }
-}
-
-// Large profile image on large screens
-// 950px -- the point where the profile image start to appear too small
-@media(min-width: 950px) {
 }
 
 // Maximum description size
