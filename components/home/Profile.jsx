@@ -10,6 +10,7 @@ import styles from 'styles/home/Profile.module.scss';
 function Profile() {
   const dispatch = useDispatch();
 
+  // only load after profile image is finished loading
   const [loaded, setLoaded] = useState(false);
   const controls = useAnimation();
   const isLoadCompleteBG = useSelector(state => state.loadCompleteBG);

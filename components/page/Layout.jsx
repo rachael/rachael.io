@@ -28,7 +28,8 @@ function Layout({
   );
 
   // content animating: hides overflow and expands container during animations.
-  // must set to false inside content to enable scroll.
+  // optimistically assumes content will animate -- must set to false inside
+  // content to reenable scrolling.
   const contentAnimating = useSelector(state => state.contentAnimating);
   const contentClasses = classNames(
     styles.content,

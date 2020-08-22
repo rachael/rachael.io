@@ -121,6 +121,9 @@ function ProfileImg() {
       key="profile-img-github"
       className={styles['profile-img-github']}
       variants={overlayVariants}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
     >
       <motion.p
         key="Portfolio"
@@ -142,6 +145,9 @@ function ProfileImg() {
       key="profile-img-resume"
       className={styles['profile-img-resume']}
       variants={overlayVariants}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
     >
       <motion.p
         key="Contact"
