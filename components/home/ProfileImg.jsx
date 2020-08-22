@@ -1,9 +1,9 @@
 import classNames from 'classnames';
-import { AnimatePresence, motion, useMotionValue } from 'framer-motion';
-import React, { useEffect, useState } from 'react';
+import { AnimatePresence, motion, useAnimation, useMotionValue } from 'framer-motion';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setContentAnimating } from 'redux/actions';
+import { loadCompleteContent, setContentAnimating } from 'redux/actions';
 
 import styles from 'styles/home/Profile.module.scss';
 
@@ -32,12 +32,32 @@ function ProfileImg() {
     }
   });
 
+  // Image load
+  const controls = useAnimation();
+  const imgRef = useRef();
+  const isLoadCompleteBG = useSelector(state => state.loadCompleteBG);
+  const isLoadCompleteContent = useSelector(state => state.loadCompleteContent);
+  const setLoadCompleteCB = useCallback(() => {
+    if(!isLoadCompleteContent) {
+      dispatch(loadCompleteContent());
+      controls.start('pulse');
+    }
+  });
+  useEffect(() => {
+    if(!isLoadCompleteContent && imgRef.current.complete) {
+      dispatch(loadCompleteContent());
+      controls.start('pulse');
+    }
+  });
+
+  // Button hover states -- add overlay to profile image
   const hoverGithub = useSelector(state => state.hoverGithub);
   const hoverResume = useSelector(state => state.hoverResume);
 
   const imgClasses = classNames(
     styles['profile-img'],
     {
+      [styles['loading']]: !(isLoadCompleteBG || isLoadCompleteContent),
       [styles['pulse']]: visiblePulseNow,
       [styles['hover-github']]: hoverGithub,
       [styles['hover-resume']]: hoverResume,
@@ -53,15 +73,22 @@ function ProfileImg() {
   const imgVariants = {
     hidden: {
       opacity: 0,
+      scale: 1.7,
+      translateY: '40%',
     },
     visible: {
-      opacity: [0, 1, 1],
-      scale: [1.7, 1.7, 1],
-      translateY: ['40%', '40%', 0],
+      opacity: 1,
+      scale: 1.7,
+      translateY: '40%',
+    },
+    pulse: {
+      opacity: [1, 1],
+      scale: [1.7, 1],
+      translateY: ['40%', 0],
       transition: {
         duration: 2,
-        times: [0, 0.5, 1],
-        ease: ['linear', [.71,-0.37,.46,.99]],
+        times: [0.5, 1],
+        ease: [[.71,-0.37,.46,.99]],
       }
     },
   };
@@ -134,15 +161,29 @@ function ProfileImg() {
     </motion.div>
   );
 
+  const loadingIndicator = (
+    <motion.div
+      key="loading"
+      className={styles['loading-indicator']}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      Loading...
+    </motion.div>
+  );
+
   return (
     <motion.div
       key="profile-img"
       className={imgClasses}
       variants={imgVariants}
       style={{ scale }}
+      animate={controls}
     >
       <AnimatePresence>
         <motion.img
+          ref={imgRef}
           key={imgSrc}
           src={imgSrc}
           alt="Profile picture"
@@ -152,6 +193,7 @@ function ProfileImg() {
         />
         {hoverGithub && profileImgGithub}
         {hoverResume && profileImgResume}
+        {!(isLoadCompleteBG || isLoadCompleteContent) && loadingIndicator}
       </AnimatePresence>
     </motion.div>
   );

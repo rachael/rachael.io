@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Button } from 'components/global';
 import { setHoverGithub, setHoverResume } from 'redux/actions';
@@ -8,6 +8,14 @@ import styles from 'styles/home/Profile.module.scss';
 
 function Profile() {
   const dispatch = useDispatch();
+
+  // The following line fixes a framer-motion bug where the Profile never
+  // animates in after adding a useEffect to the Layout.
+  // Bug is nonsensical; Profile animates if pasted into Layout directly but not
+  // if composed using props.children.
+  // This is a strange fix but I'm not going to complain that it works.
+  const isLoadCompleteBG = useSelector(state => state.loadCompleteBG);
+  const isLoadCompleteContent = useSelector(state => state.loadCompleteContent);
 
   // content appear animation
   const profileVariants = {

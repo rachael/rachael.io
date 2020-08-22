@@ -35,14 +35,14 @@ function Layout({
     { ['content-animating']: contentAnimating }
   )
 
-  // Image load
+  // image load
   const bgRef = useRef();
   const isLoadCompleteBG = useSelector(state => state.loadCompleteBG);
   const setLoadCompleteCB = useCallback(() => {
-    dispatch(loadCompleteBG());
+    if(!isLoadCompleteBG) dispatch(loadCompleteBG());
   });
   useEffect(() => {
-    if(bgRef.current.complete) dispatch(loadCompleteBG());
+    if(!isLoadCompleteBG && bgRef.current.complete) dispatch(loadCompleteBG());
   });
 
   // content appear animation

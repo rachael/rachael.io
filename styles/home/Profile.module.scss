@@ -53,6 +53,12 @@
     height: 100%;
     width: 100%;
     border-radius: 50%;
+    opacity: 1;
+    transition: opacity 0.4s;
+  }
+
+  &.loading img {
+    opacity: 0 !important;
   }
 
   &:after {
@@ -76,6 +82,14 @@
     animation: profileBreathe 16s 400ms infinite alternate,
                fadeIn 800ms 800ms,
                profilePulse 800ms;
+  }
+
+  &.loading {
+    border: 1px solid red;
+  }
+
+  .loading-indicator {
+
   }
 }
 
