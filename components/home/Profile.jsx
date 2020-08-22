@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Button } from 'components/global';
@@ -9,17 +10,18 @@ import styles from 'styles/home/Profile.module.scss';
 function Profile() {
   const dispatch = useDispatch();
 
-  // The following line fixes a framer-motion bug where the Profile never
-  // animates in after adding a useEffect to the Layout.
-  // Bug is nonsensical; Profile animates if pasted into Layout directly but not
-  // if composed using props.children.
-  // This is a strange fix but I'm not going to complain that it works.
+  const [loaded, setLoaded] = useState(false);
+  const controls = useAnimation();
   const isLoadCompleteBG = useSelector(state => state.loadCompleteBG);
   const isLoadCompleteContent = useSelector(state => state.loadCompleteContent);
+  if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
+    controls.start('load');
+    setLoaded(true);
+  }
 
   // content appear animation
   const profileVariants = {
-    visible: {
+    load: {
       opacity: 1,
       transition: {
         delay: 1.6,
@@ -36,7 +38,7 @@ function Profile() {
     },
   };
   const buttonVariants = {
-    visible: {
+    load: {
       opacity: 1,
       transition: {
         duration: 0.4,
@@ -52,7 +54,7 @@ function Profile() {
     },
   }
   const profileItemVariants = {
-    visible: {
+    load: {
       opacity: 1,
       transition: {
         duration: 0.4,
@@ -62,11 +64,13 @@ function Profile() {
       opacity: 0,
     },
   };
+
   return (
     <motion.div
       key="profile"
       className={styles.profile}
       variants={profileVariants}
+      animate={controls}
     >
       <motion.h1
         className={styles['profile-name']}

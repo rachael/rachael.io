@@ -33,6 +33,7 @@ function ProfileImg() {
   });
 
   // Image load
+  const [loaded, setLoaded] = useState(false);
   const controls = useAnimation();
   const imgRef = useRef();
   const isLoadCompleteBG = useSelector(state => state.loadCompleteBG);
@@ -40,15 +41,17 @@ function ProfileImg() {
   const setLoadCompleteCB = useCallback(() => {
     if(!isLoadCompleteContent) {
       dispatch(loadCompleteContent());
-      controls.start('pulse');
     }
   });
   useEffect(() => {
     if(!isLoadCompleteContent && imgRef.current.complete) {
       dispatch(loadCompleteContent());
-      controls.start('pulse');
     }
   });
+  if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
+    controls.start('pulse');
+    setLoaded(true);
+  }
 
   // Button hover states -- add overlay to profile image
   const hoverGithub = useSelector(state => state.hoverGithub);
