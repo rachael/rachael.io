@@ -57,10 +57,6 @@
     transition: opacity 0.4s;
   }
 
-  &.loading img {
-    opacity: 0 !important;
-  }
-
   &:after {
     content: "";
     position: absolute;
@@ -83,22 +79,14 @@
                fadeIn 800ms 800ms,
                profilePulse 800ms;
   }
-
-  &.loading {
-    border: 1px solid red;
-  }
-
-  .loading-indicator {
-
-  }
 }
 
 // Profile image pulse on hover uses global class to avoid messing up initial
 // content animation.
 :not(:global(.content-animating)) > .profile-img:hover:after {
-  animation: profileBreathe 16s 400ms infinite alternate,
-             fadeIn 800ms 400ms,
-             profilePulse 400ms;
+  animation: profileBreathe 16s 600ms infinite alternate,
+             fadeIn 800ms 600ms,
+             profilePulse 600ms;
 }
 
 @keyframes fadeIn {
@@ -149,6 +137,64 @@
   }
 }
 
+// Loading effects
+.profile-img.loading img {
+  opacity: 0 !important;
+}
+
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.loaded-from-cache .loading-indicator {
+  display: none !important;
+}
+
+// Spinner credit: https://tobiasahlin.com/spinkit/
+.loading-spinner {
+  width: 33%;
+  height: 33%;
+  position: relative;
+  text-align: center;
+  animation: sk-rotate 2.5s infinite linear;
+}
+
+.loading-dot1, .loading-dot2 {
+  width: 60%;
+  height: 60%;
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  background-color: $profile-border-color;
+  border-radius: 100%;
+  filter: blur(1px);
+  animation: sk-bounce 2.5s infinite ease-in-out;
+}
+
+.loading-dot2 {
+  top: auto;
+  bottom: 0;
+  animation-delay: -1.25s;
+}
+
+@keyframes sk-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes sk-bounce {
+  0%, 100% {
+    transform: scale(0);
+  } 50% {
+    transform: scale(1);
+  }
+}
+
 // Button hover effects
 .profile-img {
   img {
@@ -176,13 +222,6 @@
 
     p {
       margin: 0.4rem 0;
-    }
-  }
-
-  &.hover-github,
-  &.hover-resume {
-    img {
-      filter: blur(1px);
     }
   }
 

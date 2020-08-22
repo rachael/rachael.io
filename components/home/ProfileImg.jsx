@@ -33,9 +33,10 @@ function ProfileImg() {
   });
 
   // Image load
-  const [loaded, setLoaded] = useState(false);
-  const controls = useAnimation();
   const imgRef = useRef();
+  const controls = useAnimation();
+  const [loaded, setLoaded] = useState();
+  const [loadedFromCache, setLoadedFromCache] = useState();
   const isLoadCompleteBG = useSelector(state => state.loadCompleteBG);
   const isLoadCompleteContent = useSelector(state => state.loadCompleteContent);
   const setLoadCompleteCB = useCallback(() => {
@@ -46,6 +47,7 @@ function ProfileImg() {
   useEffect(() => {
     if(!isLoadCompleteContent && imgRef.current.complete) {
       dispatch(loadCompleteContent());
+      setLoadedFromCache(true);
     }
   });
   if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
@@ -61,6 +63,7 @@ function ProfileImg() {
     styles['profile-img'],
     {
       [styles['loading']]: !(isLoadCompleteBG || isLoadCompleteContent),
+      [styles['loaded-from-cache']]: loadedFromCache,
       [styles['pulse']]: visiblePulseNow,
       [styles['hover-github']]: hoverGithub,
       [styles['hover-resume']]: hoverResume,
@@ -178,7 +181,10 @@ function ProfileImg() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      Loading...
+      <div className={styles['loading-spinner']}>
+        <div className={styles['loading-dot1']} />
+        <div className={styles['loading-dot2']} />
+      </div>
     </motion.div>
   );
 
@@ -191,6 +197,7 @@ function ProfileImg() {
       animate={controls}
     >
       <AnimatePresence>
+        {!(isLoadCompleteBG || isLoadCompleteContent) && loadingIndicator}
         <motion.img
           ref={imgRef}
           key={imgSrc}
@@ -202,7 +209,6 @@ function ProfileImg() {
         />
         {hoverGithub && profileImgGithub}
         {hoverResume && profileImgResume}
-        {!(isLoadCompleteBG || isLoadCompleteContent) && loadingIndicator}
       </AnimatePresence>
     </motion.div>
   );
