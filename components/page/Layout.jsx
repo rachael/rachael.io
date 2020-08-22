@@ -34,7 +34,7 @@ function Layout({
   const contentClasses = classNames(
     styles.content,
     { ['content-animating']: contentAnimating }
-  )
+  );
 
   // image load
   const bgRef = useRef();
@@ -45,6 +45,10 @@ function Layout({
   useEffect(() => {
     if(!isLoadCompleteBG && bgRef.current.complete) dispatch(loadCompleteBG());
   });
+  const layoutClasses = classNames(
+    styles.layout,
+    { [styles['bg-loading']]: !isLoadCompleteBG }
+  );
 
   // content appear animation
   const bgVariants = {
@@ -103,7 +107,7 @@ function Layout({
   return (
     <motion.div
       key="layout"
-      className={styles.layout}
+      className={layoutClasses}
       initial="hidden"
       animate="visible"
       exit="hidden"
