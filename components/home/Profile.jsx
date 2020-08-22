@@ -55,13 +55,27 @@ function Profile() {
     },
   };
   return (
-    <motion.div className={styles.profile} variants={profileVariants}>
-      <motion.h1 className={styles['profile-name']} variants={profileItemVariants}>Rachael Passov</motion.h1>
-      <motion.div className={styles['profile-description']} variants={profileItemVariants}>
+    <motion.div
+      key="profile"
+      className={styles.profile}
+      variants={profileVariants}
+    >
+      <motion.h1
+        className={styles['profile-name']}
+        variants={profileItemVariants}
+      >
+          Rachael Passov
+      </motion.h1>
+      <motion.div
+        className={styles['profile-description']}
+        variants={profileItemVariants}
+      >
         <h2 className={styles['profile-description-line1']}>UX Designer /</h2>
         <h2 className={styles['profile-description-line2']}>Frontend Engineer</h2>
       </motion.div>
-      <motion.div variants={buttonVariants}>
+      <motion.div
+        variants={buttonVariants}
+      >
         <Button
           href='/Rachael Passov - Resume.pdf'
           onMouseEnter={() => dispatch(setHoverResume(true))}

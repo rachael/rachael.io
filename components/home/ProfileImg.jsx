@@ -90,9 +90,6 @@ function ProfileImg() {
     <motion.div
       key="profile-img-github"
       className={styles['profile-img-github']}
-      initial="hidden"
-      animate="visible"
-      exit="hidden"
       variants={overlayVariants}
     >
       <motion.p
@@ -114,9 +111,6 @@ function ProfileImg() {
     <motion.div
       key="profile-img-resume"
       className={styles['profile-img-resume']}
-      initial="hidden"
-      animate="visible"
-      exit="hidden"
       variants={overlayVariants}
     >
       <motion.p
@@ -142,6 +136,7 @@ function ProfileImg() {
 
   return (
     <motion.div
+      key="profile-img"
       className={imgClasses}
       variants={imgVariants}
       style={{ scale }}

@@ -1,4 +1,8 @@
 import {
+  LOAD_COMPLETE_BG,
+  loadCompleteBG,
+  LOAD_COMPLETE_CONTENT,
+  loadCompleteContent,
   SET_CONTENT_ANIMATING,
   setContentAnimating,
   SET_HOVER_GITHUB,
@@ -10,6 +14,10 @@ import {
 } from './actions';
 
 export {
+  LOAD_COMPLETE_BG,
+  loadCompleteBG,
+  LOAD_COMPLETE_CONTENT,
+  loadCompleteContent,
   SET_CONTENT_ANIMATING,
   setContentAnimating,
   SET_HOVER_GITHUB,

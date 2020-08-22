@@ -1,4 +1,3 @@
-import { WIGGLE } from 'redux/actions';
 import initialState from 'redux/initialState';
 
 /**
@@ -11,11 +10,21 @@ import initialState from 'redux/initialState';
 // create a simple reducer
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case 'LOAD_COMPLETE_BG':
+          return {
+            ...state,
+            loadCompleteBG: true,
+          }
+        case 'LOAD_COMPLETE_CONTENT':
+          return {
+            ...state,
+            loadCompleteContent: true,
+          }
         case 'SET_HOVER_GITHUB':
           return {
             ...state,
             hoverGithub: action.payload,
-          };
+          }
         case 'SET_HOVER_RESUME':
           return {
             ...state,
@@ -25,13 +34,13 @@ const reducer = (state = initialState, action) => {
             return {
               ...state,
               contentAnimating: action.payload,
-            };
+            }
         case 'WIGGLE':
             return {
               ...state,
               wiggle: action.payload,
               backgroundScroll: !action.payload,
-            };
+            }
         default:
             return state
     }

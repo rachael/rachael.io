@@ -1,8 +1,9 @@
 import classNames from 'classnames';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { wiggle } from 'redux/actions';
+import { loadCompleteBG, wiggle } from 'redux/actions';
 import initialState from 'redux/initialState';
 
 import styles from 'styles/page/Layout.module.scss';
@@ -13,15 +14,19 @@ function Layout({
   title,
    ...props
 }) {
-  // wiggle demo: controls whether dots are rendered or not
   const dispatch = useDispatch();
+
+  // wiggle demo: controls whether dots are rendered or not
   const wiggleEnabled = useSelector(state => state.wiggle);
+  const wiggleCB = useCallback(() => dispatch(wiggle(!wiggleEnabled)));
+
   // background scroll effect
   const backgroundScroll = useSelector(state => state.backgroundScroll);
   const backgroundClass = classNames(
     styles['background-image'],
     { [styles['background-scroll']]: backgroundScroll }
   );
+
   // content animating: hides overflow and expands container during animations.
   // must set to false inside content to enable scroll.
   const contentAnimating = useSelector(state => state.contentAnimating);
@@ -29,7 +34,29 @@ function Layout({
     styles.content,
     { ['content-animating']: contentAnimating }
   )
+
+  // Image load
+  const bgRef = useRef();
+  const isLoadCompleteBG = useSelector(state => state.loadCompleteBG);
+  const setLoadCompleteCB = useCallback(() => {
+    dispatch(loadCompleteBG());
+  });
+  useEffect(() => {
+    if(bgRef.current.complete) dispatch(loadCompleteBG());
+  });
+
   // content appear animation
+  const bgVariants = {
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.2,
+      }
+    },
+    hidden: {
+      opacity: 0,
+    }
+  };
   const layoutVariants = {
     visible: {
       opacity: 1,
@@ -71,6 +98,7 @@ function Layout({
       },
     },
   };
+
   return (
     <motion.div
       key="layout"
@@ -81,7 +109,19 @@ function Layout({
       variants={layoutVariants}
     >
       <Header title={title} />
-      <div className={backgroundClass} />
+      <img
+        className={styles['background-loader']}
+        src='/bg_postits_blur.png'
+        ref={bgRef}
+        onLoad={setLoadCompleteCB}
+      />
+      <AnimatePresence>
+        {isLoadCompleteBG && <motion.div
+          key="bg"
+          className={backgroundClass}
+          variants={bgVariants}
+        />}
+      </AnimatePresence>
       <motion.div
         key="container"
         className={styles.container}
@@ -95,7 +135,11 @@ function Layout({
           {props.children}
         </motion.div>
         <Footer key="footer">
-          <a className='link' href='#' onClick={() => dispatch(wiggle(!wiggleEnabled))}>wiggle</a>
+          <a className='link'
+             href='#'
+             onClick={wiggleCB}>
+            wiggle
+          </a>
         </Footer>
       </motion.div>
       <Dots renderDots={wiggleEnabled} />
@@ -104,8 +148,6 @@ function Layout({
 }
 
 export function getStaticProps() {
-  // Note that in this case we're returning the state directly, without creating
-  // the store first (like in /pages/ssr.js), this approach can be better and easier
   return {
     props: {
       initialReduxState: initialState,

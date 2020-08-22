@@ -1,5 +1,5 @@
 import { Provider } from 'react-redux'
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion'
 
 import { Layout } from 'components/page'
 import { useStore } from 'redux/store'
