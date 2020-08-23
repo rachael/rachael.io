@@ -201,6 +201,7 @@
     position: absolute;
     top: 0;
     left: 0;
+    transition: filter 400ms;
   }
 
   .profile-img-github,
@@ -222,6 +223,14 @@
 
     p {
       margin: 0.2rem 0;
+    }
+  }
+
+  &.hover-github,
+  &.hover-resume {
+    img {
+      // blur image when overlay is present, blurred edges are more cohesive
+      filter: blur(1px);
     }
   }
 
