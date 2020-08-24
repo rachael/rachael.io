@@ -85,9 +85,9 @@
 // Profile image pulse on hover uses global class to avoid messing up initial
 // content animation.
 :not(:global(.content-animating)) > .profile-img:hover:after {
-  animation: profileBreathe 16s 600ms infinite alternate,
-             fadeIn 800ms 600ms,
-             profilePulse 600ms;
+  animation: profileBreathe 16s 400ms infinite alternate,
+             fadeIn 800ms 500ms,
+             profilePulse 500ms;
 }
 
 @keyframes fadeIn {
