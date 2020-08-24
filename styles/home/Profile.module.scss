@@ -224,7 +224,7 @@
 
     p {
       margin: 0.2rem 0;
-      color: color.mix($profile-border-color, $text-color, 40%);
+      color: rgba(color.mix($profile-border-color, $text-color, 20%), 0.7);
     }
   }
 
