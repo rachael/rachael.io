@@ -1,6 +1,6 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
-import styles from 'styles/global/Button.module.scss'
+import styles from 'styles/global/Button.module.scss';
 
 function Button({
   text,
@@ -24,4 +24,4 @@ function Button({
 
 }
 
-export default Button
+export default Button;

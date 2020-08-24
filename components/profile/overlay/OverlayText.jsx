@@ -1,5 +1,8 @@
 import styles from 'styles/home/Profile.module.scss';
 
+/**
+ * Knockout text that appears behind text overlay on the profile image.
+ */
 function OverlayText(props) {
   return (
     <svg className={styles['knockout-text']}>

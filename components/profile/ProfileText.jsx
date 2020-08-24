@@ -7,7 +7,7 @@ import { setHoverGithub, setHoverResume } from 'redux/actions';
 
 import styles from 'styles/home/Profile.module.scss';
 
-function Profile() {
+function ProfileText() {
   const dispatch = useDispatch();
 
   // only load after profile image is finished loading
@@ -108,4 +108,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default ProfileText;

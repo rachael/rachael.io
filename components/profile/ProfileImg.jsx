@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { loadCompleteContent, setContentAnimating } from 'redux/actions';
-import { OverlayText } from './overlays';
+import { Overlay } from './overlay';
 
 import styles from 'styles/home/Profile.module.scss';
 
@@ -60,6 +60,11 @@ function ProfileImg() {
   const hoverGithub = useSelector(state => state.hoverGithub);
   const hoverResume = useSelector(state => state.hoverResume);
 
+  let imgSrc = '/images/profile_sm.png';
+  if (hoverGithub || hoverResume) {
+    imgSrc = '/images/profile_sm_blur.png';
+  }
+
   const imgClasses = classNames(
     styles['profile-img'],
     {
@@ -71,10 +76,21 @@ function ProfileImg() {
     }
   );
 
-  let imgSrc = '/images/profile_sm.png';
-  if (hoverGithub || hoverResume) {
-    imgSrc = '/images/profile_sm_blur.png';
-  }
+  // loading indicator
+  const loadingIndicator = (
+    <motion.div
+      key="loading"
+      className={styles['loading-indicator']}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <div className={styles['loading-spinner']}>
+        <div className={styles['loading-dot1']} />
+        <div className={styles['loading-dot2']} />
+      </div>
+    </motion.div>
+  );
 
   // content appear animation
   const imgVariants = {
@@ -99,97 +115,6 @@ function ProfileImg() {
       }
     },
   };
-  const overlayVariants = {
-    hidden: {
-      opacity: 0,
-    },
-    visible: {
-      opacity: 1,
-      transition: {
-        when: 'beforeChildren',
-        staggerChildren: 0.4,
-      },
-    },
-  };
-  const overlayItemVariants = {
-    hidden: {
-      opacity: 0,
-    },
-    visible: {
-      opacity: 1,
-    },
-  };
-
-  const profileImgGithub = (
-    <motion.div
-      key="profile-img-github"
-      className={styles['profile-img-github']}
-      variants={overlayVariants}
-      initial="hidden"
-      animate="visible"
-      exit="hidden"
-    >
-      <OverlayText>GITHUB</OverlayText>
-      <motion.p
-        key="Portfolio"
-        variants={overlayItemVariants}
-      >
-        Portfolio
-      </motion.p>
-      <motion.p
-        key="Projects"
-        variants={overlayItemVariants}
-      >
-        Projects
-      </motion.p>
-    </motion.div>
-  );
-
-  const profileImgResume = (
-    <motion.div
-      key="profile-img-resume"
-      className={styles['profile-img-resume']}
-      variants={overlayVariants}
-      initial="hidden"
-      animate="visible"
-      exit="hidden"
-    >
-      <OverlayText>RESUME</OverlayText>
-      <motion.p
-        key="Contact"
-        variants={overlayItemVariants}
-      >
-        Contact
-      </motion.p>
-      <motion.p
-        key="Skills"
-        variants={overlayItemVariants}
-      >
-        Skills
-      </motion.p>
-      <motion.p
-        key="Experience"
-        variants={overlayItemVariants}
-      >
-        Experience
-      </motion.p>
-    </motion.div>
-  );
-
-  const loadingIndicator = (
-    <motion.div
-      key="loading"
-      className={styles['loading-indicator']}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      <div className={styles['loading-spinner']}>
-        <div className={styles['loading-dot1']} />
-        <div className={styles['loading-dot2']} />
-      </div>
-    </motion.div>
-  );
 
   return (
     <motion.div
@@ -210,8 +135,16 @@ function ProfileImg() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         />
-        {hoverGithub && profileImgGithub}
-        {hoverResume && profileImgResume}
+        {hoverGithub && (<Overlay
+          className="profile-img-github"
+          overlayText="GITHUB"
+          items={["Portfolio", "Projects"]} />
+        )}
+        {hoverResume && (<Overlay
+          className="profile-img-resume"
+          overlayText="RESUME"
+          items={["Contact", "Skills", "Experience"]} />
+        )}
       </AnimatePresence>
     </motion.div>
   );

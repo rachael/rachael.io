@@ -1,10 +1,7 @@
-import { Profile, ProfileImg } from 'components/home';
+import { Profile } from 'components/profile';
 
 export default function Home() {
   return (
-    <>
-      <ProfileImg />
-      <Profile />
-    </>
+    <Profile />
   );
 }
