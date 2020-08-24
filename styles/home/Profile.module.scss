@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import 'styles/variables';
 
 .profile {
@@ -223,6 +224,7 @@
 
     p {
       margin: 0.2rem 0;
+      color: color.mix($profile-border-color, $text-color, 40%);
     }
   }
 
@@ -310,6 +312,11 @@
     min-height: 15rem;
     min-width: 15rem;
     margin: 3vh 0 4vh 0;
+
+    .profile-img-github,
+    .profile-img-resume {
+      font-size: 5vh;
+    }
   }
 }
 
@@ -325,5 +332,15 @@
 @media(min-width: 1400px) {
   .profile-name {
     font-size: 6.1rem;
+  }
+}
+
+// Maximum overlay text size
+@media(min-height: 1080px) {
+  .profile-img {
+    .profile-img-github,
+    .profile-img-resume {
+      font-size: 3.4rem;
+    }
   }
 }
