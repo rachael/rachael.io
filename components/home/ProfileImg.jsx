@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { loadCompleteContent, setContentAnimating } from 'redux/actions';
+import { OverlayText } from './overlays';
 
 import styles from 'styles/home/Profile.module.scss';
 
@@ -45,7 +46,7 @@ function ProfileImg() {
     }
   });
   useEffect(() => {
-    if(!isLoadCompleteContent && imgRef.current.complete) {
+    if(!isLoadCompleteContent && imgRef.current && imgRef.current.complete) {
       dispatch(loadCompleteContent());
       setLoadedFromCache(true);
     }
@@ -128,6 +129,7 @@ function ProfileImg() {
       animate="visible"
       exit="hidden"
     >
+      <OverlayText>GITHUB</OverlayText>
       <motion.p
         key="Portfolio"
         variants={overlayItemVariants}
@@ -152,6 +154,7 @@ function ProfileImg() {
       animate="visible"
       exit="hidden"
     >
+      <OverlayText>RESUME</OverlayText>
       <motion.p
         key="Contact"
         variants={overlayItemVariants}

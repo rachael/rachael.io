@@ -225,6 +225,24 @@
     p {
       margin: 0.2rem 0;
       color: rgba(color.mix($profile-border-color, $text-color, 20%), 0.7);
+      z-index: 2;
+      text-shadow:
+       -1px -1px 0 rgba($background-color, 0.7),
+        1px -1px 0 rgba($background-color, 0.7),
+        -1px 1px 0 rgba($background-color, 0.7),
+         1px 1px 0 rgba($background-color, 0.7);
+    }
+
+    .knockout-text {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+
+      text {
+        font-size: 4rem;
+        text-transform: uppercase;
+      }
     }
   }
 
@@ -316,6 +334,10 @@
     .profile-img-github,
     .profile-img-resume {
       font-size: 5vh;
+
+      .knockout-text text {
+        font-size: 10vh;
+      }
     }
   }
 }
