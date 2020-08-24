@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 
-import styles from 'styles/page/Layout.module.scss'
+import styles from 'styles/page/Layout.module.scss';
 
 function Footer({ ...props }) {
   // only appear after content has loaded
@@ -31,7 +31,7 @@ function Footer({ ...props }) {
     >
       {props.children}
     </motion.footer>
-  )
+  );
 }
 
-export default Footer
+export default Footer;

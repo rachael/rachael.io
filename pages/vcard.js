@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 
 /**
  * Static redirect for vcard file. Does not use StaticFileRedirect as there is
@@ -25,4 +25,4 @@ VCard.getInitialProps = ctx => {
   return { };
 }
 
-export default VCard
+export default VCard;

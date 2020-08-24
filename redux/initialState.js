@@ -6,4 +6,4 @@ export default {
   hoverResume: false,
   hoverGithub: false,
   wiggle: false,
-};
+}

@@ -44,7 +44,7 @@ function ProfileImg() {
     if(!isLoadCompleteContent) {
       dispatch(loadCompleteContent());
     }
-  });
+  }, [isLoadCompleteContent, dispatch]);
   useEffect(() => {
     if(!isLoadCompleteContent && imgRef.current && imgRef.current.complete) {
       dispatch(loadCompleteContent());

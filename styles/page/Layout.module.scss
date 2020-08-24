@@ -36,6 +36,7 @@
 }
 
 // Main container and content
+// On mobile, also render pulsing cinema bars on top and bottom edge of screen
 .container {
   display: flex;
   flex-direction: column;

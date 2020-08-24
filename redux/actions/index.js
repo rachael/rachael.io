@@ -11,7 +11,7 @@ import {
   setHoverResume,
   WIGGLE,
   wiggle,
-} from './actions';
+} from './actions'
 
 export {
   LOAD_COMPLETE_BG,
@@ -26,4 +26,4 @@ export {
   setHoverResume,
   WIGGLE,
   wiggle,
-};
+}

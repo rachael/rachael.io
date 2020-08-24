@@ -1,6 +1,9 @@
 @use 'sass:color';
 @import 'styles/variables';
 
+/*******************************************************************************
+* Profile
+*******************************************************************************/
 .profile {
   display: flex;
   flex-direction: column;
@@ -9,6 +12,9 @@
   padding: 0 1rem;
 }
 
+/*******************************************************************************
+* Profile text
+*******************************************************************************/
 .profile-name,
 .profile-description-line1,
 .profile-description-line2 {
@@ -42,6 +48,9 @@
   margin: 0 -1.5rem 1.5rem 0;
 }
 
+/*******************************************************************************
+* Profile image
+*******************************************************************************/
 .profile-img {
   flex-shrink: 0;
   position: relative;
@@ -138,7 +147,9 @@
   }
 }
 
-// Loading effects
+/*******************************************************************************
+* Loading effects
+*******************************************************************************/
 .profile-img.loading img {
   opacity: 0 !important;
 }
@@ -196,7 +207,9 @@
   }
 }
 
-// Button hover effects
+/*******************************************************************************
+* Button hover effects
+*******************************************************************************/
 .profile-img {
   img {
     position: absolute;
@@ -266,7 +279,6 @@
     }
   }
 }
-
 // Start scaling text by screen size as soon as possible.
 // Freeze min content size at $content-min-width for sane minimum resizing.
 @media(min-width: $content-min-width) {
@@ -288,6 +300,9 @@
   }
 }
 
+/*******************************************************************************
+* Mobile screen styles (< 800px)
+*******************************************************************************/
 // 500px -- found by experiment -- freeze text size in preparation for main
 // container size decrease.
 @media(min-width: 500px) {
@@ -309,7 +324,9 @@
   }
 }
 
-// Large screens
+/*******************************************************************************
+* Non-mobile screen styles (> 800px)
+*******************************************************************************/
 @media(min-width: $large-screen-size) {
   .profile-name {
     font-size: 7vw;

@@ -41,7 +41,7 @@ function Layout({
   const isLoadCompleteBG = useSelector(state => state.loadCompleteBG);
   const setLoadCompleteCB = useCallback(() => {
     if(!isLoadCompleteBG) dispatch(loadCompleteBG());
-  });
+  }, [isLoadCompleteBG, dispatch]);
   useEffect(() => {
     if(!isLoadCompleteBG && bgRef.current.complete) dispatch(loadCompleteBG());
   });
@@ -116,7 +116,8 @@ function Layout({
       <Header title={title} />
       <img
         className={styles['background-loader']}
-        src='/images/bg_postits_blur.png'
+        src="/images/bg_postits_blur.png"
+        alt=""
         ref={bgRef}
         onLoad={setLoadCompleteCB}
       />
@@ -140,8 +141,8 @@ function Layout({
           {props.children}
         </motion.div>
         <Footer key="footer">
-          <a className='link'
-             href='#'
+          <a className="link"
+             href="#"
              onClick={wiggleCB}>
             wiggle
           </a>
