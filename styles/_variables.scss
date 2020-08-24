@@ -17,8 +17,7 @@ $dot-colors: (
 );
 
 // Global
-$button-border-color: #abcad6;
-$button-hover-color: #fff;
+$button-hover-color: $background-color;
 $button-hover-background: $text-color;
 
 // Profile

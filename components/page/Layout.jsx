@@ -116,7 +116,7 @@ function Layout({
       <Header title={title} />
       <img
         className={styles['background-loader']}
-        src='/bg_postits_blur.png'
+        src='/images/bg_postits_blur.png'
         ref={bgRef}
         onLoad={setLoadCompleteCB}
       />

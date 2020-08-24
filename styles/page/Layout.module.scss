@@ -148,7 +148,7 @@
 // background-image 100px opacity transition buffer
 @media (min-width: #{$large-screen-size - 100}) {
   .background-image {
-    background: url('/bg_postits_blur.png');
+    background: url('/images/bg_postits_blur.png');
     background-size: cover;
   }
 }

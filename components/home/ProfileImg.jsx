@@ -70,9 +70,9 @@ function ProfileImg() {
     }
   );
 
-  let imgSrc = '/profile_sm.png';
+  let imgSrc = '/images/profile_sm.png';
   if (hoverGithub || hoverResume) {
-    imgSrc = '/profile_sm_blur.png';
+    imgSrc = '/images/profile_sm_blur.png';
   }
 
   // content appear animation
