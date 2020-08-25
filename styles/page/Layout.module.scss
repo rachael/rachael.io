@@ -166,8 +166,12 @@
 
   .container {
     width: 65%;
-    background: rgba($background-color, 0.8);
-    box-shadow: 0 0 7px 10px rgba($background-color, 0.8);
+    background: rgba($background-color, 0.5);
+    text-shadow:
+     -1px -1px 0 rgba($background-color, 0.7),
+      1px -1px 0 rgba($background-color, 0.7),
+      -1px 1px 0 rgba($background-color, 0.7),
+       1px 1px 0 rgba($background-color, 0.7);
     transition: width 100ms;
 
     &:before,
