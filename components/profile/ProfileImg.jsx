@@ -11,6 +11,21 @@ import styles from 'styles/home/Profile.module.scss';
 function ProfileImg() {
   const dispatch = useDispatch();
 
+  // Set position of profile border background image so pattern acts as a mask
+  const profileBorderStrokeWidth = 3;
+  const [profileFillX, setProfileFillX] = useState(0);
+  const [profileFillY, setProfileFillY] = useState(0);
+
+  const setProfileFill = () => {
+    const profileImgPos = imgRef.current.getBoundingClientRect();
+    setProfileFillX(`${-profileImgPos.x + profileBorderStrokeWidth}px`);
+    setProfileFillY(`${-profileImgPos.y + profileBorderStrokeWidth}px`);
+  };
+
+  useEffect(() => {
+    setProfileFill();
+  });
+
   // Send off pulse when animating in.
   // Pulse animation is controlled by CSS.
   const [visiblePulseNow, setVisiblePulseNow] = useState();
@@ -18,18 +33,20 @@ function ProfileImg() {
 
   useEffect(() => {
     let timeout;
-    const unsubscribeScale = scale.onChange(activatePulse);
+    const unsubscribePulseOnScale = scale.onChange(activatePulse);
     function activatePulse() {
-      unsubscribeScale();
+      unsubscribePulseOnScale();
       setVisiblePulseNow(true);
       timeout = setTimeout(() => {
         setVisiblePulseNow(false);
         dispatch(setContentAnimating(false));
       }, 1600);
     }
+    const unsubscribeSetProfileFillOnScale = scale.onChange(setProfileFill);
     return () => {
       clearTimeout(timeout);
-      unsubscribeScale();
+      unsubscribePulseOnScale();
+      unsubscribeSetProfileFillOnScale();
     }
   });
 
@@ -45,16 +62,18 @@ function ProfileImg() {
       dispatch(loadCompleteContent());
     }
   }, [isLoadCompleteContent, dispatch]);
+
+  if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
+    controls.start('pulse');
+    setLoaded(true);
+  }
+
   useEffect(() => {
     if(!isLoadCompleteContent && imgRef.current && imgRef.current.complete) {
       dispatch(loadCompleteContent());
       setLoadedFromCache(true);
     }
   });
-  if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
-    controls.start('pulse');
-    setLoaded(true);
-  }
 
   // Button hover states -- add overlay to profile image
   const hoverGithub = useSelector(state => state.hoverGithub);
@@ -135,6 +154,39 @@ function ProfileImg() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         />
+        <svg
+          key="profile-img-border"
+          className={styles['profile-img-border']}
+        >
+          <pattern
+            id="profileImgFill"
+            patternUnits="userSpaceOnUse"
+            width="100vw"
+            height="300vh"
+            x={`-${profileBorderStrokeWidth}px`}
+            y={`-${profileBorderStrokeWidth}px`}
+          >
+            <image
+              className={styles['profile-fill']}
+              y={profileFillY}
+              x={profileFillX}
+              width="100vw"
+              height="300vh"
+              preserveAspectRatio="xMinYMin slice"
+              href="/images/bg_postits_blur.png"
+            >
+            </image>
+          </pattern>
+          <circle
+            className={styles['profile-img-border-circle']}
+            cx="50%"
+            cy="50%"
+            r="50%"
+            stroke="url(#profileImgFill)"
+            strokeWidth={profileBorderStrokeWidth}
+            fill="none"
+          />
+        </svg>
         {hoverGithub && (<Overlay
           className="profile-img-github"
           overlayText="GITHUB"
