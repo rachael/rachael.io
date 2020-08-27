@@ -5,8 +5,8 @@ import styles from 'styles/home/Profile.module.scss';
  */
 function OverlayText(props) {
   return (
-    <svg className={styles['knockout-text']}>
-      <pattern id="pattern" patternUnits="userSpaceOnUse" width="100%" height="100%">
+    <svg className={styles['overlay-knockout-text']}>
+      <pattern id="overlayfill" patternUnits="userSpaceOnUse" width="100%" height="100%">
         <image width="100%" height="100%" href="/images/profile_sm_overlayfill.png"></image>
       </pattern>
       <text
@@ -14,7 +14,7 @@ function OverlayText(props) {
         y="50%"
         dominantBaseline="middle"
         textAnchor="middle"
-        fill="url(#pattern)"
+        fill="url(#overlayfill)"
         fontFamily="Montserrat"
         fontWeight="900"
         textLength="100%"

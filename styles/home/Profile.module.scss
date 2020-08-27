@@ -9,7 +9,19 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0 1rem;
+  width: 100%;
+  overflow: visible;
+}
+
+// Scrolling background fill
+@keyframes backgroundAnimation {
+	from { transform: translateY(-120vh); }
+	to { transform: translateY(0vh); }
+}
+
+.profile-fill {
+  animation: backgroundAnimation 90s linear infinite;
+  animation-direction: alternate;
 }
 
 /*******************************************************************************
@@ -18,34 +30,17 @@
 .profile-name,
 .profile-description-line1,
 .profile-description-line2 {
-  transition: font-size 200ms;
+  transition: font-size 400ms;
 }
 
 .profile-name {
-  font-size: 1.9rem;
-  margin: 0 0 0.6rem 0;
-  text-align: center;
-}
-
-.profile-description {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  font-size: 2.8rem;
+  height: 2.8rem;
 }
 
 .profile-description-line1,
 .profile-description-line2 {
-  font-size: 1.1rem;
-  transition: margin 400ms;
-}
-
-.profile-description-line1 {
-  margin: 0 0 0 -4rem;
-}
-
-.profile-description-line2 {
-  margin: 0 -1.5rem 1.5rem 0;
+  font-size: 1.4rem;
 }
 
 /*******************************************************************************
@@ -56,8 +51,8 @@
   position: relative;
   height: 15rem;
   width: 15rem;
-  margin-bottom: 1.5rem;
-  transition: width 400ms, height 400ms, margin 400ms;
+  margin-bottom: 1rem;
+  transition: width 400ms, height 400ms;
 
   img {
     height: 100%;
@@ -246,7 +241,7 @@
          1px 1px 0 rgba($background-color, 0.7);
     }
 
-    .knockout-text {
+    .overlay-knockout-text {
       position: absolute;
       width: 100%;
       height: 100%;
@@ -280,35 +275,29 @@
     }
   }
 }
-// Start scaling text by screen size as soon as possible.
-// Freeze min content size at $content-min-width for sane minimum resizing.
-@media(min-width: $content-min-width) {
-  .profile-name {
-    font-size: 10vw;
-  }
-
-  .profile-description-line1,
-  .profile-description-line2 {
-    font-size: 6vw;
-  }
-
-  .profile-description-line1 {
-    margin-left: -24vw;
-  }
-
-  .profile-description-line2 {
-    margin-right: -6vw;
-  }
-}
 
 /*******************************************************************************
 * Mobile screen styles (< 800px)
 *******************************************************************************/
-// 500px -- found by experiment -- freeze text size in preparation for main
-// container size decrease.
+// Freeze content size below $content-min-width for sane minimum resizing.
+// Start scaling text by screen size at $content-min-width and above.
+@media(min-width: $content-min-width) {
+  .profile-name {
+    font-size: 15vw;
+    height: 15vw;
+  }
+
+  .profile-description-line1,
+  .profile-description-line2 {
+    font-size: 1.7rem;
+  }
+}
+
+// 500px: freeze text size in preparation for main container size decrease.
 @media(min-width: 500px) {
   .profile-name {
-    font-size: 3.2rem;
+    font-size: 4.6rem;
+    height: 4.6rem;
   }
 
   .profile-description-line1,
@@ -329,25 +318,27 @@
 * Non-mobile screen styles (> 800px)
 *******************************************************************************/
 @media(min-width: $large-screen-size) {
+  .profile {
+    position: fixed;
+    width: 100%;
+    top: 58vh;
+  }
+
   .profile-name {
-    font-size: 7vw;
+    font-size: 12vh;
+    height: 12vh;
   }
 
   .profile-description-line1,
   .profile-description-line2 {
-    font-size: 3.8vw;
-  }
-
-  .profile-description-line2 {
-    margin-bottom: 4vh;
+    font-size: 5vh;
   }
 
   .profile-img {
+    position: fixed;
     height: 40vh;
     width: 40vh;
-    min-height: 15rem;
-    min-width: 15rem;
-    margin: 3vh 0 4vh 0;
+    top: 16vh;
 
     .profile-img-github,
     .profile-img-resume {
@@ -369,11 +360,11 @@
 }
 
 // Maximum name size
-@media(min-width: 1400px) {
-  .profile-name {
-    font-size: 6.1rem;
-  }
-}
+// @media(min-width: 1400px) {
+//   .profile-name {
+//     font-size: 6.1rem;
+//   }
+// }
 
 // Maximum overlay text size
 @media(min-height: 1080px) {
