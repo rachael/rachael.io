@@ -291,9 +291,17 @@
   .profile-description-line2 {
     font-size: 1.7rem;
   }
+
+  .profile-img {
+    width: 80vw;
+    height: 80vw;
+    max-width: 50vh;
+    max-height: 50vh;
+  }
 }
 
 // 500px: freeze text size in preparation for main container size decrease.
+// Increase size of profile image.
 @media(min-width: 500px) {
   .profile-name {
     font-size: 4.6rem;
@@ -303,14 +311,6 @@
   .profile-description-line1,
   .profile-description-line2 {
     font-size: 1.9rem;
-  }
-
-  .profile-description-line1 {
-    margin-left: -4em;
-  }
-
-  .profile-description-line2 {
-    margin-right: -1.5em;
   }
 }
 
@@ -336,9 +336,9 @@
 
   .profile-img {
     position: fixed;
-    height: 40vh;
-    width: 40vh;
-    top: 16vh;
+    height: 50vh;
+    width: 50vh;
+    top: 7vh;
 
     .profile-img-github,
     .profile-img-resume {
@@ -351,13 +351,32 @@
   }
 }
 
-// Maximum description size
-@media(min-width: 1160px) {
+@media (min-width: $large-screen-size) and (max-aspect-ratio: "3/2") {
+  .profile-name {
+    font-size: 7.5vw;
+    height: 7.5vw;
+  }
+
   .profile-description-line1,
   .profile-description-line2 {
-    font-size: 2.8rem;
+    font-size: 3.3vw;
+  }
+
+  .profile-img {
+    height: 47.21435316vw;
+    width: 47.21435316vw;
+    top: unset;
+    bottom: 42vh;
   }
 }
+
+// Maximum description size
+// @media(min-width: 1160px) {
+//   .profile-description-line1,
+//   .profile-description-line2 {
+//     font-size: 2.8rem;
+//   }
+// }
 
 // Maximum name size
 // @media(min-width: 1400px) {

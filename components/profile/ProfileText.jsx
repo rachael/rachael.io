@@ -23,67 +23,32 @@ function ProfileText() {
   // position & resize
   const positions = {
     min: {
-      nameY: '2.8rem',
       nameTextLength: '270px',
-      descriptionLine1DY: '1.9rem',
-      descriptionLine2DY: '1.6rem',
-      descriptionLine1DX: '-3rem',
-      descriptionLine2DX: '2.5rem',
     },
     '300': {
-      nameY: '15vw',
       nameTextLength: '90vw',
-      descriptionLine1DY: '2rem',
-      descriptionLine2DY: '2rem',
-      descriptionLine1DX: '-3rem',
-      descriptionLine2DX: '2rem',
     },
     '500': {
-      nameY: '4.6rem',
       nameTextLength: '450px',
-      descriptionLine1DY: '2.5rem',
-      descriptionLine2DY: '2rem',
-      descriptionLine1DX: '-3rem',
-      descriptionLine2DX: '2.5rem',
     },
     '800': {
-      nameY: '12vh',
       nameTextLength: '500px',
-      descriptionLine1DY: '6vh',
-      descriptionLine2DY: '5vh',
-      descriptionLine1DX: '-7vh',
-      descriptionLine2DX: '6vh',
     },
     '1060': {
-      nameY: '12vh',
-      nameTextLength: '500px',
-      descriptionLine1DY: '2.5rem',
-      descriptionLine2DY: '2rem',
-      descriptionLine1DX: '-3rem',
-      descriptionLine2DX: '2.5rem',
+      nameTextLength: '47.21435316vw',
     },
   };
 
   const [currentPosition, updatePosition] = useState();
-  const [nameY, setNameY] = useState();
   const [nameTextLength, setNameTextLength] = useState();
-  const [descriptionLine1DY, setDescriptionLine1DY] = useState();
-  const [descriptionLine1DX, setDescriptionLine1DX] = useState();
-  const [descriptionLine2DY, setDescriptionLine2DY] = useState();
-  const [descriptionLine2DX, setDescriptionLine2DX] = useState();
 
   const setPosition = (position) => {
     console.log('set position', position);
     updatePosition(position);
-    setNameY(positions[position]['nameY']);
     setNameTextLength(positions[position]['nameTextLength']);
-    setDescriptionLine1DY(positions[position]['descriptionLine1DY']);
-    setDescriptionLine2DY(positions[position]['descriptionLine2DY']);
-    setDescriptionLine1DX(positions[position]['descriptionLine1DX']);
-    setDescriptionLine2DX(positions[position]['descriptionLine2DX']);
   };
 
-  useEffect(() => {
+  const setupMediaQueries = () => {
     const mqlMin = window.matchMedia('(max-width: 299px)');
     const screenTestMin = (e) => {
       if(currentPosition !== 'min' && e.matches) setPosition('min');
@@ -105,7 +70,7 @@ function ProfileText() {
     mql500.addListener(screenTest500);
     screenTest500(mql500);
 
-    const mql800 = window.matchMedia('(min-width: 800px)');
+    const mql800 = window.matchMedia('(min-width: 800px) and (max-width: 1059px)');
     const screenTest800 = (e) => {
       if(e.matches) {
         if(currentPosition !== '800' && e.matches) setPosition('800');
@@ -113,6 +78,19 @@ function ProfileText() {
     }
     mql800.addListener(screenTest800);
     screenTest800(mql800);
+
+    const mql1060 = window.matchMedia('(min-width: 1060px)');
+    const screenTest1060 = (e) => {
+      if(e.matches) {
+        if(currentPosition !== '1060' && e.matches) setPosition('1060');
+      }
+    }
+    mql1060.addListener(screenTest1060);
+    screenTest1060(mql1060);
+  };
+
+  useEffect(() => {
+    setupMediaQueries();
   });
 
   // content appear animation
@@ -178,84 +156,86 @@ function ProfileText() {
   };
 
   return (
-    <motion.svg
-      className={styles.profile}
-      variants={profileVariants}
-      animate={controls}
-    >
-      <pattern id="profileFill" patternUnits="userSpaceOnUse" width="100vw" height="100vh">
-        <image
-          className={styles['profile-fill']}
-          y="-58vh"
-          width="100vw"
-          height="300vh"
-          preserveAspectRatio="xMinYMin slice"
-          href="/images/bg_postits_blur.png"
-        >
-        </image>
-      </pattern>
-      <text
-        fontFamily="Indie Flower"
-        textAnchor="middle"
-        fill="url(#profileFill)"
+    <>
+      <motion.svg
+        className={styles.profile}
+        variants={profileVariants}
+        animate={controls}
       >
-        <motion.tspan
-          className={styles['profile-name']}
-          x="50%"
-          y={nameY}
-          textLength={nameTextLength}
-          variants={profileNameVariants}
-          layout
+        <pattern id="profileFill" patternUnits="userSpaceOnUse" width="100vw" height="100vh">
+          <image
+            className={styles['profile-fill']}
+            y="-58vh"
+            width="100vw"
+            height="300vh"
+            preserveAspectRatio="xMinYMin slice"
+            href="/images/bg_postits_blur.png"
+          >
+          </image>
+        </pattern>
+        <text
+          fontFamily="Indie Flower"
+          textAnchor="middle"
+          fill="url(#profileFill)"
         >
-          Rachael Passov
-        </motion.tspan>
-        <motion.tspan
-          className={styles['profile-description-line1']}
-          x="50%"
-          dx={descriptionLine1DX}
-          dy={descriptionLine1DY}
-          variants={profileDescriptionVariants}
-          layout
+          <motion.tspan
+            className={styles['profile-name']}
+            x="50%"
+            y="1em"
+            textLength={nameTextLength}
+            variants={profileNameVariants}
+            layout
+          >
+            Rachael Passov
+          </motion.tspan>
+          <motion.tspan
+            className={styles['profile-description-line1']}
+            x="50%"
+            dx="-2em"
+            dy="1.2em"
+            variants={profileDescriptionVariants}
+            layout
+          >
+              UX Designer /
+          </motion.tspan>
+          <motion.tspan
+            className={styles['profile-description-line2']}
+            x="50%"
+            dx="1.3em"
+            dy="1em"
+            variants={profileDescriptionVariants}
+            layout
+          >
+              Frontend Engineer
+          </motion.tspan>
+        </text>
+      </motion.svg>
+      {/* <motion.div
+        className={styles['profile-description']}
+        variants={profileItemVariants}
+      >
+        <h2 className={styles['profile-description-line1']}>UX Designer /</h2>
+        <h2 className={styles['profile-description-line2']}>Frontend Engineer</h2>
+      </motion.div> */}
+      <motion.div
+        variants={buttonVariants}
+      >
+        <Button
+          href='/Rachael Passov - Resume.pdf'
+          onMouseEnter={() => dispatch(setHoverResume(true))}
+          onMouseLeave={() => dispatch(setHoverResume(false))}
         >
-            UX Designer /
-        </motion.tspan>
-        <motion.tspan
-          className={styles['profile-description-line2']}
-          x="50%"
-          dx={descriptionLine2DX}
-          dy={descriptionLine2DY}
-          variants={profileDescriptionVariants}
-          layout
+            Resume
+        </Button>
+        <Button
+          href='https://github.rachael.io'
+          onMouseEnter={() => dispatch(setHoverGithub(true))}
+          onMouseLeave={() => dispatch(setHoverGithub(false))}
         >
-            Frontend Engineer
-        </motion.tspan>
-      </text>
-    </motion.svg>
-    // {/* <motion.div
-    //   className={styles['profile-description']}
-    //   variants={profileItemVariants}
-    // >
-    //   <h2 className={styles['profile-description-line1']}>UX Designer /</h2>
-    //   <h2 className={styles['profile-description-line2']}>Frontend Engineer</h2>
-    // </motion.div>
-    // <motion.div
-    //   variants={buttonVariants}
-    // >
-    //   <Button
-    //     href='/Rachael Passov - Resume.pdf'
-    //     onMouseEnter={() => dispatch(setHoverResume(true))}
-    //     onMouseLeave={() => dispatch(setHoverResume(false))}
-    //   >
-    //       Resume
-    //   </Button>
-    //   <Button
-    //     href='https://github.rachael.io'
-    //     onMouseEnter={() => dispatch(setHoverGithub(true))}
-    //     onMouseLeave={() => dispatch(setHoverGithub(false))}
-    //   >
-    //       Github
-    //   </Button>
-    // </motion.div> */}
+            Github
+        </Button>
+      </motion.div>
+    </>
   );
 }
 
