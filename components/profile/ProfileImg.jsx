@@ -12,41 +12,28 @@ function ProfileImg() {
   const dispatch = useDispatch();
 
   // Set position of profile border background image so pattern acts as a mask
-  const profileBorderStrokeWidth = 3;
+  const profileBorderStrokeWidth = 4;
   const [profileFillX, setProfileFillX] = useState(0);
   const [profileFillY, setProfileFillY] = useState(0);
 
-  const setProfileFill = () => {
+  const setProfileFillPosition = () => {
     const profileImgPos = imgRef.current.getBoundingClientRect();
     setProfileFillX(`${-profileImgPos.x + profileBorderStrokeWidth}px`);
     setProfileFillY(`${-profileImgPos.y + profileBorderStrokeWidth}px`);
   };
 
   useEffect(() => {
-    setProfileFill();
+    setProfileFillPosition();
   });
 
   // Send off pulse when animating in.
-  // Pulse animation is controlled by CSS.
-  const [visiblePulseNow, setVisiblePulseNow] = useState();
   const scale = useMotionValue(1.7);
+  const borderScale = useMotionValue(1.04);
 
   useEffect(() => {
-    let timeout;
-    const unsubscribePulseOnScale = scale.onChange(activatePulse);
-    function activatePulse() {
-      unsubscribePulseOnScale();
-      setVisiblePulseNow(true);
-      timeout = setTimeout(() => {
-        setVisiblePulseNow(false);
-        dispatch(setContentAnimating(false));
-      }, 1600);
-    }
-    const unsubscribeSetProfileFillOnScale = scale.onChange(setProfileFill);
+    const unsubscribeBorderBackgroundScale = scale.onChange(setProfileFillPosition);
     return () => {
-      clearTimeout(timeout);
-      unsubscribePulseOnScale();
-      unsubscribeSetProfileFillOnScale();
+      unsubscribeBorderBackgroundScale();
     }
   });
 
@@ -64,6 +51,7 @@ function ProfileImg() {
   }, [isLoadCompleteContent, dispatch]);
 
   if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
+    console.log('pulse');
     controls.start('pulse');
     setLoaded(true);
   }
@@ -89,7 +77,6 @@ function ProfileImg() {
     {
       [styles['loading']]: !(isLoadCompleteBG || isLoadCompleteContent),
       [styles['loaded-from-cache']]: loadedFromCache,
-      [styles['pulse']]: visiblePulseNow,
       [styles['hover-github']]: hoverGithub,
       [styles['hover-resume']]: hoverResume,
     }
@@ -113,11 +100,6 @@ function ProfileImg() {
 
   // content appear animation
   const imgVariants = {
-    hidden: {
-      opacity: 0,
-      scale: 1.7,
-      translateY: '40%',
-    },
     visible: {
       opacity: 1,
       scale: 1.7,
@@ -129,10 +111,53 @@ function ProfileImg() {
       translateY: ['40%', 0],
       transition: {
         duration: 2,
+        delay: 0.6,
         times: [0.5, 1],
         ease: [[.71,-0.37,.46,.99]],
       }
+    }
+  };
+
+  const borderVariants = {
+    borderBreathe: {
+      scale: [1.04, 1.10, 1.07, 1.11, 1.05, 1.09],
+      transition: {
+        duration: 16,
+      }
     },
+    fadeIn: {
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+      },
+    },
+    pulse: {
+      scale: 3,
+      transition: {
+        duration: 0.8,
+        delay: 1.6,
+      },
+      transitionEnd: {
+        scale: 1.04,
+      }
+    },
+  };
+
+  const profileFillVariants = {
+    hidden: {
+      scale: 1/1.7,
+    },
+    visible: {
+      scale: 1/1.7,
+    },
+    pulse: {
+      scale: [1/1.7, 1],
+      transition: {
+        duration: 2,
+        times: [0.5, 1],
+        ease: [[.71,-0.37,.46,.99]],
+      }
+    }
   };
 
   return (
@@ -165,6 +190,7 @@ function ProfileImg() {
             height="300vh"
             x={`-${profileBorderStrokeWidth}px`}
             y={`-${profileBorderStrokeWidth}px`}
+            patternTransform={`scale(${1/scale.get()})`}
           >
             <image
               className={styles['profile-fill']}
@@ -174,10 +200,9 @@ function ProfileImg() {
               height="300vh"
               preserveAspectRatio="xMinYMin slice"
               href="/images/bg_postits_blur.png"
-            >
-            </image>
+            />
           </pattern>
-          <circle
+          <motion.circle
             className={styles['profile-img-border-circle']}
             cx="50%"
             cy="50%"
@@ -185,6 +210,10 @@ function ProfileImg() {
             stroke="url(#profileImgFill)"
             strokeWidth={profileBorderStrokeWidth}
             fill="none"
+            variants={borderVariants}
+            animate={controls}
+            style={{ scale: borderScale }}
+            layout
           />
         </svg>
         {hoverGithub && (<Overlay
