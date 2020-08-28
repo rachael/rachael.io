@@ -17,6 +17,7 @@ function ProfileImg() {
   const imgControls = useAnimation();
   const borderControls = useAnimation();
   const imgScale = useMotionValue(1.7);
+  const imgTranslateY = useMotionValue('40%');
   const borderScale = useMotionValue(1.04);
 
   const borderStrokeWidth = 4;
@@ -28,17 +29,23 @@ function ProfileImg() {
 
   const setBorderFillPosition = () => {
     const borderPos = borderRef.current.getBoundingClientRect();
-    const diffX = ((borderPos.width * borderScale.get()) - borderPos.width)/2;
-    const diffY = ((borderPos.height * borderScale.get()) - borderPos.height)/2;
+    const scaledWidth = borderPos.width * borderScale.get();
+    const scaleDiff = (scaledWidth - borderPos.width)/2;
+    const translateY = parseFloat(imgTranslateY.get())/100;
+    const translateYDiff = borderPos.y + (scaledWidth * translateY);
     if (imgScale.get() > 1) {
-      if (borderPos.x + borderStrokeWidth > diffX) {
-        setBorderFillX(`${-borderPos.x + borderStrokeWidth + diffX}px`);
-        setBorderFillY(`${-borderPos.y + borderStrokeWidth + diffY}px`);
+      console.log(translateY);
+      if (borderPos.x - borderStrokeWidth > scaleDiff) {
+        // before pulse animation start
+        setBorderFillX(`${-borderPos.x + borderStrokeWidth + scaleDiff}px`);
+        setBorderFillY(`${-borderPos.y + borderStrokeWidth + scaleDiff}px`);
       } else {
-        setBorderFillX(`${-borderPos.x + borderStrokeWidth*2}px`);
-        setBorderFillY(`${-borderPos.y + borderStrokeWidth*2}px`);
+        // after pulse animation start
+        setBorderFillX(`${-borderPos.x + borderStrokeWidth}px`);
+        setBorderFillY(`${-borderPos.y - translateYDiff + borderStrokeWidth}px`);
       }
     } else {
+      // breathe animation
       setBorderFillX(`${-borderPos.x + borderStrokeWidth}px`);
       setBorderFillY(`${-borderPos.y + borderStrokeWidth}px`);
     }
@@ -150,7 +157,7 @@ function ProfileImg() {
       scale: 3,
       opacity: 0,
       transition: {
-        duration: 0.8,
+        duration: 2,
       },
     },
   };
@@ -176,7 +183,7 @@ function ProfileImg() {
       key="profile-img"
       className={imgClasses}
       variants={imgVariants}
-      style={{ scale: imgScale }}
+      style={{ scale: imgScale, translateY: imgTranslateY }}
       initial="visible"
       animate={imgControls}
     >
