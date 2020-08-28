@@ -22,6 +22,7 @@
 .profile-fill {
   animation: backgroundAnimation 90s linear infinite;
   animation-direction: alternate;
+  will-change: transform;
 }
 
 /*******************************************************************************
@@ -81,9 +82,9 @@
     .profile-fill {
       // animation: profileBreatheInverse 16s 400ms infinite alternate,
       //            backgroundAnimation 90s linear infinite alternate;
-      animation: backgroundAnimation 90s linear infinite alternate;
+      // animation: backgroundAnimation 90s linear infinite alternate;
       // transform-origin: center;
-      will-change: transform;
+      // will-change: transform;
     }
   }
 

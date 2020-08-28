@@ -11,40 +11,56 @@ import styles from 'styles/home/Profile.module.scss';
 function ProfileImg() {
   const dispatch = useDispatch();
 
-  // Set position of profile border background image so pattern acts as a mask
-  const profileBorderStrokeWidth = 4;
-  const [profileFillX, setProfileFillX] = useState(0);
-  const [profileFillY, setProfileFillY] = useState(0);
+  const imgRef = useRef();
+  const borderRef = useRef();
 
-  const setProfileFillPosition = () => {
-    const profileImgPos = imgRef.current.getBoundingClientRect();
-    setProfileFillX(`${-profileImgPos.x + profileBorderStrokeWidth}px`);
-    setProfileFillY(`${-profileImgPos.y + profileBorderStrokeWidth}px`);
+  const imgControls = useAnimation();
+  const borderControls = useAnimation();
+  const imgScale = useMotionValue(1.7);
+  const borderScale = useMotionValue(1.04);
+
+  const borderStrokeWidth = 4;
+
+  // Set position of profile border fill so pattern acts as a mask.
+  // fill position:
+  const [borderFillX, setBorderFillX] = useState(0);
+  const [borderFillY, setBorderFillY] = useState(0);
+
+  const setBorderFillPosition = () => {
+    const borderPos = borderRef.current.getBoundingClientRect();
+    const diffX = (borderPos.width * borderScale.get()) - borderPos.width;
+    const diffY = (borderPos.height * borderScale.get()) - borderPos.height;
+    if (imgScale.get() > 1) {
+      setBorderFillX(`${-borderPos.x + borderStrokeWidth + diffX/2}px`);
+      setBorderFillY(`${-borderPos.y + borderStrokeWidth + diffY/2}px`);
+    } else {
+      setBorderFillX(`${-borderPos.x + borderStrokeWidth}px`);
+      setBorderFillY(`${-borderPos.y + borderStrokeWidth}px`);
+    }
   };
 
   useEffect(() => {
-    setProfileFillPosition();
+    setBorderFillPosition();
   });
 
-  // Send off pulse when animating in.
-  const scale = useMotionValue(1.7);
-  const borderScale = useMotionValue(1.04);
-
+  // scale:
   useEffect(() => {
-    const unsubscribeBorderBackgroundScale = scale.onChange(setProfileFillPosition);
+    const unsubscribeBorderBackgroundScale = borderScale.onChange(setBorderFillPosition);
     return () => {
       unsubscribeBorderBackgroundScale();
     }
   });
 
   // Image load
-  const imgRef = useRef();
-  const borderControls = useAnimation();
-  const imgControls = useAnimation();
+  // loaded: true if image has finished loading and started its 'pulse' animation.
+  // ensures pulse is only fired off once.
   const [loaded, setLoaded] = useState();
+  // loadedFromCache: hides the loading indicator to prevent flash
   const [loadedFromCache, setLoadedFromCache] = useState();
+  // loadComplete store variables
   const isLoadCompleteBG = useSelector(state => state.loadCompleteBG);
   const isLoadCompleteContent = useSelector(state => state.loadCompleteContent);
+  // callback on img load complete
   const setLoadCompleteCB = useCallback(() => {
     if(!isLoadCompleteContent) {
       dispatch(loadCompleteContent());
@@ -52,6 +68,7 @@ function ProfileImg() {
   }, [isLoadCompleteContent, dispatch]);
 
   useEffect(() => {
+    // image has been loaded from cache
     if(!isLoadCompleteContent && imgRef.current && imgRef.current.complete) {
       dispatch(loadCompleteContent());
       setLoadedFromCache(true);
@@ -59,13 +76,13 @@ function ProfileImg() {
 
     // once loaded, wait 1.6 seconds to show enlarged profile img and then pulse
     const timeout = setTimeout(() => {
-      // if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
-      //   imgControls.start('pulse');
-      //   borderControls.start('pulse')
-      //     .then(() => borderControls.start('fadeInAndBreathe'))
-      //     .then(() => borderControls.start('breathe'));
-      //   setLoaded(true);
-      // }
+      if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
+        imgControls.start('pulse');
+        borderControls.start('pulse')
+          .then(() => borderControls.start('fadeInAndBreathe'))
+          .then(() => borderControls.start('breathe'));
+        setLoaded(true);
+      }
     }, 1600);
 
     return () => {
@@ -82,6 +99,7 @@ function ProfileImg() {
     imgSrc = '/images/profile_sm_blur.png';
   }
 
+  // Wrapper classes
   const imgClasses = classNames(
     styles['profile-img'],
     {
@@ -92,23 +110,7 @@ function ProfileImg() {
     }
   );
 
-  // loading indicator
-  const loadingIndicator = (
-    <motion.div
-      key="loading"
-      className={styles['loading-indicator']}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      <div className={styles['loading-spinner']}>
-        <div className={styles['loading-dot1']} />
-        <div className={styles['loading-dot2']} />
-      </div>
-    </motion.div>
-  );
-
-  // content appear animation
+  // animations
   const imgVariants = {
     visible: {
       scale: 1.7,
@@ -137,49 +139,39 @@ function ProfileImg() {
       opacity: [0, 1, 1, 1, 1, 1, 1],
       transition: {
         duration: 16,
-        delay: 0.4,
       }
     },
-    fadeIn: {
-      opacity: 1,
+    pulse: {
+      scale: 3,
+      opacity: 0,
       transition: {
         duration: 0.8,
-        delay: 0.2,
-      },
-    },
-    pulse: {
-      scale: [null, 3, 1.04],
-      opacity: [1, 0, 0],
-      transition: {
-        duration: 1,
-        times: [0, 0.8, 1],
       },
     },
   };
 
-  const profileFillVariants = {
-    hidden: {
-      scale: 1/1.7,
-    },
-    visible: {
-      scale: 1/1.7,
-    },
-    pulse: {
-      scale: [1/1.7, 1],
-      transition: {
-        duration: 2,
-        times: [0.5, 1],
-        ease: [[.71,-0.37,.46,.99]],
-      }
-    }
-  };
+  // Loading indicator
+  const loadingIndicator = (
+    <motion.div
+      key="loading"
+      className={styles['loading-indicator']}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <div className={styles['loading-spinner']}>
+        <div className={styles['loading-dot1']} />
+        <div className={styles['loading-dot2']} />
+      </div>
+    </motion.div>
+  );
 
   return (
     <motion.div
       key="profile-img"
       className={imgClasses}
       variants={imgVariants}
-      style={{ scale }}
+      style={{ scale: imgScale }}
       initial="visible"
       animate={imgControls}
     >
@@ -199,18 +191,19 @@ function ProfileImg() {
           className={styles['profile-img-border']}
         >
           <pattern
-            id="profileImgFill"
+            key="profile-fill-pattern"
+            id="profileBorderFill"
             patternUnits="userSpaceOnUse"
             width="100vw"
             height="300vh"
-            x={`-${profileBorderStrokeWidth}px`}
-            y={`-${profileBorderStrokeWidth}px`}
-            patternTransform={`scale(${1/(borderScale.get() * scale.get())})`}
+            x={`-${borderStrokeWidth}px`}
+            y={`-${borderStrokeWidth}px`}
+            patternTransform={`scale(${1/(borderScale.get() * imgScale.get())})`}
           >
             <image
               className={styles['profile-fill']}
-              y={profileFillY}
-              x={profileFillX}
+              y={borderFillY}
+              x={borderFillX}
               width="100vw"
               height="300vh"
               preserveAspectRatio="xMinYMin slice"
@@ -218,16 +211,16 @@ function ProfileImg() {
             />
           </pattern>
           <motion.circle
+            ref={borderRef}
             className={styles['profile-img-border-circle']}
             cx="50%"
             cy="50%"
             r="50%"
-            stroke="url(#profileImgFill)"
-            strokeWidth={profileBorderStrokeWidth}
+            stroke={isLoadCompleteBG ? 'url(#profileBorderFill)' : 'black'}
+            strokeWidth={borderStrokeWidth}
             fill="none"
             opacity="1"
             variants={borderVariants}
-            initial="breathe"
             animate={borderControls}
             style={{ scale: borderScale }}
           />
