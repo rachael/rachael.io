@@ -28,11 +28,16 @@ function ProfileImg() {
 
   const setBorderFillPosition = () => {
     const borderPos = borderRef.current.getBoundingClientRect();
-    const diffX = (borderPos.width * borderScale.get()) - borderPos.width;
-    const diffY = (borderPos.height * borderScale.get()) - borderPos.height;
+    const diffX = ((borderPos.width * borderScale.get()) - borderPos.width)/2;
+    const diffY = ((borderPos.height * borderScale.get()) - borderPos.height)/2;
     if (imgScale.get() > 1) {
-      setBorderFillX(`${-borderPos.x + borderStrokeWidth + diffX/2}px`);
-      setBorderFillY(`${-borderPos.y + borderStrokeWidth + diffY/2}px`);
+      if (borderPos.x + borderStrokeWidth > diffX) {
+        setBorderFillX(`${-borderPos.x + borderStrokeWidth + diffX}px`);
+        setBorderFillY(`${-borderPos.y + borderStrokeWidth + diffY}px`);
+      } else {
+        setBorderFillX(`${-borderPos.x + borderStrokeWidth*2}px`);
+        setBorderFillY(`${-borderPos.y + borderStrokeWidth*2}px`);
+      }
     } else {
       setBorderFillX(`${-borderPos.x + borderStrokeWidth}px`);
       setBorderFillY(`${-borderPos.y + borderStrokeWidth}px`);
