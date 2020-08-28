@@ -39,7 +39,8 @@ function ProfileImg() {
 
   // Image load
   const imgRef = useRef();
-  const controls = useAnimation();
+  const borderControls = useAnimation();
+  const imgControls = useAnimation();
   const [loaded, setLoaded] = useState();
   const [loadedFromCache, setLoadedFromCache] = useState();
   const isLoadCompleteBG = useSelector(state => state.loadCompleteBG);
@@ -50,17 +51,26 @@ function ProfileImg() {
     }
   }, [isLoadCompleteContent, dispatch]);
 
-  if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
-    console.log('pulse');
-    controls.start('pulse');
-    setLoaded(true);
-  }
-
   useEffect(() => {
     if(!isLoadCompleteContent && imgRef.current && imgRef.current.complete) {
       dispatch(loadCompleteContent());
       setLoadedFromCache(true);
     }
+
+    // once loaded, wait 1.6 seconds to show enlarged profile img and then pulse
+    const timeout = setTimeout(() => {
+      // if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
+      //   imgControls.start('pulse');
+      //   borderControls.start('pulse')
+      //     .then(() => borderControls.start('fadeInAndBreathe'))
+      //     .then(() => borderControls.start('breathe'));
+      //   setLoaded(true);
+      // }
+    }, 1600);
+
+    return () => {
+      clearTimeout(timeout);
+    };
   });
 
   // Button hover states -- add overlay to profile image
@@ -101,45 +111,49 @@ function ProfileImg() {
   // content appear animation
   const imgVariants = {
     visible: {
-      opacity: 1,
       scale: 1.7,
       translateY: '40%',
     },
     pulse: {
-      opacity: [1, 1],
-      scale: [1.7, 1],
-      translateY: ['40%', 0],
+      scale: 1,
+      translateY: 0,
       transition: {
-        duration: 2,
-        delay: 0.6,
-        times: [0.5, 1],
+        duration: 1,
         ease: [[.71,-0.37,.46,.99]],
       }
     }
   };
 
   const borderVariants = {
-    borderBreathe: {
-      scale: [1.04, 1.10, 1.07, 1.11, 1.05, 1.09],
+    breathe: {
+      scale: [1.04, 1.10, 1.07, 1.11, 1.05, 1.09, 1.04],
+      transition: {
+        yoyo: Infinity,
+        duration: 16,
+      }
+    },
+    fadeInAndBreathe: {
+      scale: [1.04, 1.10, 1.07, 1.11, 1.05, 1.09, 1.04],
+      opacity: [0, 1, 1, 1, 1, 1, 1],
       transition: {
         duration: 16,
+        delay: 0.4,
       }
     },
     fadeIn: {
       opacity: 1,
       transition: {
         duration: 0.8,
+        delay: 0.2,
       },
     },
     pulse: {
-      scale: 3,
+      scale: [null, 3, 1.04],
+      opacity: [1, 0, 0],
       transition: {
-        duration: 0.8,
-        delay: 1.6,
+        duration: 1,
+        times: [0, 0.8, 1],
       },
-      transitionEnd: {
-        scale: 1.04,
-      }
     },
   };
 
@@ -166,7 +180,8 @@ function ProfileImg() {
       className={imgClasses}
       variants={imgVariants}
       style={{ scale }}
-      animate={controls}
+      initial="visible"
+      animate={imgControls}
     >
       <AnimatePresence>
         {!(isLoadCompleteBG || isLoadCompleteContent) && loadingIndicator}
@@ -190,7 +205,7 @@ function ProfileImg() {
             height="300vh"
             x={`-${profileBorderStrokeWidth}px`}
             y={`-${profileBorderStrokeWidth}px`}
-            patternTransform={`scale(${1/scale.get()})`}
+            patternTransform={`scale(${1/(borderScale.get() * scale.get())})`}
           >
             <image
               className={styles['profile-fill']}
@@ -210,10 +225,11 @@ function ProfileImg() {
             stroke="url(#profileImgFill)"
             strokeWidth={profileBorderStrokeWidth}
             fill="none"
+            opacity="1"
             variants={borderVariants}
-            animate={controls}
+            initial="breathe"
+            animate={borderControls}
             style={{ scale: borderScale }}
-            layout
           />
         </svg>
         {hoverGithub && (<Overlay

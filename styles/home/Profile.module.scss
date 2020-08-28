@@ -70,13 +70,12 @@
       height: 100%;
       width: 100%;
       // animation: profileBreathe 16s 400ms infinite alternate;
-      opacity: 1;
       transform-origin: center;
       will-change: transform, opacity;
 
-      @media(min-width: $large-screen-size) {
-        filter: blur(1px);
-      }
+      // @media(min-width: $large-screen-size) {
+      //   filter: blur(1px);
+      // }
     }
 
     .profile-fill {
@@ -88,20 +87,20 @@
     }
   }
 
-  &.pulse .profile-img-border {
-    circle {
-      // animation: profileBreathe 16s 400ms infinite alternate,
-      //            fadeIn 800ms 800ms,
-      //            profilePulse 800ms;
-    }
-
-    .profile-fill {
-      // animation: profileBreatheInverse 16s 400ms infinite alternate,
-      //            profilePulseInverse 800ms,
-      //            backgroundAnimation 90s linear infinite alternate;
-      animation: backgroundAnimation 90s linear infinite alternate;
-    }
-  }
+  // &.pulse .profile-img-border {
+  //   circle {
+  //     // animation: profileBreathe 16s 400ms infinite alternate,
+  //     //            fadeIn 800ms 800ms,
+  //     //            profilePulse 800ms;
+  //   }
+  //
+  //   .profile-fill {
+  //     // animation: profileBreatheInverse 16s 400ms infinite alternate,
+  //     //            profilePulseInverse 800ms,
+  //     //            backgroundAnimation 90s linear infinite alternate;
+  //     animation: backgroundAnimation 90s linear infinite alternate;
+  //   }
+  // }
 }
 
 // Profile image pulse on hover uses global class to avoid messing up initial
