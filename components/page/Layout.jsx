@@ -121,22 +121,6 @@ function Layout({
         ref={bgRef}
         onLoad={setLoadCompleteCB}
       />
-      <svg width="100%" height="0">
-        <defs>
-          <pattern id="backgroundFill" patternUnits="userSpaceOnUse" width="100vw" height="100vh">
-            <image
-              className={styles['background-fill']}
-              x="0"
-              y="0"
-              width="100vw"
-              height="300vh"
-              preserveAspectRatio="xMinYMin slice"
-              href="/images/bg_postits_blur.png"
-            >
-            </image>
-          </pattern>
-        </defs>
-      </svg>
       <AnimatePresence>
         {isLoadCompleteBG && <motion.div
           key="bg"
