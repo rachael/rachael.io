@@ -83,7 +83,10 @@ function ProfileImg() {
       const timeoutID = setTimeout(() => {
         imgControls.start('pulse');
         borderControls.start('pulse')
-          .then(() => borderControls.start('fadeInAndBreathe'))
+          .then(() => {
+            dispatch(setContentAnimating(false));
+            borderControls.start('fadeInAndBreathe');
+          })
           .then(() => borderControls.start('breathe'));
       }, 1600);
       setLoadTimeoutID(timeoutID);
@@ -119,12 +122,15 @@ function ProfileImg() {
   );
 
   // Mouse enter
-  const mouseEnterPulse = () => {
-    borderControls.start('reset')
-      .then(() => borderControls.start('mouseEnterPulse'))
-      .then(() => borderControls.start('fadeInAndBreathe'))
-      .then(() => borderControls.start('breathe'));
-  }
+  const contentAnimating = useSelector(state => state.contentAnimating);
+  const mouseEnterPulse = useCallback(() => {
+    if(!contentAnimating) {
+      borderControls.start('reset')
+        .then(() => borderControls.start('mouseEnterPulse'))
+        .then(() => borderControls.start('fadeInAndBreathe'))
+        .then(() => borderControls.start('breathe'));
+    }
+  }, [contentAnimating]);
 
   // Animations
   const imgVariants = {
