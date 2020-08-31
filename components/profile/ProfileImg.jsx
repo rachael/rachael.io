@@ -17,7 +17,6 @@ function ProfileImg() {
   const imgControls = useAnimation();
   const borderControls = useAnimation();
   const imgScale = useMotionValue(1.7);
-  const imgTranslateY = useMotionValue('40%');
   const borderScale = useMotionValue(1.04);
 
   const borderStrokeWidth = 4;
@@ -29,41 +28,24 @@ function ProfileImg() {
 
   const setBorderFillPosition = () => {
     const borderPos = borderRef.current.getBoundingClientRect();
-    const scaledWidth = borderPos.width * borderScale.get();
-    const scaleDiff = (scaledWidth - borderPos.width)/2;
-    const translateY = parseFloat(imgTranslateY.get())/100;
-    const translateYDiff = borderPos.y + (scaledWidth * translateY);
-    if (imgScale.get() > 1) {
-      console.log(translateY);
-      if (borderPos.x - borderStrokeWidth > scaleDiff) {
-        // before pulse animation start
-        setBorderFillX(`${-borderPos.x + borderStrokeWidth + scaleDiff}px`);
-        setBorderFillY(`${-borderPos.y + borderStrokeWidth + scaleDiff}px`);
-      } else {
-        // after pulse animation start
-        setBorderFillX(`${-borderPos.x + borderStrokeWidth}px`);
-        setBorderFillY(`${-borderPos.y - translateYDiff + borderStrokeWidth}px`);
-      }
-    } else {
-      // breathe animation
-      setBorderFillX(`${-borderPos.x + borderStrokeWidth}px`);
-      setBorderFillY(`${-borderPos.y + borderStrokeWidth}px`);
-    }
+    setBorderFillX(`${-borderPos.x + borderStrokeWidth}px`);
+    setBorderFillY(`${-borderPos.y + borderStrokeWidth}px`);
   };
 
   useEffect(() => {
+    // on mount:
     setBorderFillPosition();
-  });
 
-  // scale:
-  useEffect(() => {
-    const unsubscribeBorderBackgroundScale = borderScale.onChange(setBorderFillPosition);
+    // on scale:
+    const unsubscribeSetPositionOnScale = borderScale.onChange(setBorderFillPosition);
     return () => {
-      unsubscribeBorderBackgroundScale();
+      unsubscribeSetPositionOnScale();
     }
   });
 
   // Image load
+  // breatheStarted: true if initial breathe animation has been started
+  const [breatheStarted, setBreatheStarted] = useState();
   // loaded: true if image has finished loading and started its 'pulse' animation.
   // ensures pulse is only fired off once.
   const [loaded, setLoaded] = useState();
@@ -72,6 +54,9 @@ function ProfileImg() {
   // loadComplete store variables
   const isLoadCompleteBG = useSelector(state => state.loadCompleteBG);
   const isLoadCompleteContent = useSelector(state => state.loadCompleteContent);
+  // timeout ID for pulse on load, safeguards that the ID does not get destroyed
+  // by render cycle before timeout can be cleared
+  const [loadTimeoutID, setLoadTimeoutID] = useState();
   // callback on img load complete
   const setLoadCompleteCB = useCallback(() => {
     if(!isLoadCompleteContent) {
@@ -80,6 +65,12 @@ function ProfileImg() {
   }, [isLoadCompleteContent, dispatch]);
 
   useEffect(() => {
+    // start breathe once
+    if (!breatheStarted) {
+      borderControls.start('breathe');
+      setBreatheStarted(true);
+    }
+
     // image has been loaded from cache
     if(!isLoadCompleteContent && imgRef.current && imgRef.current.complete) {
       dispatch(loadCompleteContent());
@@ -87,20 +78,25 @@ function ProfileImg() {
     }
 
     // once loaded, wait 1.6 seconds to show enlarged profile img and then pulse
-    const timeout = setTimeout(() => {
-      if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
+    if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
+      setLoaded(true);
+      const timeoutID = setTimeout(() => {
         imgControls.start('pulse');
         borderControls.start('pulse')
           .then(() => borderControls.start('fadeInAndBreathe'))
           .then(() => borderControls.start('breathe'));
-        setLoaded(true);
-      }
-    }, 1600);
-
+      }, 1600);
+      setLoadTimeoutID(timeoutID);
+    }
     return () => {
-      clearTimeout(timeout);
+      clearTimeout(loadTimeoutID);
     };
-  });
+  }, [
+    breatheStarted,
+    loaded,
+    isLoadCompleteBG,
+    isLoadCompleteContent
+  ]);
 
   // Button hover states -- add overlay to profile image
   const hoverGithub = useSelector(state => state.hoverGithub);
@@ -122,7 +118,15 @@ function ProfileImg() {
     }
   );
 
-  // animations
+  // Mouse enter
+  const mouseEnterPulse = () => {
+    borderControls.start('reset')
+      .then(() => borderControls.start('mouseEnterPulse'))
+      .then(() => borderControls.start('fadeInAndBreathe'))
+      .then(() => borderControls.start('breathe'));
+  }
+
+  // Animations
   const imgVariants = {
     visible: {
       scale: 1.7,
@@ -147,19 +151,34 @@ function ProfileImg() {
       }
     },
     fadeInAndBreathe: {
-      scale: [1.04, 1.10, 1.07, 1.11, 1.05, 1.09, 1.04],
-      opacity: [0, 1, 1, 1, 1, 1, 1],
+      scale: [1.04, 1.07, 1.10, 1.07, 1.11, 1.05, 1.09, 1.04],
+      opacity: [0, 1, 1, 1, 1, 1, 1, 1],
       transition: {
         duration: 16,
+        times: [0, .0833, .1667, .3333, .5, .6667, .8333, 1]
       }
     },
     pulse: {
       scale: 3,
       opacity: 0,
       transition: {
-        duration: 2,
+        duration: 1,
       },
     },
+    reset: {
+      opacity: 1,
+      scale: 1.04,
+      transition: {
+        duration: 0,
+      }
+    },
+    mouseEnterPulse: {
+      scale: 3,
+      opacity: 0,
+      transition: {
+        duration: 0.6,
+      }
+    }
   };
 
   // Loading indicator
@@ -183,9 +202,10 @@ function ProfileImg() {
       key="profile-img"
       className={imgClasses}
       variants={imgVariants}
-      style={{ scale: imgScale, translateY: imgTranslateY }}
+      style={{ scale: imgScale }}
       initial="visible"
       animate={imgControls}
+      onMouseEnter={mouseEnterPulse}
     >
       <AnimatePresence>
         {!(isLoadCompleteBG || isLoadCompleteContent) && loadingIndicator}
