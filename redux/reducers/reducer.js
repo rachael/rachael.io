@@ -20,6 +20,11 @@ const reducer = (state = initialState, action) => {
             ...state,
             loadCompleteContent: true,
           }
+        case 'SET_BACKGROUND_TRANSLATEY':
+          return {
+            ...state,
+            backgroundTranslateY: action.payload,
+          }
         case 'SET_HOVER_GITHUB':
           return {
             ...state,

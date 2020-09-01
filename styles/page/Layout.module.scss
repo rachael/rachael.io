@@ -10,12 +10,6 @@
   min-height: 100vh;
 }
 
-// Scrolling background image
-@keyframes backgroundAnimation {
-	from { transform: translateY(-120vh); }
-	to { transform: translateY(0); }
-}
-
 .background-image {
   position: absolute;
   height: 300vh;
@@ -25,13 +19,6 @@
   z-index: 1;
   background: url('/images/bg_postits_blur.png');
   background-size: cover;
-  animation: backgroundAnimation 90s linear infinite;
-  animation-play-state: paused;
-  animation-direction: alternate;
-
-  &.background-scroll {
-    animation-play-state: running;
-  }
 }
 
 .background-loader {
@@ -102,12 +89,6 @@
     min-width: 500px;
     background: rgba($background-color, 0.6);
     transition: width 400ms;
-
-    &:before,
-    &:after {
-      opacity: 0;
-      animation-play-state: paused;
-    }
   }
 
   .bg-loading .container {

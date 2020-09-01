@@ -133,6 +133,8 @@ function ProfileImg() {
   }, [contentAnimating]);
 
   // Animations
+  const backgroundTranslateY = useSelector(state => state.backgroundTranslateY);
+
   const imgVariants = {
     visible: {
       scale: 1.7,
@@ -240,12 +242,13 @@ function ProfileImg() {
           >
             <image
               className={styles['profile-fill']}
-              y={borderFillY}
               x={borderFillX}
+              y={borderFillY}
               width="100vw"
               height="300vh"
               preserveAspectRatio="xMinYMin slice"
               href="/images/bg_postits_blur.png"
+              style={{ transform: `translateY(${backgroundTranslateY})` }}
             />
           </pattern>
           <motion.circle
