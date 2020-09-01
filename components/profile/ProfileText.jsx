@@ -96,7 +96,9 @@ function ProfileText() {
     setTimeout(setTextHeight, 400);
   }
 
-  // content appear animation
+  // animations
+  const backgroundTranslateY = useSelector(state => state.backgroundTranslateY);
+
   const profileVariants = {
     load: {
       opacity: 1,
@@ -149,6 +151,7 @@ function ProfileText() {
                 height="300vh"
                 preserveAspectRatio="xMinYMin slice"
                 href="/images/bg_postits_blur.png"
+                style={{ transform: `translateY(${backgroundTranslateY})` }}
               >
               </image>
             </pattern>

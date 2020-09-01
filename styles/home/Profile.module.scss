@@ -13,18 +13,6 @@
   overflow: visible;
 }
 
-// Scrolling background fill
-@keyframes backgroundAnimation {
-	from { transform: translateY(-120vh); }
-	to { transform: translateY(0vh); }
-}
-
-.profile-fill {
-  animation: backgroundAnimation 90s linear infinite;
-  animation-direction: alternate;
-  will-change: transform;
-}
-
 /*******************************************************************************
 * Profile text
 *******************************************************************************/

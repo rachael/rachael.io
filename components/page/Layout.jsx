@@ -1,9 +1,9 @@
 import classNames from 'classnames';
-import { AnimatePresence, motion } from 'framer-motion';
-import React, { useCallback, useEffect, useRef } from 'react';
+import { AnimatePresence, motion, useAnimation, useMotionValue } from 'framer-motion';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { loadCompleteBG, wiggle } from 'redux/actions';
+import { loadCompleteBG, setBackgroundTranslateY, wiggle } from 'redux/actions';
 import initialState from 'redux/initialState';
 
 import styles from 'styles/page/Layout.module.scss';
@@ -20,13 +20,6 @@ function Layout({
   const wiggleEnabled = useSelector(state => state.wiggle);
   const wiggleCB = useCallback(() => dispatch(wiggle(!wiggleEnabled)));
 
-  // background scroll effect
-  const backgroundScroll = useSelector(state => state.backgroundScroll);
-  const backgroundClass = classNames(
-    styles['background-image'],
-    { [styles['background-scroll']]: backgroundScroll }
-  );
-
   // content animating: hides overflow and expands container during animations.
   // optimistically assumes content will animate -- must set to false inside
   // content to reenable scrolling.
@@ -42,16 +35,50 @@ function Layout({
   const setLoadCompleteCB = useCallback(() => {
     if(!isLoadCompleteBG) dispatch(loadCompleteBG());
   }, [isLoadCompleteBG, dispatch]);
+
   useEffect(() => {
     if(!isLoadCompleteBG && bgRef.current.complete) dispatch(loadCompleteBG());
   });
+
   const layoutClasses = classNames(
     styles.layout,
     { [styles['bg-loading']]: !isLoadCompleteBG }
   );
 
+  // background scroll effect
+  const backgroundScroll = useSelector(state => state.backgroundScroll);
+  const backgroundClass = classNames(
+    styles['background-image'],
+    { [styles['background-scroll']]: backgroundScroll }
+  );
+
+  const backgroundTranslateY = useMotionValue('-120vh');
+  const bgControls = useAnimation();
+  const [backgroundScrollStarted, setBackgroundScrollStarted] = useState();
+
+  useLayoutEffect(() => {
+    const unsubscribeBackgroundTranslateY = backgroundTranslateY.onChange(
+      translateY => dispatch(setBackgroundTranslateY(translateY))
+    );
+    if(!backgroundScrollStarted && isLoadCompleteBG) {
+      bgControls.start('visible').then(() => bgControls.start('scroll'));
+      setBackgroundScrollStarted(true);
+    }
+    return () => {
+      unsubscribeBackgroundTranslateY();
+    }
+  }, [isLoadCompleteBG]);
+
   // content appear animation
   const bgVariants = {
+    scroll: {
+      translateY: ['-120vh', '0vh'],
+      transition: {
+        yoyo: Infinity,
+        duration: 180,
+        times: [0, 1],
+      }
+    },
     visible: {
       opacity: 1,
       transition: {
@@ -126,6 +153,8 @@ function Layout({
           key="bg"
           className={backgroundClass}
           variants={bgVariants}
+          animate={bgControls}
+          style={{ translateY: backgroundTranslateY }}
         />}
       </AnimatePresence>
       <motion.div

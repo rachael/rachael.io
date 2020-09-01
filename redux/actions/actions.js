@@ -4,6 +4,7 @@ export const SET_HOVER_RESUME = 'SET_HOVER_RESUME';
 export const SET_CONTENT_ANIMATING = 'SET_CONTENT_ANIMATING';
 export const LOAD_COMPLETE_BG = 'LOAD_COMPLETE_BG';
 export const LOAD_COMPLETE_CONTENT = 'LOAD_COMPLETE_CONTENT';
+export const SET_BACKGROUND_TRANSLATEY = 'SET_BACKGROUND_TRANSLATEY';
 export const WIGGLE = 'WIGGLE';
 
 // Action Creator
@@ -13,6 +14,11 @@ export const loadCompleteBG = () => ({
 
 export const loadCompleteContent = () => ({
   type: LOAD_COMPLETE_CONTENT,
+});
+
+export const setBackgroundTranslateY = (payload) => ({
+  type: SET_BACKGROUND_TRANSLATEY,
+  payload,
 });
 
 export const setHoverGithub = (payload) => ({
