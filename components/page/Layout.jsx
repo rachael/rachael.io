@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { AnimatePresence, motion, useAnimation, useMotionValue } from 'framer-motion';
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { loadCompleteBG, setBackgroundTranslateY, wiggle } from 'redux/actions';
@@ -56,7 +56,7 @@ function Layout({
   const bgControls = useAnimation();
   const [backgroundScrollStarted, setBackgroundScrollStarted] = useState();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const unsubscribeBackgroundTranslateY = backgroundTranslateY.onChange(
       translateY => dispatch(setBackgroundTranslateY(translateY))
     );
@@ -75,7 +75,7 @@ function Layout({
       translateY: ['-120vh', '0vh'],
       transition: {
         yoyo: Infinity,
-        duration: 180,
+        duration: 120,
         times: [0, 1],
       }
     },

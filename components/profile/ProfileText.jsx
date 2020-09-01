@@ -1,5 +1,5 @@
 import { motion, useAnimation } from 'framer-motion';
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { setHoverGithub, setHoverResume } from 'redux/actions';
@@ -10,53 +10,101 @@ import styles from 'styles/home/Profile.module.scss';
 function ProfileText() {
   const dispatch = useDispatch();
 
-  // position & resize
-  const positions = {
-    min: {
-      nameTextLength: '270px',
-      breakpoint: '(max-width: 299px)',
-    },
-    '300': {
-      nameTextLength: '90vw',
-      breakpoint: '(min-width: 300px) and (max-width: 499px)',
-    },
-    '500': {
-      nameTextLength: '450px',
-      breakpoint: '(min-width: 500px) and (max-width: 799px)',
-    },
-    '800': {
-      nameTextLength: '500px',
-      breakpoint: '(min-width: 800px) and (max-width: 1059px)',
-    },
-    '1060': {
-      nameTextLength: '47.21435316vw',
-      breakpoint: '(min-width: 1060px)',
-    },
-  };
+  // Absolute units for Firefox
+  // Necessary because Firefox requires absolute units on everything, so vw/vh
+  // cannot be used. Emulates vw/vh by updating on resize.
+  // http://ronaldroe.com/psa-viewport-units-on-svg/
+  const [[windowWidth, windowHeight], setWindowSize] = useState([0, 0]);
+  const [absoluteUnits, setAbsoluteUnits] = useState({});
+  const [positions, setPositions] = useState({});
 
+  const updateWindowSize = () => {
+    setWindowSize([window.innerWidth, window.innerHeight]);
+  }
+
+  const updateAbsoluteUnits = () => {
+    setAbsoluteUnits({
+      '-58vh': -windowHeight * 0.58,
+      '100vh': windowHeight,
+      '300vh': windowHeight * 3,
+      '47.21435316vw': windowWidth * 0.4721435316,
+      '90vw': windowWidth * 0.9,
+      '100vw': windowWidth,
+    });
+  }
+
+  const updatePositions = () => {
+    setPositions({
+      min: {
+        nameTextLength: '270px',
+        breakpoint: '(max-width: 299px)',
+      },
+      '300': {
+        nameTextLength: absoluteUnits['90vw'],
+        breakpoint: '(min-width: 300px) and (max-width: 499px)',
+      },
+      '500': {
+        nameTextLength: '450px',
+        breakpoint: '(min-width: 500px) and (max-width: 799px)',
+      },
+      '800': {
+        nameTextLength: '500px',
+        breakpoint: '(min-width: 800px) and (max-width: 1059px)',
+      },
+      '1060': {
+        nameTextLength: absoluteUnits['47.21435316vw'],
+        breakpoint: '(min-width: 1060px)',
+      },
+    });
+  }
+
+  useEffect(() => {
+    updateWindowSize();
+  }, []);
+
+  useEffect(() => {
+    updateAbsoluteUnits();
+  }, [windowWidth, windowHeight]);
+
+  useEffect(() => {
+    updatePositions();
+  }, [JSON.stringify(absoluteUnits)]);
+
+  // position & resize
   const [currentPosition, updatePosition] = useState();
   const [nameTextLength, setNameTextLength] = useState();
 
   // set position when hitting a media query breakpoint
+  // because of Firefox, also need to set on resize
   const setPosition = (position) => {
-    updatePosition(position);
     setNameTextLength(positions[position].nameTextLength);
+    updatePosition(position);
   };
+
+  const [mediaQueries, setMediaQueries] = useState({});
 
   const setupMediaQueries = () => {
+    const mediaQueries = {};
     for(let position in positions) {
-      positions[position].mql = window.matchMedia(positions[position].breakpoint);
-      positions[position].screenTest = (e) => {
-        if(currentPosition !== position && e.matches) setPosition(position);
-      };
-      positions[position].mql.addListener(positions[position].screenTest);
-      positions[position].screenTest(positions[position].mql);
+      if(!positions[position].nameTextLength) break;
+      mediaQueries[position] = {};
+      const mql = window.matchMedia(positions[position].breakpoint);
+      const screenTest = (e) => { if(e.matches) setPosition(position) };
+      mql.addListener(screenTest);
+      screenTest(mql);
+      mediaQueries[position].mql = mql;
+      mediaQueries[position].screenTest = screenTest;
     }
+    setMediaQueries(mediaQueries);
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setupMediaQueries();
-  });
+  }, [JSON.stringify(positions)]);
+
+  const testMediaQuery = () => {
+    mediaQueries[currentPosition].screenTest(mediaQueries[currentPosition].mql);
+  }
 
   // expand <svg> heights to fit inner text so vertical alignment works
   const [textSVGHeight, setTextSVGHeight] = useState();
@@ -75,14 +123,6 @@ function ProfileText() {
     setTextHeightAdjustTimeoutID(setTimeout(setTextHeight, 400));
   }
 
-  useLayoutEffect(() => {
-    window.addEventListener('resize', setTextHeightFireTwice);
-    return () => {
-      window.removeEventListener('resize', setTextHeightFireTwice);
-      clearTimeout(textHeightAdjustTimeoutID);
-    }
-  });
-
   // only load after profile image is finished loading
   const [loaded, setLoaded] = useState(false);
   const controls = useAnimation();
@@ -95,6 +135,23 @@ function ProfileText() {
     // (bug caused by framer-motion animation)
     setTimeout(setTextHeight, 400);
   }
+
+  // Window resize listener
+  // Updates all absolutely set positions on resize for Firefox
+  useEffect(() => {
+    const onResize = () => {
+      updateWindowSize();
+      updateAbsoluteUnits();
+      updatePositions();
+      testMediaQuery();
+      setTextHeightFireTwice();
+    }
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      clearTimeout(textHeightAdjustTimeoutID);
+    }
+  })
 
   // animations
   const backgroundTranslateY = useSelector(state => state.backgroundTranslateY);
@@ -143,12 +200,17 @@ function ProfileText() {
           layout
         >
           <defs>
-            <pattern id="profileFill" patternUnits="userSpaceOnUse" width="100vw" height="100vh">
+            <pattern
+              id="profileFill"
+              patternUnits="userSpaceOnUse"
+              width={absoluteUnits['100vw']}
+              height={absoluteUnits['100vh']}
+            >
               <image
                 className={styles['profile-fill']}
-                y="-58vh"
-                width="100vw"
-                height="300vh"
+                y={absoluteUnits['-58vh']}
+                width={absoluteUnits['100vw']}
+                height={absoluteUnits['300vh']}
                 preserveAspectRatio="xMinYMin slice"
                 href="/images/bg_postits_blur.png"
                 style={{ transform: `translateY(${backgroundTranslateY})` }}
