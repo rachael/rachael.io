@@ -28,6 +28,11 @@
 /*******************************************************************************
 * Profile text
 *******************************************************************************/
+.profile-text-svg,
+.profile-buttons-svg {
+    overflow: visible;
+}
+
 .profile-name,
 .profile-description-line1,
 .profile-description-line2 {
@@ -70,131 +75,11 @@
     circle {
       height: 100%;
       width: 100%;
-      // animation: profileBreathe 16s 400ms infinite alternate;
       transform-origin: center;
       will-change: transform, opacity;
-
-      // @media(min-width: $large-screen-size) {
-      //   filter: blur(1px);
-      // }
-    }
-
-    .profile-fill {
-      // animation: profileBreatheInverse 16s 400ms infinite alternate,
-      //            backgroundAnimation 90s linear infinite alternate;
-      // animation: backgroundAnimation 90s linear infinite alternate;
-      // transform-origin: center;
-      // will-change: transform;
     }
   }
-
-  // &.pulse .profile-img-border {
-  //   circle {
-  //     // animation: profileBreathe 16s 400ms infinite alternate,
-  //     //            fadeIn 800ms 800ms,
-  //     //            profilePulse 800ms;
-  //   }
-  //
-  //   .profile-fill {
-  //     // animation: profileBreatheInverse 16s 400ms infinite alternate,
-  //     //            profilePulseInverse 800ms,
-  //     //            backgroundAnimation 90s linear infinite alternate;
-  //     animation: backgroundAnimation 90s linear infinite alternate;
-  //   }
-  // }
 }
-
-// Profile image pulse on hover uses global class to avoid messing up initial
-// content animation.
-// :not(:global(.content-animating)) > .profile-img:hover .profile-img-border circle {
-//   animation: profileBreathe 16s 400ms infinite alternate,
-//              fadeIn 800ms 500ms,
-//              profilePulse 500ms;
-// }
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes profilePulse {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  100% {
-    opacity: 0;
-    transform: scale(3);
-  }
-}
-
-// @keyframes profilePulseInverse {
-//   0% {
-//     transform: scale(1);
-//   }
-//
-//   100% {
-//     transform: scale(0.33333);
-//   }
-// }
-
-@keyframes profileBreathe {
-  0% {
-    transform: scale(1.04);
-  }
-
-  20% {
-    transform: scale(1.1);
-  }
-
-  40% {
-    transform: scale(1.07);
-  }
-
-  60% {
-    transform: scale(1.11);
-  }
-
-  80% {
-    transform: scale(1.05);
-  }
-
-  100% {
-    transform: scale(1.09);
-  }
-}
-
-// @keyframes profileBreatheInverse {
-//   0% {
-//     transform: scale(0.96154);
-//   }
-//
-//   20% {
-//     transform: scale(0.90909);
-//   }
-//
-//   40% {
-//     transform: scale(0.93457);
-//   }
-//
-//   60% {
-//     transform: scale(0.90090);
-//   }
-//
-//   80% {
-//     transform: scale(0.95238);
-//   }
-//
-//   100% {
-//     transform: scale(0.91743);
-//   }
-// }
 
 /*******************************************************************************
 * Loading effects
@@ -423,21 +308,6 @@
     bottom: 42vh;
   }
 }
-
-// Maximum description size
-// @media(min-width: 1160px) {
-//   .profile-description-line1,
-//   .profile-description-line2 {
-//     font-size: 2.8rem;
-//   }
-// }
-
-// Maximum name size
-// @media(min-width: 1400px) {
-//   .profile-name {
-//     font-size: 6.1rem;
-//   }
-// }
 
 // Maximum overlay text size
 @media(min-height: 1080px) {

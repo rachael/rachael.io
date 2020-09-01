@@ -19,7 +19,7 @@ function ProfileImg() {
   const imgScale = useMotionValue(1.7);
   const borderScale = useMotionValue(1.04);
 
-  const borderStrokeWidth = 4;
+  const borderStrokeWidth = 4; // TODO: set to 5 on very large screens
 
   // Set position of profile border fill so pattern acts as a mask.
   // fill position:
@@ -249,6 +249,7 @@ function ProfileImg() {
             />
           </pattern>
           <motion.circle
+            key="profile-img-border-circle"
             ref={borderRef}
             className={styles['profile-img-border-circle']}
             cx="50%"
