@@ -18,6 +18,7 @@ function ProfileButton({
     <a
       className={styles.button}
       href={href}
+      xlinkHref={href}
       {...props}
     >
       <text

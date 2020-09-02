@@ -10,9 +10,9 @@ import styles from 'styles/home/Profile.module.scss';
 function ProfileText() {
   const dispatch = useDispatch();
 
-  // Absolute units for Firefox
-  // Necessary because Firefox requires absolute units on everything, so vw/vh
-  // cannot be used. Emulates vw/vh by updating on resize.
+  // Absolute units for Firefox/Safari
+  // Necessary because Firefox/Safari requires absolute units on everything, so
+  // vw/vh cannot be used. Emulates vw/vh by updating on resize.
   // http://ronaldroe.com/psa-viewport-units-on-svg/
   const [[windowWidth, windowHeight], setWindowSize] = useState([0, 0]);
   const [absoluteUnits, setAbsoluteUnits] = useState({});
@@ -75,7 +75,7 @@ function ProfileText() {
   const [nameTextLength, setNameTextLength] = useState();
 
   // set position when hitting a media query breakpoint
-  // because of Firefox, also need to set on resize
+  // because of Firefox/Safari, also need to set on resize
   const setPosition = (position) => {
     setNameTextLength(positions[position].nameTextLength);
     updatePosition(position);
@@ -137,7 +137,7 @@ function ProfileText() {
   }
 
   // Window resize listener
-  // Updates all absolutely set positions on resize for Firefox
+  // Updates all absolutely set positions on resize for Firefox/Safari
   useEffect(() => {
     const onResize = () => {
       updateWindowSize();
