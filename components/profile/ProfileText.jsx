@@ -112,7 +112,7 @@ function ProfileText() {
 
   const setTextHeight = () => {
     const textPos = textRef.current.getBoundingClientRect();
-    setTextSVGHeight(textPos.height);
+    setTextSVGHeight(textPos.height + 20);
   }
 
   // helps with quick resizing where js can't keep up by fixing height again
