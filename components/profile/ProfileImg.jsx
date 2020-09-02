@@ -21,6 +21,46 @@ function ProfileImg() {
 
   const borderStrokeWidth = 4; // TODO: set to 5 on very large screens
 
+  // Absolute units for Firefox/Safari
+  // Necessary because Firefox/Safari requires absolute units on svg elements,
+  // so vw/vh cannot be used. Emulates vw/vh by updating on resize.
+  // http://ronaldroe.com/psa-viewport-units-on-svg/
+  const [[windowWidth, windowHeight], setWindowSize] = useState([0, 0]);
+  const [absoluteUnits, setAbsoluteUnits] = useState({});
+  const [positions, setPositions] = useState({});
+
+  const updateWindowSize = () => {
+    setWindowSize([window.innerWidth, window.innerHeight]);
+  }
+
+  const updateAbsoluteUnits = () => {
+    setAbsoluteUnits({
+      '100vw': windowWidth,
+      '300vh': windowHeight * 3,
+    });
+  }
+
+  useEffect(() => {
+    updateWindowSize();
+  }, []);
+
+  useEffect(() => {
+    updateAbsoluteUnits();
+  }, [windowWidth, windowHeight]);
+
+  // Window resize listener
+  // Updates all absolutely set positions on resize for Firefox/Safari
+  useEffect(() => {
+    const onResize = () => {
+      updateWindowSize();
+      updateAbsoluteUnits();
+    }
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+    }
+  })
+
   // Set position of profile border fill so pattern acts as a mask.
   // fill position:
   const [borderFillX, setBorderFillX] = useState(0);
@@ -230,27 +270,29 @@ function ProfileImg() {
           key="profile-img-border"
           className={styles['profile-img-border']}
         >
-          <pattern
-            key="profile-fill-pattern"
-            id="profileBorderFill"
-            patternUnits="userSpaceOnUse"
-            width="100vw"
-            height="300vh"
-            x={`-${borderStrokeWidth}px`}
-            y={`-${borderStrokeWidth}px`}
-            patternTransform={`scale(${1/(borderScale.get() * imgScale.get())})`}
-          >
-            <image
-              className={styles['profile-fill']}
-              x={borderFillX}
-              y={borderFillY}
-              width="100vw"
-              height="300vh"
-              preserveAspectRatio="xMinYMin slice"
-              href="/images/bg_postits_blur.png"
-              style={{ transform: `translateY(${backgroundTranslateY})` }}
-            />
-          </pattern>
+          <defs>
+            <pattern
+              key="profile-fill-pattern"
+              id="profileBorderFill"
+              patternUnits="userSpaceOnUse"
+              width={absoluteUnits['100vw']}
+              height={absoluteUnits['300vh']}
+              x={`-${borderStrokeWidth}px`}
+              y={`-${borderStrokeWidth}px`}
+              patternTransform={`scale(${1/(borderScale.get() * imgScale.get())})`}
+            >
+              <image
+                className={styles['profile-fill']}
+                x={borderFillX}
+                y={borderFillY}
+                width={absoluteUnits['100vw']}
+                height={absoluteUnits['300vh']}
+                preserveAspectRatio="xMinYMin slice"
+                href="/images/bg_postits_blur.png"
+                style={{ transform: `translateY(${backgroundTranslateY})` }}
+              />
+            </pattern>
+          </defs>
           <motion.circle
             key="profile-img-border-circle"
             ref={borderRef}

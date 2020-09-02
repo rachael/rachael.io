@@ -11,8 +11,8 @@ function ProfileText() {
   const dispatch = useDispatch();
 
   // Absolute units for Firefox/Safari
-  // Necessary because Firefox/Safari requires absolute units on everything, so
-  // vw/vh cannot be used. Emulates vw/vh by updating on resize.
+  // Necessary because Firefox/Safari requires absolute units on svg elements,
+  // so vw/vh cannot be used. Emulates vw/vh by updating on resize.
   // http://ronaldroe.com/psa-viewport-units-on-svg/
   const [[windowWidth, windowHeight], setWindowSize] = useState([0, 0]);
   const [absoluteUnits, setAbsoluteUnits] = useState({});
@@ -75,7 +75,6 @@ function ProfileText() {
   const [nameTextLength, setNameTextLength] = useState();
 
   // set position when hitting a media query breakpoint
-  // because of Firefox/Safari, also need to set on resize
   const setPosition = (position) => {
     setNameTextLength(positions[position].nameTextLength);
     updatePosition(position);
@@ -112,7 +111,8 @@ function ProfileText() {
 
   const setTextHeight = () => {
     const textPos = textRef.current.getBoundingClientRect();
-    setTextSVGHeight(textPos.height + 20);
+    // extra 20px is for buttons
+    setTextSVGHeight(textPos.height + 20); // TODO: buttonHeight variable based on font size
   }
 
   // helps with quick resizing where js can't keep up by fixing height again
@@ -120,7 +120,9 @@ function ProfileText() {
   const [textHeightAdjustTimeoutID, setTextHeightAdjustTimeoutID] = useState();
   const setTextHeightFireTwice = () => {
     setTextHeight();
-    setTextHeightAdjustTimeoutID(setTimeout(setTextHeight, 400));
+    clearTimeout(textHeightAdjustTimeoutID);
+    const timeoutID = setTimeout(setTextHeight, 400);
+    setTextHeightAdjustTimeoutID(timeoutID);
   }
 
   // only load after profile image is finished loading
@@ -128,13 +130,19 @@ function ProfileText() {
   const controls = useAnimation();
   const isLoadCompleteBG = useSelector(state => state.loadCompleteBG);
   const isLoadCompleteContent = useSelector(state => state.loadCompleteContent);
-  if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
-    controls.start('load');
-    setLoaded(true);
-    // fixes height being slightly short if set on mount without the timeout
-    // (bug caused by framer-motion animation)
-    setTimeout(setTextHeight, 400);
-  }
+  useEffect(() => {
+    let timeoutID;
+    if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
+      controls.start('load');
+      setLoaded(true);
+      // fixes height being slightly short if set on mount without the timeout
+      // (bug caused by framer-motion animation)
+      timeoutID = setTimeout(setTextHeight, 400);
+    }
+    return () => {
+      clearTimeout(timeoutID);
+    }
+  }, [isLoadCompleteBG, isLoadCompleteContent]);
 
   // Window resize listener
   // Updates all absolutely set positions on resize for Firefox/Safari
