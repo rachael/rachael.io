@@ -8,6 +8,7 @@ function ProfileButton({
   href = '#',
   as,
   position,
+  y = 0,
   ...props
 }) {
   let dx;
@@ -23,8 +24,9 @@ function ProfileButton({
     >
       <text
         x="50%"
-        y="100%"
+        y={y}
         dx={dx}
+        dy="1.5em"
         fontFamily="Montserrat"
         textAnchor="middle"
         fill="url(#profileFill)"
