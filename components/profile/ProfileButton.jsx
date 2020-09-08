@@ -25,7 +25,7 @@ function ProfileButton({
         x="50%"
         y="100%"
         dx={dx}
-        fontFamily="Indie Flower"
+        fontFamily="Montserrat"
         textAnchor="middle"
         fill="url(#profileFill)"
       >

@@ -2,9 +2,10 @@ export default {
   backgroundScroll: true,
   backgroundTranslateY: '-120vh',
   contentAnimating: true,
-  loadCompleteBG: false,
-  loadCompleteContent: false,
   hoverResume: false,
   hoverGithub: false,
+  loadCompleteBG: false,
+  loadCompleteContent: false,
+  loadCompleteProfileImage: false,
   wiggle: false,
 }

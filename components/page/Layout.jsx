@@ -47,11 +47,6 @@ function Layout({
 
   // background scroll effect
   const backgroundScroll = useSelector(state => state.backgroundScroll);
-  const backgroundClass = classNames(
-    styles['background-image'],
-    { [styles['background-scroll']]: backgroundScroll }
-  );
-
   const backgroundTranslateY = useMotionValue('-120vh');
   const bgControls = useAnimation();
   const [backgroundScrollStarted, setBackgroundScrollStarted] = useState();
@@ -61,7 +56,7 @@ function Layout({
       translateY => dispatch(setBackgroundTranslateY(translateY))
     );
     if(!backgroundScrollStarted && isLoadCompleteBG) {
-      bgControls.start('visible').then(() => bgControls.start('scroll'));
+      bgControls.start('visible');
       setBackgroundScrollStarted(true);
     }
     return () => {
@@ -151,9 +146,11 @@ function Layout({
       <AnimatePresence>
         {isLoadCompleteBG && <motion.div
           key="bg"
-          className={backgroundClass}
+          className={styles['background-image']}
           variants={bgVariants}
           animate={bgControls}
+          // onMouseEnter={() => bgControls.start('scroll')}
+          // onMouseLeave={() => bgControls.stop()}
           style={{ translateY: backgroundTranslateY }}
         />}
       </AnimatePresence>

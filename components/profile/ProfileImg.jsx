@@ -3,12 +3,15 @@ import { AnimatePresence, motion, useAnimation, useMotionValue } from 'framer-mo
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { loadCompleteContent, setContentAnimating } from 'redux/actions';
+import { loadCompleteContent, loadCompleteProfileImage, setContentAnimating } from 'redux/actions';
 import { Overlay } from './overlay';
 
 import styles from 'styles/home/Profile.module.scss';
 
 function ProfileImg() {
+  // Must detect Firefox because animations are too laggy in Firefox to run
+  const isFirefox = typeof InstallTrigger !== 'undefined';
+
   const dispatch = useDispatch();
 
   const imgRef = useRef();
@@ -17,7 +20,7 @@ function ProfileImg() {
   const imgControls = useAnimation();
   const borderControls = useAnimation();
   const imgScale = useMotionValue(1.7);
-  const borderScale = useMotionValue(1.04);
+  const borderScale = isFirefox ? useMotionValue(1.10) : useMotionValue(1.04);
 
   const borderStrokeWidth = 4; // TODO: set to 5 on very large screens
 
@@ -78,8 +81,13 @@ function ProfileImg() {
 
     // on scale:
     const unsubscribeSetPositionOnScale = borderScale.onChange(setBorderFillPosition);
+    let unsubscribeSetPositionOnScaleFirefox;
+    if(isFirefox) {
+      unsubscribeSetPositionOnScaleFirefox = imgScale.onChange(setBorderFillPosition);
+    }
     return () => {
       unsubscribeSetPositionOnScale();
+      if(unsubscribeSetPositionOnScaleFirefox) unsubscribeSetPositionOnScaleFirefox();
     }
   });
 
@@ -121,13 +129,26 @@ function ProfileImg() {
     if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
       setLoaded(true);
       const timeoutID = setTimeout(() => {
-        imgControls.start('pulse');
-        borderControls.start('pulse')
-          .then(() => {
-            dispatch(setContentAnimating(false));
-            borderControls.start('fadeInAndBreathe');
-          })
-          .then(() => borderControls.start('breathe'));
+        if(isFirefox) {
+          borderControls.start('fadeOut')
+            .then(() => imgControls.start('pulse'))
+            .then(() => borderControls.start('resetScale'))
+            .then(() => {
+              setBorderFillPosition();
+              dispatch(setContentAnimating(false));
+              return borderControls.start('fadeIn');
+            })
+            .then(() => dispatch(loadCompleteProfileImage()));
+        } else {
+          imgControls.start('pulse');
+          borderControls.start('pulse')
+            .then(() => {
+              dispatch(setContentAnimating(false));
+              dispatch(loadCompleteProfileImage());
+              borderControls.start('fadeInAndBreathe');
+            })
+            .then(() => borderControls.start('breathe'));
+        }
       }, 1600);
       setLoadTimeoutID(timeoutID);
     }
@@ -164,7 +185,7 @@ function ProfileImg() {
   // Mouse enter
   const contentAnimating = useSelector(state => state.contentAnimating);
   const mouseEnterPulse = useCallback(() => {
-    if(!contentAnimating) {
+    if(!contentAnimating && !isFirefox) {
       borderControls.start('reset')
         .then(() => borderControls.start('mouseEnterPulse'))
         .then(() => borderControls.start('fadeInAndBreathe'))
@@ -198,12 +219,25 @@ function ProfileImg() {
         duration: 16,
       }
     },
+    fadeIn: {
+      opacity: 1,
+    },
     fadeInAndBreathe: {
       scale: [1.04, 1.07, 1.10, 1.07, 1.11, 1.05, 1.09, 1.04],
       opacity: [0, 1, 1, 1, 1, 1, 1, 1],
       transition: {
         duration: 16,
         times: [0, .0833, .1667, .3333, .5, .6667, .8333, 1]
+      }
+    },
+    fadeOut: {
+      opacity: 0,
+    },
+    mouseEnterPulse: {
+      scale: 3,
+      opacity: 0,
+      transition: {
+        duration: 0.6,
       }
     },
     pulse: {
@@ -220,13 +254,12 @@ function ProfileImg() {
         duration: 0,
       }
     },
-    mouseEnterPulse: {
-      scale: 3,
-      opacity: 0,
+    resetScale: {
+      scale: 1.07,
       transition: {
-        duration: 0.6,
+        duration: 0,
       }
-    }
+    },
   };
 
   // Loading indicator

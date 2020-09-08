@@ -20,11 +20,21 @@ const reducer = (state = initialState, action) => {
             ...state,
             loadCompleteContent: true,
           }
+        case 'LOAD_COMPLETE_PROFILE_IMAGE':
+          return {
+            ...state,
+            loadCompleteProfileImage: true,
+          }
         case 'SET_BACKGROUND_TRANSLATEY':
           return {
             ...state,
             backgroundTranslateY: action.payload,
           }
+        case 'SET_CONTENT_ANIMATING':
+            return {
+              ...state,
+              contentAnimating: action.payload,
+            }
         case 'SET_HOVER_GITHUB':
           return {
             ...state,
@@ -35,11 +45,6 @@ const reducer = (state = initialState, action) => {
             ...state,
             hoverResume: action.payload,
           }
-        case 'SET_CONTENT_ANIMATING':
-            return {
-              ...state,
-              contentAnimating: action.payload,
-            }
         case 'WIGGLE':
             return {
               ...state,

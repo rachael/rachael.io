@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { motion, useAnimation } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +10,10 @@ import styles from 'styles/home/Profile.module.scss';
 
 function ProfileText() {
   const dispatch = useDispatch();
+
+  // Must detect Firefox because some animations are too laggy in Firefox to run
+  // So, animation start timings for profile text is different in Firefox
+  const isFirefox = typeof InstallTrigger !== 'undefined';
 
   // Absolute units for Firefox/Safari
   // Necessary because Firefox/Safari requires absolute units on svg elements,
@@ -128,21 +133,18 @@ function ProfileText() {
   // only load after profile image is finished loading
   const [loaded, setLoaded] = useState(false);
   const controls = useAnimation();
-  const isLoadCompleteBG = useSelector(state => state.loadCompleteBG);
-  const isLoadCompleteContent = useSelector(state => state.loadCompleteContent);
+  const loadCompleteProfileImage = useSelector(state => state.loadCompleteProfileImage);
   useEffect(() => {
     let timeoutID;
-    if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
+    if(!loaded && loadCompleteProfileImage) {
+      setTextHeight();
       controls.start('load');
       setLoaded(true);
-      // fixes height being slightly short if set on mount without the timeout
-      // (bug caused by framer-motion animation)
-      timeoutID = setTimeout(setTextHeight, 400);
     }
     return () => {
       clearTimeout(timeoutID);
     }
-  }, [isLoadCompleteBG, isLoadCompleteContent]);
+  }, [loadCompleteProfileImage]);
 
   // Window resize listener
   // Updates all absolutely set positions on resize for Firefox/Safari
@@ -168,7 +170,7 @@ function ProfileText() {
     load: {
       opacity: 1,
       transition: {
-        delay: 2.6,
+        delay: 0.4,
         duration: 0.4,
         when: "beforeChildren",
         staggerChildren: 0.4,
@@ -192,6 +194,11 @@ function ProfileText() {
       opacity: 0,
     },
   };
+
+  const profileNameClass = classNames(
+    styles['profile-name'],
+    { [styles['is-firefox']]: isFirefox }
+  )
 
   return (
     <>
@@ -233,7 +240,7 @@ function ProfileText() {
             fill="url(#profileFill)"
           >
             <motion.tspan
-              className={styles['profile-name']}
+              className={profileNameClass}
               x="50%"
               y="1em"
               textLength={nameTextLength}
