@@ -20,7 +20,7 @@ function ProfileImg() {
 
   const imgControls = useAnimation();
   const borderControls = useAnimation();
-  const imgScale = useMotionValue(1.7);
+  const imgScale = useMotionValue(1);
   const borderScale = isFirefox ? useMotionValue(1.10) : useMotionValue(1.06);
 
   const borderStrokeWidth = 4; // TODO: set to 5 on very large screens
@@ -66,8 +66,9 @@ function ProfileImg() {
   })
 
   // Disable scale animations in Safari and mobile, which has the same problem.
+  // A function so that it will be up to date when used from within setTimeout.
   // Must detect Safari because Safari does not properly support SVG overflows
-  // due to scaling and clips the ring SVG so animation must be turned off
+  // due to scaling and clips the ring SVG so animation must be turned off.
   // All browser detection credit goes to https://stackoverflow.com/questions/49328382/browser-detection-in-reactjs
   const scaleAnimationsEnabled = () => {
     const isSafari = /constructor/i.test(window.HTMLElement) || (function (p) {
@@ -103,6 +104,8 @@ function ProfileImg() {
   });
 
   // Image load
+  // scaled: true if the image has been scaled for initial load animation
+  const [scaled, setScaled] = useState();
   // breatheStarted: true if initial breathe animation has been started
   const [breatheStarted, setBreatheStarted] = useState();
   // loaded: true if image has finished loading and started its 'pulse' animation.
@@ -125,7 +128,12 @@ function ProfileImg() {
 
   useEffect(() => {
     if(windowWidth) {
-      console.log(scaleAnimationsEnabled());
+      // only scale image for loading animation on large screens
+      if(!scaled && windowWidth >= 800) {
+        imgControls.start('scaled');
+        setScaled(true);
+      }
+
       // start breathe once
       if (!breatheStarted && scaleAnimationsEnabled()) {
         borderControls.start('breathe');
@@ -139,37 +147,49 @@ function ProfileImg() {
       }
 
       // once loaded, wait 1.6 seconds to show enlarged profile img and then pulse
+      // firefox: fade out profile ring, then fade in when pulse is over
+      // mobile: don't wait as image is not scaled
       if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
         setLoaded(true);
-        const timeoutID = setTimeout(() => {
-          if(isFirefox) {
-            borderControls.start('fadeOut')
-              .then(() => imgControls.start('imgPulse'))
-              .then(() => borderControls.start('resetScale'))
-              .then(() => {
-                setBorderFillPosition();
-                dispatch(setContentAnimating(false));
-                return borderControls.start('fadeIn');
-              })
-              .then(() => dispatch(loadCompleteProfileImage()));
-          } else if(!scaleAnimationsEnabled()) {
-            imgControls.start('imgPulse')
-              .then(() => {
-                dispatch(setContentAnimating(false));
-                dispatch(loadCompleteProfileImage());
-              });
-          } else {
-            imgControls.start('imgPulse');
-            borderControls.start('pulse')
-              .then(() => {
-                dispatch(setContentAnimating(false));
-                dispatch(loadCompleteProfileImage());
-                borderControls.start('fadeInAndBreathe');
-              })
-              .then(() => borderControls.start('breathe'));
-          }
-        }, 1600);
-        setLoadTimeoutID(timeoutID);
+        if(windowWidth >= 800) {
+          // large screens
+          const timeoutID = setTimeout(() => {
+            if(isFirefox) {
+              // Firefox
+              borderControls.start('fadeOut')
+                .then(() => imgControls.start('imgPulse'))
+                .then(() => borderControls.start('resetScale'))
+                .then(() => {
+                  setBorderFillPosition();
+                  dispatch(setContentAnimating(false));
+                  return borderControls.start('fadeIn');
+                })
+                .then(() => dispatch(loadCompleteProfileImage()));
+            } else if(!scaleAnimationsEnabled()) {
+              // no scale animations; Safari
+              imgControls.start('imgPulse')
+                .then(() => {
+                  dispatch(setContentAnimating(false));
+                  dispatch(loadCompleteProfileImage());
+                });
+            } else {
+              // pulse animation
+              imgControls.start('imgPulse');
+              borderControls.start('pulse')
+                .then(() => {
+                  dispatch(setContentAnimating(false));
+                  dispatch(loadCompleteProfileImage());
+                  borderControls.start('fadeInAndBreathe');
+                })
+                .then(() => borderControls.start('breathe'));
+            }
+          }, 1600);
+          setLoadTimeoutID(timeoutID);
+        } else {
+          // mobile
+          dispatch(setContentAnimating(false));
+          dispatch(loadCompleteProfileImage());
+        }
       }
       return () => {
         clearTimeout(loadTimeoutID);
@@ -218,9 +238,12 @@ function ProfileImg() {
   const backgroundTranslateY = useSelector(state => state.backgroundTranslateY);
 
   const imgVariants = {
-    visible: {
+    scaled: {
       scale: 1.7,
       translateY: '40%',
+      transition: {
+        duration: 0.01,
+      }
     },
     imgPulse: {
       scale: 1,
@@ -305,7 +328,6 @@ function ProfileImg() {
       className={imgClasses}
       variants={imgVariants}
       style={{ scale: imgScale }}
-      initial="visible"
       animate={imgControls}
     >
       <AnimatePresence>

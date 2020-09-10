@@ -20,6 +20,17 @@ function Layout({
   const wiggleEnabled = useSelector(state => state.wiggle);
   const wiggleCB = useCallback(() => dispatch(wiggle(!wiggleEnabled)));
 
+  // track window width/height for mobile detection
+  const [[windowWidth, windowHeight], setWindowSize] = useState([0, 0]);
+
+  const updateWindowSize = () => {
+    setWindowSize([window.innerWidth, window.innerHeight]);
+  }
+
+  useEffect(() => {
+    updateWindowSize();
+  }, []);
+
   // content animating: hides overflow and expands container during animations.
   // optimistically assumes content will animate -- must set to false inside
   // content to reenable scrolling.
@@ -144,7 +155,7 @@ function Layout({
         onLoad={setLoadCompleteCB}
       />
       <AnimatePresence>
-        {isLoadCompleteBG && <motion.div
+        {windowWidth > 800 && isLoadCompleteBG && <motion.div
           key="bg"
           className={styles['background-image']}
           variants={bgVariants}
