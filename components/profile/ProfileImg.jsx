@@ -10,6 +10,7 @@ import styles from 'styles/home/Profile.module.scss';
 
 function ProfileImg() {
   // Must detect Firefox because animations are too laggy in Firefox to run
+  // All browser detection credit goes to https://stackoverflow.com/questions/49328382/browser-detection-in-reactjs
   const isFirefox = typeof InstallTrigger !== 'undefined';
 
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ function ProfileImg() {
   const imgControls = useAnimation();
   const borderControls = useAnimation();
   const imgScale = useMotionValue(1.7);
-  const borderScale = isFirefox ? useMotionValue(1.10) : useMotionValue(1.04);
+  const borderScale = isFirefox ? useMotionValue(1.10) : useMotionValue(1.06);
 
   const borderStrokeWidth = 4; // TODO: set to 5 on very large screens
 
@@ -64,6 +65,19 @@ function ProfileImg() {
     }
   })
 
+  // Disable scale animations in Safari and mobile, which has the same problem.
+  // Must detect Safari because Safari does not properly support SVG overflows
+  // due to scaling and clips the ring SVG so animation must be turned off
+  // All browser detection credit goes to https://stackoverflow.com/questions/49328382/browser-detection-in-reactjs
+  const scaleAnimationsEnabled = () => {
+    const isSafari = /constructor/i.test(window.HTMLElement) || (function (p) {
+      return p.toString() === "[object SafariRemoteNotification]";
+    })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+    // Disable scale animations in Safari and also mobile, which has the same problem
+    if(isSafari || windowWidth < 800) return false;
+    else return true;
+  };
+
   // Set position of profile border fill so pattern acts as a mask.
   // fill position:
   const [borderFillX, setBorderFillX] = useState(0);
@@ -80,14 +94,11 @@ function ProfileImg() {
     setBorderFillPosition();
 
     // on scale:
-    const unsubscribeSetPositionOnScale = borderScale.onChange(setBorderFillPosition);
-    let unsubscribeSetPositionOnScaleFirefox;
-    if(isFirefox) {
-      unsubscribeSetPositionOnScaleFirefox = imgScale.onChange(setBorderFillPosition);
-    }
+    const unsubscribeBorderScale = borderScale.onChange(setBorderFillPosition);
+    const unsubscribeImageScale = imgScale.onChange(setBorderFillPosition);
     return () => {
-      unsubscribeSetPositionOnScale();
-      if(unsubscribeSetPositionOnScaleFirefox) unsubscribeSetPositionOnScaleFirefox();
+      unsubscribeBorderScale();
+      unsubscribeImageScale();
     }
   });
 
@@ -113,53 +124,63 @@ function ProfileImg() {
   }, [isLoadCompleteContent, dispatch]);
 
   useEffect(() => {
-    // start breathe once
-    if (!breatheStarted) {
-      borderControls.start('breathe');
-      setBreatheStarted(true);
-    }
+    if(windowWidth) {
+      console.log(scaleAnimationsEnabled());
+      // start breathe once
+      if (!breatheStarted && scaleAnimationsEnabled()) {
+        borderControls.start('breathe');
+        setBreatheStarted(true);
+      }
 
-    // image has been loaded from cache
-    if(!isLoadCompleteContent && imgRef.current && imgRef.current.complete) {
-      dispatch(loadCompleteContent());
-      setLoadedFromCache(true);
-    }
+      // image has been loaded from cache
+      if(!isLoadCompleteContent && imgRef.current && imgRef.current.complete) {
+        dispatch(loadCompleteContent());
+        setLoadedFromCache(true);
+      }
 
-    // once loaded, wait 1.6 seconds to show enlarged profile img and then pulse
-    if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
-      setLoaded(true);
-      const timeoutID = setTimeout(() => {
-        if(isFirefox) {
-          borderControls.start('fadeOut')
-            .then(() => imgControls.start('pulse'))
-            .then(() => borderControls.start('resetScale'))
-            .then(() => {
-              setBorderFillPosition();
-              dispatch(setContentAnimating(false));
-              return borderControls.start('fadeIn');
-            })
-            .then(() => dispatch(loadCompleteProfileImage()));
-        } else {
-          imgControls.start('pulse');
-          borderControls.start('pulse')
-            .then(() => {
-              dispatch(setContentAnimating(false));
-              dispatch(loadCompleteProfileImage());
-              borderControls.start('fadeInAndBreathe');
-            })
-            .then(() => borderControls.start('breathe'));
-        }
-      }, 1600);
-      setLoadTimeoutID(timeoutID);
+      // once loaded, wait 1.6 seconds to show enlarged profile img and then pulse
+      if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
+        setLoaded(true);
+        const timeoutID = setTimeout(() => {
+          if(isFirefox) {
+            borderControls.start('fadeOut')
+              .then(() => imgControls.start('imgPulse'))
+              .then(() => borderControls.start('resetScale'))
+              .then(() => {
+                setBorderFillPosition();
+                dispatch(setContentAnimating(false));
+                return borderControls.start('fadeIn');
+              })
+              .then(() => dispatch(loadCompleteProfileImage()));
+          } else if(!scaleAnimationsEnabled()) {
+            imgControls.start('imgPulse')
+              .then(() => {
+                dispatch(setContentAnimating(false));
+                dispatch(loadCompleteProfileImage());
+              });
+          } else {
+            imgControls.start('imgPulse');
+            borderControls.start('pulse')
+              .then(() => {
+                dispatch(setContentAnimating(false));
+                dispatch(loadCompleteProfileImage());
+                borderControls.start('fadeInAndBreathe');
+              })
+              .then(() => borderControls.start('breathe'));
+          }
+        }, 1600);
+        setLoadTimeoutID(timeoutID);
+      }
+      return () => {
+        clearTimeout(loadTimeoutID);
+      };
     }
-    return () => {
-      clearTimeout(loadTimeoutID);
-    };
   }, [
     breatheStarted,
-    loaded,
     isLoadCompleteBG,
-    isLoadCompleteContent
+    isLoadCompleteContent,
+    loaded,
+    windowWidth,
   ]);
 
   // Button hover states -- add overlay to profile image
@@ -185,13 +206,13 @@ function ProfileImg() {
   // Mouse enter
   const contentAnimating = useSelector(state => state.contentAnimating);
   const mouseEnterPulse = useCallback(() => {
-    if(!contentAnimating && !isFirefox) {
+    if(!contentAnimating && !isFirefox && scaleAnimationsEnabled()) {
       borderControls.start('reset')
         .then(() => borderControls.start('mouseEnterPulse'))
         .then(() => borderControls.start('fadeInAndBreathe'))
         .then(() => borderControls.start('breathe'));
     }
-  }, [contentAnimating]);
+  }, [contentAnimating, windowWidth]);
 
   // Animations
   const backgroundTranslateY = useSelector(state => state.backgroundTranslateY);
@@ -201,7 +222,7 @@ function ProfileImg() {
       scale: 1.7,
       translateY: '40%',
     },
-    pulse: {
+    imgPulse: {
       scale: 1,
       translateY: 0,
       transition: {
@@ -255,7 +276,7 @@ function ProfileImg() {
       }
     },
     resetScale: {
-      scale: 1.07,
+      scale: 1.06,
       transition: {
         duration: 0,
       }
@@ -286,7 +307,6 @@ function ProfileImg() {
       style={{ scale: imgScale }}
       initial="visible"
       animate={imgControls}
-      onMouseEnter={mouseEnterPulse}
     >
       <AnimatePresence>
         {!(isLoadCompleteBG || isLoadCompleteContent) && loadingIndicator}
@@ -298,6 +318,7 @@ function ProfileImg() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          onMouseEnter={mouseEnterPulse}
         />
         <svg
           key="profile-img-border"

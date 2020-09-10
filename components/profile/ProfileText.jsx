@@ -13,6 +13,7 @@ function ProfileText() {
 
   // Must detect Firefox because some animations are too laggy in Firefox to run
   // So, animation start timings for profile text is different in Firefox
+  // All browser detection credit goes to https://stackoverflow.com/questions/49328382/browser-detection-in-reactjs
   const isFirefox = typeof InstallTrigger !== 'undefined';
 
   // Absolute units for Firefox/Safari
@@ -172,6 +173,22 @@ function ProfileText() {
     }
   }, [loadCompleteProfileImage]);
 
+  // Set height of SVG to include buttons, otherwise buttons are uninteractable
+  // in Safari
+  const [profileHeight, setProfileHeight] = useState();
+  const buttonsRef = useRef();
+  const profileRef = useRef();
+
+  const updateProfileHeight = () => {
+    const buttonsPos = buttonsRef.current.getBoundingClientRect();
+    const profilePos = profileRef.current.getBoundingClientRect();
+    setProfileHeight(buttonsPos.bottom - profilePos.top);
+  }
+
+  useEffect(() => {
+    updateProfileHeight();
+  })
+
   // Window resize listener
   // Updates all absolutely set positions on resize for Firefox/Safari
   useEffect(() => {
@@ -180,12 +197,14 @@ function ProfileText() {
       updateAbsoluteUnits();
       updatePositions();
       testMediaQuery();
+      updateProfileHeight();
     }
-    window.addEventListener('resize', onResize);
-    window.addEventListener('orientationchange', onResize);
+    // detect orientation change (works for iOS -- and first 'resize' is required)
+    if ("onorientationchange" in window) window.addEventListener('resize orientationchange', onResize);
+    else window.addEventListener('resize', onResize);
     return () => {
       window.removeEventListener('resize', onResize);
-      window.removeEventListener('orientationchange', onResize);
+      window.removeEventListener('resize orientataionchange', onResize);
     }
   })
 
@@ -229,7 +248,9 @@ function ProfileText() {
   return (
     <>
       <motion.svg
+        ref={profileRef}
         className={styles.profile}
+        height={profileHeight}
         variants={profileVariants}
         animate={controls}
       >
@@ -312,6 +333,7 @@ function ProfileText() {
         </motion.svg>
         <motion.svg
           key="buttons-svg"
+          ref={buttonsRef}
           className={styles['profile-buttons-svg']}
           variants={profileItemVariants}
           layout
