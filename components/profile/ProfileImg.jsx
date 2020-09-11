@@ -59,9 +59,12 @@ function ProfileImg() {
       updateWindowSize();
       updateAbsoluteUnits();
     }
-    window.addEventListener('resize', onResize);
+    // detect orientation change (works for iOS -- and first 'resize' is required)
+    if ("onorientationchange" in window) window.addEventListener('resize orientationchange', onResize);
+    else window.addEventListener('resize', onResize);
     return () => {
       window.removeEventListener('resize', onResize);
+      window.removeEventListener('resize orientataionchange', onResize);
     }
   });
 
