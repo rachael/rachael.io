@@ -35,14 +35,14 @@ function ProfileImg() {
 
   const updateWindowSize = () => {
     setWindowSize([window.innerWidth, window.innerHeight]);
-  }
+  };
 
   const updateAbsoluteUnits = () => {
     setAbsoluteUnits({
       '100vw': windowWidth,
       '300vh': windowHeight * 3,
     });
-  }
+  };
 
   useEffect(() => {
     updateWindowSize();
@@ -63,20 +63,23 @@ function ProfileImg() {
     return () => {
       window.removeEventListener('resize', onResize);
     }
-  })
+  });
 
   // Disable scale animations in Safari and mobile, which has the same problem.
   // A function so that it will be up to date when used from within setTimeout.
   // Must detect Safari because Safari does not properly support SVG overflows
   // due to scaling and clips the ring SVG so animation must be turned off.
   // All browser detection credit goes to https://stackoverflow.com/questions/49328382/browser-detection-in-reactjs
-  const scaleAnimationsEnabled = () => {
-    const isSafari = /constructor/i.test(window.HTMLElement) || (function (p) {
+  const isSafari = () => {
+    return /constructor/i.test(window.HTMLElement) || (function (p) {
       return p.toString() === "[object SafariRemoteNotification]";
     })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+  };
+
+  const scaleAnimationsEnabled = () => {
     // Disable scale animations in Safari and also mobile, which has the same problem
-    if(isSafari || windowWidth < 800) return false;
-    else return true;
+    if(isSafari() || windowWidth < 800) return false;
+    return true;
   };
 
   // Set position of profile border fill so pattern acts as a mask.
