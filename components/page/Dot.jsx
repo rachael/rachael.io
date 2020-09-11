@@ -52,6 +52,7 @@ class Dot extends Component {
     } else {
       baseTransformX = getRandomInt(0, 4);
     }
+    
     this.setState({
       // Randomly translateX each dot to vary dot position along edge, in rem
       baseTransformX,
