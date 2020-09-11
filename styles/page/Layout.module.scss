@@ -96,7 +96,7 @@
   .container {
     width: 47.21435316vw; // 1.618 | 2 | 1.618
     min-width: 500px;
-    background: rgba($background-color, 0.6);
+    background: $background-color-large-screens;
     transition: width 400ms;
   }
 
