@@ -208,7 +208,7 @@ function ProfileImg() {
   const hoverResume = useSelector(state => state.hoverResume);
 
   let imgSrc = '/images/profile_sm.png';
-  if (hoverGithub || hoverResume) {
+  if (windowWidth >= 800 && (hoverGithub || hoverResume)) {
     imgSrc = '/images/profile_sm_blur.png';
   }
 
@@ -218,8 +218,8 @@ function ProfileImg() {
     {
       [styles['loading']]: !(isLoadCompleteBG || isLoadCompleteContent),
       [styles['loaded-from-cache']]: loadedFromCache,
-      [styles['hover-github']]: hoverGithub,
-      [styles['hover-resume']]: hoverResume,
+      [styles['hover-github']]: windowWidth >= 800 && hoverGithub,
+      [styles['hover-resume']]: windowWidth >= 800 && hoverResume,
     }
   );
 
@@ -385,12 +385,12 @@ function ProfileImg() {
             style={{ scale: borderScale }}
           />
         </svg>
-        {hoverGithub && (<Overlay
+        {windowWidth >= 800 && hoverGithub && (<Overlay
           className="profile-img-github"
           overlayText="GITHUB"
           items={["Portfolio", "Projects"]} />
         )}
-        {hoverResume && (<Overlay
+        {windowWidth >= 800 && hoverResume && (<Overlay
           className="profile-img-resume"
           overlayText="RESUME"
           items={["Contact", "Skills", "Experience"]} />
