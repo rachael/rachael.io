@@ -136,7 +136,7 @@ function ProfileImg() {
     if(windowWidth) {
       // only scale image for loading animation on large screens
       if(!scaled && windowWidth >= 800) {
-        imgControls.start('scaled');
+        imgControls.start('scaled').then(() => setBorderFillPosition());
         setScaled(true);
       }
 
