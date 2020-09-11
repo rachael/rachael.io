@@ -50,13 +50,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   width: 100%;
   min-width: $content-min-width;
+  padding: 2rem 0;
   overflow: auto;
 
   &:global(.content-animating) {
     overflow: hidden;
+  }
+}
+
+// center content on larger small screens (e.g. tablets) and above
+@media (min-width: 500px) and (min-height: 500px) {
+  .content {
+    justify-content: center;
+    padding: 0;
   }
 }
 
