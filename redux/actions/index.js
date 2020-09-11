@@ -1,6 +1,8 @@
 import {
-  LOAD_COMPLETE_BG,
-  loadCompleteBG,
+  IMAGE_LOAD_COMPLETE_BG,
+  imageLoadCompleteBG,
+  IMAGE_LOAD_COMPLETE_CONTENT,
+  imageLoadCompleteContent,
   LOAD_COMPLETE_CONTENT,
   loadCompleteContent,
   LOAD_COMPLETE_PROFILE_IMAGE,
@@ -18,8 +20,10 @@ import {
 } from './actions'
 
 export {
-  LOAD_COMPLETE_BG,
-  loadCompleteBG,
+  IMAGE_LOAD_COMPLETE_BG,
+  imageLoadCompleteBG,
+  IMAGE_LOAD_COMPLETE_CONTENT,
+  imageLoadCompleteContent,
   LOAD_COMPLETE_CONTENT,
   loadCompleteContent,
   LOAD_COMPLETE_PROFILE_IMAGE,

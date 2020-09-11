@@ -3,7 +3,7 @@ import { AnimatePresence, motion, useAnimation, useMotionValue } from 'framer-mo
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { loadCompleteBG, setBackgroundTranslateY, wiggle } from 'redux/actions';
+import { imageLoadCompleteBG, setBackgroundTranslateY, wiggle } from 'redux/actions';
 import initialState from 'redux/initialState';
 
 import styles from 'styles/page/Layout.module.scss';
@@ -42,18 +42,18 @@ function Layout({
 
   // image load
   const bgRef = useRef();
-  const isLoadCompleteBG = useSelector(state => state.loadCompleteBG);
+  const isImageLoadCompleteBG = useSelector(state => state.imageLoadCompleteBG);
   const setLoadCompleteCB = useCallback(() => {
-    if(!isLoadCompleteBG) dispatch(loadCompleteBG());
-  }, [isLoadCompleteBG, dispatch]);
+    if(!isImageLoadCompleteBG) dispatch(imageLoadCompleteBG());
+  }, [isImageLoadCompleteBG, dispatch]);
 
   useEffect(() => {
-    if(!isLoadCompleteBG && bgRef.current.complete) dispatch(loadCompleteBG());
+    if(!isImageLoadCompleteBG && bgRef.current.complete) dispatch(imageLoadCompleteBG());
   });
 
   const layoutClasses = classNames(
     styles.layout,
-    { [styles['bg-loading']]: !isLoadCompleteBG }
+    { [styles['bg-loading']]: !isImageLoadCompleteBG }
   );
 
   // background scroll effect
@@ -66,14 +66,14 @@ function Layout({
     const unsubscribeBackgroundTranslateY = backgroundTranslateY.onChange(
       translateY => dispatch(setBackgroundTranslateY(translateY))
     );
-    if(!backgroundScrollStarted && isLoadCompleteBG) {
+    if(!backgroundScrollStarted && isImageLoadCompleteBG) {
       bgControls.start('visible');
       setBackgroundScrollStarted(true);
     }
     return () => {
       unsubscribeBackgroundTranslateY();
     }
-  }, [isLoadCompleteBG]);
+  }, [isImageLoadCompleteBG]);
 
   // content appear animation
   const bgVariants = {
@@ -155,7 +155,7 @@ function Layout({
         onLoad={setLoadCompleteCB}
       />
       <AnimatePresence>
-        {windowWidth > 800 && isLoadCompleteBG && <motion.div
+        {windowWidth > 800 && isImageLoadCompleteBG && <motion.div
           key="bg"
           className={styles['background-image']}
           variants={bgVariants}

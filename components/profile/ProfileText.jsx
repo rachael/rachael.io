@@ -3,7 +3,7 @@ import { motion, useAnimation } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setHoverGithub, setHoverResume } from 'redux/actions';
+import { loadCompleteContent, setHoverGithub, setHoverResume } from 'redux/actions';
 import { ProfileButton } from '.';
 
 import styles from 'styles/home/Profile.module.scss';
@@ -135,7 +135,7 @@ function ProfileText() {
     setDescriptionLine2Y(positions[position].descriptionLine2Y);
     setButtonsY(positions[position].buttonsY);
     updatePosition(position);
-  };
+  }
 
   const [mediaQueries, setMediaQueries] = useState({});
 
@@ -153,7 +153,7 @@ function ProfileText() {
       mediaQueries[position].screenTest = screenTest;
     }
     setMediaQueries(mediaQueries);
-  };
+  }
 
   useEffect(() => {
     setupMediaQueries();
@@ -169,7 +169,7 @@ function ProfileText() {
   const loadCompleteProfileImage = useSelector(state => state.loadCompleteProfileImage);
   useEffect(() => {
     if(!loaded && loadCompleteProfileImage) {
-      controls.start('load');
+      controls.start('load').then(() => dispatch(loadCompleteContent()));
       setLoaded(true);
     }
   }, [loadCompleteProfileImage]);

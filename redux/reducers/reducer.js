@@ -10,10 +10,15 @@ import initialState from 'redux/initialState';
 // create a simple reducer
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case 'LOAD_COMPLETE_BG':
+        case 'IMAGE_LOAD_COMPLETE_BG':
           return {
             ...state,
-            loadCompleteBG: true,
+            imageLoadCompleteBG: true,
+          }
+        case 'IMAGE_LOAD_COMPLETE_CONTENT':
+          return {
+            ...state,
+            imageLoadCompleteContent: true,
           }
         case 'LOAD_COMPLETE_CONTENT':
           return {

@@ -3,7 +3,7 @@ import { AnimatePresence, motion, useAnimation, useMotionValue } from 'framer-mo
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { loadCompleteContent, loadCompleteProfileImage, setContentAnimating } from 'redux/actions';
+import { imageLoadCompleteContent, loadCompleteProfileImage, setContentAnimating } from 'redux/actions';
 import { Overlay } from './overlay';
 
 import styles from 'styles/home/Profile.module.scss';
@@ -120,17 +120,17 @@ function ProfileImg() {
   // loadedFromCache: hides the loading indicator to prevent flash
   const [loadedFromCache, setLoadedFromCache] = useState();
   // loadComplete store variables
-  const isLoadCompleteBG = useSelector(state => state.loadCompleteBG);
-  const isLoadCompleteContent = useSelector(state => state.loadCompleteContent);
+  const isImageLoadCompleteBG = useSelector(state => state.imageLoadCompleteBG);
+  const isImageLoadCompleteContent = useSelector(state => state.imageLoadCompleteContent);
   // timeout ID for pulse on load, safeguards that the ID does not get destroyed
   // by render cycle before timeout can be cleared
   const [loadTimeoutID, setLoadTimeoutID] = useState();
   // callback on img load complete
   const setLoadCompleteCB = useCallback(() => {
-    if(!isLoadCompleteContent) {
-      dispatch(loadCompleteContent());
+    if(!isImageLoadCompleteContent) {
+      dispatch(imageLoadCompleteContent());
     }
-  }, [isLoadCompleteContent, dispatch]);
+  }, [isImageLoadCompleteContent, dispatch]);
 
   useEffect(() => {
     if(windowWidth) {
@@ -147,15 +147,15 @@ function ProfileImg() {
       }
 
       // image has been loaded from cache
-      if(!isLoadCompleteContent && imgRef.current && imgRef.current.complete) {
-        dispatch(loadCompleteContent());
+      if(!isImageLoadCompleteContent && imgRef.current && imgRef.current.complete) {
+        dispatch(imageLoadCompleteContent());
         setLoadedFromCache(true);
       }
 
       // once loaded, wait 1.6 seconds to show enlarged profile img and then pulse
       // firefox: fade out profile ring, then fade in when pulse is over
       // mobile: don't wait as image is not scaled
-      if(!loaded && isLoadCompleteBG && isLoadCompleteContent) {
+      if(!loaded && isImageLoadCompleteBG && isImageLoadCompleteContent) {
         setLoaded(true);
         if(windowWidth >= 800) {
           // large screens
@@ -203,8 +203,8 @@ function ProfileImg() {
     }
   }, [
     breatheStarted,
-    isLoadCompleteBG,
-    isLoadCompleteContent,
+    isImageLoadCompleteBG,
+    isImageLoadCompleteContent,
     loaded,
     windowWidth,
   ]);
@@ -222,7 +222,7 @@ function ProfileImg() {
   const imgClasses = classNames(
     styles['profile-img'],
     {
-      [styles['loading']]: !(isLoadCompleteBG || isLoadCompleteContent),
+      [styles['loading']]: !(isImageLoadCompleteBG || isImageLoadCompleteContent),
       [styles['loaded-from-cache']]: loadedFromCache,
       [styles['hover-github']]: windowWidth >= 800 && hoverGithub,
       [styles['hover-resume']]: windowWidth >= 800 && hoverResume,
@@ -337,7 +337,7 @@ function ProfileImg() {
       animate={imgControls}
     >
       <AnimatePresence>
-        {!(isLoadCompleteBG || isLoadCompleteContent) && loadingIndicator}
+        {!(isImageLoadCompleteBG || isImageLoadCompleteContent) && loadingIndicator}
         <motion.img
           ref={imgRef}
           key={imgSrc}
@@ -382,7 +382,7 @@ function ProfileImg() {
             cx="50%"
             cy="50%"
             r="50%"
-            stroke={isLoadCompleteBG ? 'url(#profileBorderFill)' : 'black'}
+            stroke={isImageLoadCompleteBG ? 'url(#profileBorderFill)' : 'black'}
             strokeWidth={borderStrokeWidth}
             fill="none"
             opacity="1"

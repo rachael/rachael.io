@@ -2,15 +2,20 @@
 export const SET_HOVER_GITHUB = 'SET_HOVER_GITHUB';
 export const SET_HOVER_RESUME = 'SET_HOVER_RESUME';
 export const SET_CONTENT_ANIMATING = 'SET_CONTENT_ANIMATING';
-export const LOAD_COMPLETE_BG = 'LOAD_COMPLETE_BG';
+export const IMAGE_LOAD_COMPLETE_BG = 'IMAGE_LOAD_COMPLETE_BG';
+export const IMAGE_LOAD_COMPLETE_CONTENT = 'IMAGE_LOAD_COMPLETE_CONTENT';
 export const LOAD_COMPLETE_CONTENT = 'LOAD_COMPLETE_CONTENT';
 export const LOAD_COMPLETE_PROFILE_IMAGE = 'LOAD_COMPLETE_PROFILE_IMAGE';
 export const SET_BACKGROUND_TRANSLATEY = 'SET_BACKGROUND_TRANSLATEY';
 export const WIGGLE = 'WIGGLE';
 
-// Action Creator
-export const loadCompleteBG = () => ({
-  type: LOAD_COMPLETE_BG,
+// Action Creators
+export const imageLoadCompleteBG = () => ({
+  type: IMAGE_LOAD_COMPLETE_BG,
+});
+
+export const imageLoadCompleteContent = () => ({
+  type: IMAGE_LOAD_COMPLETE_CONTENT,
 });
 
 export const loadCompleteContent = () => ({
