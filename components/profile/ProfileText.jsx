@@ -139,6 +139,7 @@ function ProfileText() {
 
   const [mediaQueries, setMediaQueries] = useState({});
 
+  // sets up media queries and tests each one, setting the position if it matches
   const setupMediaQueries = () => {
     const mediaQueries = {};
     for(let position in positions) {

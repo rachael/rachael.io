@@ -8,7 +8,7 @@ function ProfileButton({
   href = '#',
   as,
   position,
-  y = 0,
+  y = 0, // y must be passed to each item individually to preserve position of fill
   ...props
 }) {
   let dx;
