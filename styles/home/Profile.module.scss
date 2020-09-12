@@ -260,16 +260,25 @@
     position: fixed;
     width: 100%;
     top: 58vh;
+    // disable pointer events from profile container to avoid blocking
+    // background scroll. re-enable on text and buttons.
+    pointer-events: none;
   }
 
   .profile-name {
     font-size: 12vh;
     height: 12vh;
+    pointer-events: all;
   }
 
   .profile-description-line1,
   .profile-description-line2 {
     font-size: 5vh;
+    pointer-events: all;
+  }
+
+  .profile-buttons-svg {
+    pointer-events: all;
   }
 
   .profile-img {
