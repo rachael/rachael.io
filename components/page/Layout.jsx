@@ -3,7 +3,7 @@ import { AnimatePresence, motion, useAnimation, useMotionValue } from 'framer-mo
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { imageLoadCompleteBG, setBackgroundTranslateY, wiggle } from 'redux/actions';
+import { imageLoadCompleteBG, reverseBackgroundDirection, setBackgroundTranslateY, wiggle } from 'redux/actions';
 import initialState from 'redux/initialState';
 
 import styles from 'styles/page/Layout.module.scss';
@@ -58,13 +58,14 @@ function Layout({
 
   // background scroll effect
   const backgroundScroll = useSelector(state => state.backgroundScroll);
+  const backgroundDirection = useSelector(state => state.backgroundDirection);
   const backgroundTranslateY = useMotionValue('-120vh');
   const bgControls = useAnimation();
   const [backgroundScrollStarted, setBackgroundScrollStarted] = useState();
 
   useEffect(() => {
     const unsubscribeBackgroundTranslateY = backgroundTranslateY.onChange(
-      translateY => dispatch(setBackgroundTranslateY(translateY))
+      (translateY) => dispatch(setBackgroundTranslateY(translateY))
     );
     if(!backgroundScrollStarted && isImageLoadCompleteBG) {
       bgControls.start('visible');
@@ -77,14 +78,20 @@ function Layout({
 
   // content appear animation
   const bgVariants = {
-    scroll: {
-      translateY: ['-120vh', '0vh'],
+    scroll: ([y, dir]) => ({
+      translateY: dir === 'reverse' ? ['0vh', '-120vh'] : ['-120vh', '0vh'],
       transition: {
         yoyo: Infinity,
         duration: 120,
         times: [0, 1],
       }
-    },
+    }),
+    scrollToEnd: ([y, dir]) => ({
+      translateY: dir === 'reverse' ? [null, '-120vh'] : [null, '0vh'],
+      transition: {
+        duration: dir === 'reverse' ? (120 - Math.abs(parseFloat(y))) : Math.abs(parseFloat(y)),
+      }
+    }),
     visible: {
       opacity: 1,
       transition: {
@@ -160,8 +167,13 @@ function Layout({
           className={styles['background-image']}
           variants={bgVariants}
           animate={bgControls}
-          // onMouseEnter={() => bgControls.start('scroll')}
-          // onMouseLeave={() => bgControls.stop()}
+          // onMouseEnter={() => bgControls.start('scrollToEnd')}
+          onMouseEnter={() => bgControls.start('scrollToEnd').then(() => {
+            dispatch(reverseBackgroundDirection());
+            bgControls.start('scroll');
+          })}
+          onMouseLeave={() => bgControls.stop()}
+          custom={[backgroundTranslateY.get(), backgroundDirection]}
           style={{ translateY: backgroundTranslateY }}
         />}
       </AnimatePresence>

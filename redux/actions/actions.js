@@ -6,6 +6,7 @@ export const IMAGE_LOAD_COMPLETE_BG = 'IMAGE_LOAD_COMPLETE_BG';
 export const IMAGE_LOAD_COMPLETE_CONTENT = 'IMAGE_LOAD_COMPLETE_CONTENT';
 export const LOAD_COMPLETE_CONTENT = 'LOAD_COMPLETE_CONTENT';
 export const LOAD_COMPLETE_PROFILE_IMAGE = 'LOAD_COMPLETE_PROFILE_IMAGE';
+export const REVERSE_BACKGROUND_DIRECTION = 'REVERSE_BACKGROUND_DIRECTION';
 export const SET_BACKGROUND_TRANSLATEY = 'SET_BACKGROUND_TRANSLATEY';
 export const WIGGLE = 'WIGGLE';
 
@@ -24,6 +25,10 @@ export const loadCompleteContent = () => ({
 
 export const loadCompleteProfileImage = () => ({
   type: LOAD_COMPLETE_PROFILE_IMAGE,
+});
+
+export const reverseBackgroundDirection = (payload) => ({
+  type: REVERSE_BACKGROUND_DIRECTION,
 });
 
 export const setBackgroundTranslateY = (payload) => ({

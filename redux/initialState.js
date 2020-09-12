@@ -1,4 +1,5 @@
 export default {
+  backgroundDirection: 'forward',
   backgroundScroll: true,
   backgroundTranslateY: '-120vh',
   contentAnimating: true,

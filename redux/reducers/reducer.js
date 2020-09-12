@@ -30,10 +30,16 @@ const reducer = (state = initialState, action) => {
             ...state,
             loadCompleteProfileImage: true,
           }
+        case 'REVERSE_BACKGROUND_DIRECTION':
+          return {
+            ...state,
+            backgroundDirection: state.backgroundDirection === 'forward' ? 'reverse' : 'forward',
+          }
         case 'SET_BACKGROUND_TRANSLATEY':
           return {
             ...state,
             backgroundTranslateY: action.payload,
+            backgroundDirection: parseFloat(action.payload) > parseFloat(state.backgroundTranslateY) ? 'forward' : 'reverse',
           }
         case 'SET_CONTENT_ANIMATING':
             return {
