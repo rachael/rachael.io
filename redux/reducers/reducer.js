@@ -41,11 +41,6 @@ const reducer = (state = initialState, action) => {
             backgroundTranslateY: action.payload,
             backgroundDirection: parseFloat(action.payload) > parseFloat(state.backgroundTranslateY) ? 'forward' : 'reverse',
           }
-        case 'SET_CONTENT_ANIMATING':
-            return {
-              ...state,
-              contentAnimating: action.payload,
-            }
         case 'SET_HOVER_GITHUB':
           return {
             ...state,

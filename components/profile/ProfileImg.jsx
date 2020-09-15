@@ -3,7 +3,7 @@ import { AnimatePresence, motion, useAnimation, useMotionValue } from 'framer-mo
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { imageLoadCompleteContent, loadCompleteProfileImage, setContentAnimating } from 'redux/actions';
+import { imageLoadCompleteContent, loadCompleteProfileImage } from 'redux/actions';
 import { Overlay } from './overlay';
 
 import styles from 'styles/home/Profile.module.scss';
@@ -167,7 +167,6 @@ function ProfileImg() {
                 .then(() => borderControls.start('resetScale'))
                 .then(() => {
                   setBorderFillPosition();
-                  dispatch(setContentAnimating(false));
                   return borderControls.start('fadeIn');
                 })
                 .then(() => dispatch(loadCompleteProfileImage()));
@@ -175,7 +174,6 @@ function ProfileImg() {
               // no scale animations; Safari
               imgControls.start('imgPulse')
                 .then(() => {
-                  dispatch(setContentAnimating(false));
                   dispatch(loadCompleteProfileImage());
                 });
             } else {
@@ -183,7 +181,6 @@ function ProfileImg() {
               imgControls.start('imgPulse');
               borderControls.start('pulse')
                 .then(() => {
-                  dispatch(setContentAnimating(false));
                   dispatch(loadCompleteProfileImage());
                   borderControls.start('fadeInAndBreathe');
                 })
@@ -193,7 +190,6 @@ function ProfileImg() {
           setLoadTimeoutID(timeoutID);
         } else {
           // mobile
-          dispatch(setContentAnimating(false));
           dispatch(loadCompleteProfileImage());
         }
       }
@@ -230,15 +226,15 @@ function ProfileImg() {
   );
 
   // Mouse enter
-  const contentAnimating = useSelector(state => state.contentAnimating);
+  const isLoadCompleteProfileImage = useSelector(state => state.loadCompleteProfileImage);
   const mouseEnterPulse = useCallback(() => {
-    if(!contentAnimating && !isFirefox && scaleAnimationsEnabled()) {
+    if(isLoadCompleteProfileImage && !isFirefox && scaleAnimationsEnabled()) {
       borderControls.start('reset')
         .then(() => borderControls.start('mouseEnterPulse'))
         .then(() => borderControls.start('fadeInAndBreathe'))
         .then(() => borderControls.start('breathe'));
     }
-  }, [contentAnimating, windowWidth]);
+  }, [isLoadCompleteProfileImage, windowWidth]);
 
   // Animations
   const backgroundTranslateY = useSelector(state => state.backgroundTranslateY);

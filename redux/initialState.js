@@ -1,8 +1,6 @@
 export default {
   backgroundDirection: 'forward',
-  backgroundScroll: true,
   backgroundTranslateY: '-120vh',
-  contentAnimating: true,
   hoverResume: false,
   hoverGithub: false,
   imageLoadCompleteBG: false,

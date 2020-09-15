@@ -31,15 +31,6 @@ function Layout({
     updateWindowSize();
   }, []);
 
-  // content animating: hides overflow and expands container during animations.
-  // optimistically assumes content will animate -- must set to false inside
-  // content to reenable scrolling.
-  const contentAnimating = useSelector(state => state.contentAnimating);
-  const contentClasses = classNames(
-    styles.content,
-    { ['content-animating']: contentAnimating }
-  );
-
   // image load
   const bgRef = useRef();
   const isImageLoadCompleteBG = useSelector(state => state.imageLoadCompleteBG);
@@ -57,24 +48,51 @@ function Layout({
   );
 
   // background scroll effect
-  const backgroundScroll = useSelector(state => state.backgroundScroll);
+  const [mouseOverBackground, setMouseOverBackground] = useState();
+  const [initialScrollStarted, setInitialScrollStarted] = useState();
+  const loadCompleteContent = useSelector(state => state.loadCompleteContent);
   const backgroundDirection = useSelector(state => state.backgroundDirection);
   const backgroundTranslateY = useMotionValue('-120vh');
   const bgControls = useAnimation();
-  const [backgroundScrollStarted, setBackgroundScrollStarted] = useState();
+  const [backgroundInitialStarted, setBackgroundInitialStarted] = useState();
 
   useEffect(() => {
     const unsubscribeBackgroundTranslateY = backgroundTranslateY.onChange(
       (translateY) => dispatch(setBackgroundTranslateY(translateY))
     );
-    if(!backgroundScrollStarted && isImageLoadCompleteBG) {
-      bgControls.start('visible');
-      setBackgroundScrollStarted(true);
-    }
     return () => {
       unsubscribeBackgroundTranslateY();
     }
+  });
+
+  useEffect(() => {
+    if(!backgroundInitialStarted && isImageLoadCompleteBG) {
+      bgControls.start('visible');
+      setBackgroundInitialStarted(true);
+    }
   }, [isImageLoadCompleteBG]);
+
+  const bgStartScroll = useCallback(() => {
+    if(!loadCompleteContent) setMouseOverBackground(true);
+    if(loadCompleteContent) {
+      bgControls.start('scrollToEnd').then(() => {
+        dispatch(reverseBackgroundDirection());
+        bgControls.start('scroll');
+      });
+    }
+  }, [loadCompleteContent]);
+
+  const bgStopScroll = useCallback(() => {
+    setMouseOverBackground(false);
+    bgControls.stop();
+  });
+
+  useEffect(() => {
+    if(loadCompleteContent && mouseOverBackground && !initialScrollStarted) {
+      bgControls.start('scroll');
+      setInitialScrollStarted(true);
+    }
+  }, [loadCompleteContent]);
 
   // content appear animation
   const bgVariants = {
@@ -167,12 +185,8 @@ function Layout({
           className={styles['background-image']}
           variants={bgVariants}
           animate={bgControls}
-          // onMouseEnter={() => bgControls.start('scrollToEnd')}
-          onMouseEnter={() => bgControls.start('scrollToEnd').then(() => {
-            dispatch(reverseBackgroundDirection());
-            bgControls.start('scroll');
-          })}
-          onMouseLeave={() => bgControls.stop()}
+          onMouseEnter={bgStartScroll}
+          onMouseLeave={bgStopScroll}
           custom={[backgroundTranslateY.get(), backgroundDirection]}
           style={{ translateY: backgroundTranslateY }}
         />}
@@ -184,7 +198,7 @@ function Layout({
       >
         <motion.div
           key="content"
-          className={contentClasses}
+          className={styles.content}
           variants={contentVariants}
         >
           {props.children}
