@@ -21,7 +21,7 @@ function ProfileImg() {
   const imgControls = useAnimation();
   const borderControls = useAnimation();
   const imgScale = useMotionValue(1);
-  const borderScale = isFirefox ? useMotionValue(1.10) : useMotionValue(1.06);
+  const borderScale = useMotionValue(1.06);
 
   const borderStrokeWidth = 4; // TODO: set to 5 on very large screens
 
@@ -68,10 +68,12 @@ function ProfileImg() {
     }
   });
 
-  // Disable scale animations in Safari and mobile, which has the same problem.
+  // Disable scale animations in Safari, mobile, and Firefox.
   // A function so that it will be up to date when used from within setTimeout.
   // Must detect Safari because Safari does not properly support SVG overflows
   // due to scaling and clips the ring SVG so animation must be turned off.
+  // Mobile has the same problem.
+  // Also disable in Firefox as animations look terrible.
   // All browser detection credit goes to https://stackoverflow.com/questions/49328382/browser-detection-in-reactjs
   const isSafari = () => {
     return /constructor/i.test(window.HTMLElement) || (function (p) {
@@ -80,8 +82,7 @@ function ProfileImg() {
   };
 
   const scaleAnimationsEnabled = () => {
-    // Disable scale animations in Safari and also mobile, which has the same problem
-    if(isSafari() || windowWidth < 800) return false;
+    if(isFirefox || isSafari() || windowWidth < 800) return false;
     return true;
   };
 
@@ -135,7 +136,8 @@ function ProfileImg() {
   useEffect(() => {
     if(windowWidth) {
       // only scale image for loading animation on large screens
-      if(!scaled && windowWidth >= 800) {
+      // do not scale in Firefox (animations look terrible)
+      if(!scaled && windowWidth >= 800 && !isFirefox) {
         imgControls.start('scaled').then(() => setBorderFillPosition());
         setScaled(true);
       }
@@ -157,20 +159,10 @@ function ProfileImg() {
       // mobile: don't wait as image is not scaled
       if(!loaded && isImageLoadCompleteBG && isImageLoadCompleteContent) {
         setLoaded(true);
-        if(windowWidth >= 800) {
+        if(windowWidth >= 800 && !isFirefox) {
           // large screens
           const timeoutID = setTimeout(() => {
-            if(isFirefox) {
-              // Firefox
-              borderControls.start('fadeOut')
-                .then(() => imgControls.start('imgPulse'))
-                .then(() => borderControls.start('resetScale'))
-                .then(() => {
-                  setBorderFillPosition();
-                  return borderControls.start('fadeIn');
-                })
-                .then(() => dispatch(loadCompleteProfileImage()));
-            } else if(!scaleAnimationsEnabled()) {
+            if(!scaleAnimationsEnabled()) {
               // no scale animations; Safari
               imgControls.start('imgPulse')
                 .then(() => {

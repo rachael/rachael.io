@@ -16,6 +16,10 @@ function Layout({
 }) {
   const dispatch = useDispatch();
 
+  // Must detect Firefox because animations are too laggy in Firefox to run
+  // All browser detection credit goes to https://stackoverflow.com/questions/49328382/browser-detection-in-reactjs
+  const isFirefox = typeof InstallTrigger !== 'undefined';
+
   // wiggle demo: controls whether dots are rendered or not
   const wiggleEnabled = useSelector(state => state.wiggle);
   const wiggleCB = useCallback(() => dispatch(wiggle(!wiggleEnabled)));
@@ -74,7 +78,7 @@ function Layout({
 
   const bgStartScroll = useCallback(() => {
     if(!loadCompleteContent) setMouseOverBackground(true);
-    if(loadCompleteContent) {
+    if(loadCompleteContent && !isFirefox) {
       bgControls.start('scrollToEnd').then(() => {
         dispatch(reverseBackgroundDirection());
         bgControls.start('scroll');
@@ -88,7 +92,7 @@ function Layout({
   });
 
   useEffect(() => {
-    if(loadCompleteContent && mouseOverBackground && !initialScrollStarted) {
+    if(loadCompleteContent && mouseOverBackground && !initialScrollStarted && !isFirefox) {
       bgControls.start('scroll');
       setInitialScrollStarted(true);
     }
@@ -113,7 +117,7 @@ function Layout({
     visible: {
       opacity: 1,
       transition: {
-        duration: 0.2,
+        duration: 0.4,
       }
     },
     hidden: {
@@ -124,31 +128,35 @@ function Layout({
     visible: {
       opacity: 1,
       transition: {
-        duration: 0.4,
+        duration: 0,
       }
     },
     hidden: {
       opacity: 0,
+      transition: {
+        duration: 0,
+      }
     }
   };
   const containerVariants = {
     visible: {
       opacity: 1,
       transition: {
-        delay: 0.4,
         duration: 0.4,
-        staggerChildren: 2,
+        when: "beforeChildren",
       }
     },
     hidden: {
       opacity: 0,
+      transition: {
+        when: "afterChildren",
+      }
     }
   };
   const contentVariants = {
     visible: {
       opacity: 1,
       transition: {
-        delay: 0.4,
         duration: 0.4,
         when: "beforeChildren",
         staggerChildren: 0.4,
