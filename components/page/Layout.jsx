@@ -46,11 +46,6 @@ function Layout({
     if(!isImageLoadCompleteBG && bgRef.current.complete) dispatch(imageLoadCompleteBG());
   });
 
-  const layoutClasses = classNames(
-    styles.layout,
-    { [styles['bg-loading']]: !isImageLoadCompleteBG }
-  );
-
   // background scroll effect
   const [mouseOverBackground, setMouseOverBackground] = useState();
   const [initialScrollStarted, setInitialScrollStarted] = useState();
@@ -173,7 +168,7 @@ function Layout({
   return (
     <motion.div
       key="layout"
-      className={layoutClasses}
+      className={styles.layout}
       initial="hidden"
       animate="visible"
       exit="hidden"
