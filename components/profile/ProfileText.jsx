@@ -129,15 +129,36 @@ function ProfileText() {
   // set position when hitting a media query breakpoint
   const [currentPosition, updatePosition] = useState();
   const [nameTextLength, setNameTextLength] = useState();
+  const [nameTextLengthScale, setNameTextLengthScale] = useState();
   const [descriptionLine1Y, setDescriptionLine1Y] = useState();
   const [descriptionLine2Y, setDescriptionLine2Y] = useState();
+  const [descriptionLine1TextLength, setDescriptionLine1TextLength] = useState();
+  const [descriptionLine2TextLength, setDescriptionLine2TextLength] = useState();
   const [buttonsY, setButtonsY] = useState();
+  const nameRef = useRef();
+  const descriptionLine1Ref = useRef();
+  const descriptionLine2Ref = useRef();
 
   const setPosition = (position) => {
-    setNameTextLength(positions[position].nameTextLength);
     setDescriptionLine1Y(positions[position].descriptionLine1Y);
     setDescriptionLine2Y(positions[position].descriptionLine2Y);
     setButtonsY(positions[position].buttonsY);
+
+    // scale description textLength by same amount as name so text spacing stays
+    // constant
+    setNameTextLength(undefined);
+    const namePos = nameRef.current.getBoundingClientRect();
+    const nameScale = parseFloat(positions[position].nameTextLength)/namePos.width;
+    setNameTextLength(positions[position].nameTextLength);
+    setNameTextLengthScale(nameScale);
+
+    setDescriptionLine1TextLength(undefined);
+    setDescriptionLine2TextLength(undefined);
+    const descriptionLine1Pos = descriptionLine1Ref.current.getBoundingClientRect();
+    const descriptionLine2Pos = descriptionLine2Ref.current.getBoundingClientRect();
+    setDescriptionLine1TextLength(descriptionLine1Pos.width * nameScale);
+    setDescriptionLine2TextLength(descriptionLine2Pos.width * nameScale);
+
     updatePosition(position);
   }
 
@@ -296,6 +317,7 @@ function ProfileText() {
           layout
         >
           <text
+            ref={nameRef}
             className={profileNameClass}
             x="50%"
             y="1em"
@@ -314,11 +336,13 @@ function ProfileText() {
           layout
         >
           <text
+            ref={descriptionLine1Ref}
             className={styles['profile-description-line1']}
             x="50%"
             y={descriptionLine1Y}
             dx="-2em"
             dy="1.5em"
+            textLength={descriptionLine1TextLength}
             fontFamily="Indie Flower"
             textAnchor="middle"
             fill="url(#profileFill)"
@@ -333,11 +357,13 @@ function ProfileText() {
           layout
         >
           <text
+            ref={descriptionLine2Ref}
             className={styles['profile-description-line2']}
             x="50%"
             y={descriptionLine2Y}
             dx="1.3em"
             dy="1.5em"
+            textLength={descriptionLine2TextLength}
             fontFamily="Indie Flower"
             textAnchor="middle"
             fill="url(#profileFill)"
@@ -359,6 +385,7 @@ function ProfileText() {
             position="left"
             y={buttonsY}
             profileOffsetY={profileOffsetY}
+            textLengthScale={nameTextLengthScale}
           >
               Resume
           </ProfileButton>
@@ -369,6 +396,7 @@ function ProfileText() {
             position="right"
             y={buttonsY}
             profileOffsetY={profileOffsetY}
+            textLengthScale={nameTextLengthScale}
           >
               Github
           </ProfileButton>
