@@ -52,7 +52,7 @@ function ProfileText() {
   }
 
   // Breakpoints and rules to update for each media query in the CSS.
-  // nameTextLength: keeps name justified with translucent container edges.
+  // nameTextLength: keeps name justified with translucent container edges. +3 on large screens to justify right edge
   // descriptionLine1Y: set to the font-size of .profile-name
   // descriptionLine2Y: set to the font-size of .profile-name + the font-size of .profile-description-line1
   // buttonsY: set to the sum of the font-size of all text elements, * 1.5 for the description
@@ -80,28 +80,28 @@ function ProfileText() {
         breakpoint: '(min-width: 500px) and (max-width: 799px)',
       },
       '800portrait': {
-        nameTextLength: '500px',
+        nameTextLength: '503px',
         descriptionLine1Y: absoluteUnits['7.5vw'],
         descriptionLine2Y: absoluteUnits['10.8vw'],
         buttonsY: absoluteUnits['17.4vw'],
         breakpoint: '(min-width: 800px) and (max-width: 1059px) and (max-aspect-ratio: 3/2)',
       },
       '800landscape': {
-        nameTextLength: '500px',
+        nameTextLength: '503px',
         descriptionLine1Y: absoluteUnits['12vh'],
         descriptionLine2Y: absoluteUnits['17vh'],
         buttonsY: absoluteUnits['27vh'],
         breakpoint: '(min-width: 800px) and (max-width: 1059px) and (min-aspect-ratio: 3/2)',
       },
       '1060portrait': {
-        nameTextLength: absoluteUnits['47.21435316vw'],
+        nameTextLength: absoluteUnits['47.21435316vw'] + 3,
         descriptionLine1Y: absoluteUnits['7.5vw'],
         descriptionLine2Y: absoluteUnits['10.8vw'],
         buttonsY: absoluteUnits['17.4vw'],
         breakpoint: '(min-width: 1060px) and (max-aspect-ratio: 3/2)',
       },
       '1060landscape': {
-        nameTextLength: absoluteUnits['47.21435316vw'],
+        nameTextLength: absoluteUnits['47.21435316vw'] + 3,
         descriptionLine1Y: absoluteUnits['12vh'],
         descriptionLine2Y: absoluteUnits['17vh'],
         buttonsY: absoluteUnits['27vh'],
