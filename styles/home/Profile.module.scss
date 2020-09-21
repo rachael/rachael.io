@@ -252,6 +252,22 @@
   }
 }
 
+// animate fill on mobile only
+@keyframes profile-fill {
+  0% {
+    transform: translateY(-120vh);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@media(max-width: 799px) {
+  .profile-fill {
+    animation: profile-fill 90s infinite alternate;
+  }
+}
+
 /*******************************************************************************
 * Non-mobile screen styles (> 800px)
 *******************************************************************************/
