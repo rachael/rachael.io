@@ -5,7 +5,6 @@ import styles from 'styles/page/Layout.module.scss';
 
 function Footer({ ...props }) {
   // only appear after content has loaded
-  const isLoadCompleteBG = useSelector(state => state.loadCompleteBG);
   const isLoadCompleteContent = useSelector(state => state.loadCompleteContent);
 
   // content appear animation
@@ -13,7 +12,6 @@ function Footer({ ...props }) {
     visible: {
       opacity: 1,
       transition: {
-        delay: 3,
         duration: 1,
       }
     },
@@ -24,7 +22,7 @@ function Footer({ ...props }) {
       }
     }
   };
-  return (isLoadCompleteBG && isLoadCompleteContent &&
+  return (isLoadCompleteContent &&
     <motion.footer
       className={styles.footer}
       variants={footerVariants}

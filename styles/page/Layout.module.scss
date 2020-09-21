@@ -8,13 +8,7 @@
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-}
-
-// Scrolling background image
-// Do not load background image or play animation on small devices
-@keyframes backgroundAnimation {
-	from { transform: translateY(-120vh); }
-	to { transform: translateY(0); }
+  overflow: hidden;
 }
 
 .background-image {
@@ -24,11 +18,8 @@
   top: 0;
   left: 0;
   z-index: 1;
-  opacity: 0;
-  transition: opacity 400ms;
-  animation: backgroundAnimation 90s linear infinite;
-  animation-play-state: paused;
-  animation-direction: alternate;
+  background: url('/images/bg_postits_blur.png');
+  background-size: cover;
 }
 
 .background-loader {
@@ -36,7 +27,7 @@
 }
 
 // Main container and content
-// On mobile, also render pulsing cinema bars on top and bottom edge of screen
+// On mobile, also leave cinema bars on top and bottom edge of screen
 .container {
   display: flex;
   flex-direction: column;
@@ -52,59 +43,6 @@
   @media(min-width: $content-min-width) {
     align-items: center;
   }
-
-  &:before,
-  &:after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: calc(50vh - 17rem);
-    left: 0;
-    z-index: 1;
-    background: $text-color;
-    animation: bgPulse 20s ease-out infinite;
-    animation-direction: alternate;
-    pointer-events: none;
-    transition: opacity 400ms;
-    will-change: transform, opacity;
-  }
-
-  &:before {
-    top: 0;
-    transform-origin: top;
-  }
-
-  &:after {
-    bottom: 0;
-    transform-origin: bottom;
-    animation-delay: -1s;
-  }
-}
-
-@keyframes bgPulse {
-  0% {
-    transform: scaleY(0.9);
-  }
-
-  20% {
-    transform: scaleY(0.95);
-  }
-
-  40% {
-    transform: scaleY(0.8);
-  }
-
-  60% {
-    transform: scaleY(0.9);
-  }
-
-  80% {
-    transform: scaleY(0.85);
-  }
-
-  100% {
-    transform: scaleY(1);
-  }
 }
 
 .content {
@@ -112,13 +50,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   width: 100%;
   min-width: $content-min-width;
+  padding: 2rem 0;
   overflow: auto;
 
   &:global(.content-animating) {
     overflow: hidden;
+  }
+}
+
+// center content on larger small screens (e.g. tablets) and above
+@media (min-width: 500px) and (min-height: 500px) {
+  .content {
+    justify-content: center;
+    padding: 0;
   }
 }
 
@@ -146,42 +92,16 @@
 /*******************************************************************************
 * Non-mobile screen styles (> 800px)
 *******************************************************************************/
-// background-image 100px opacity transition buffer
-@media (min-width: #{$large-screen-size - 100}) {
-  .background-image {
-    background: url('/images/bg_postits_blur.png');
-    background-size: cover;
-  }
-}
-
-// > 800px background and container styles
 @media (min-width: $large-screen-size) {
-  .background-image {
-    opacity: 1;
-
-    &.background-scroll {
-      animation-play-state: running;
-    }
-  }
-
   .container {
-    width: 65%;
-    background: rgba($background-color, 0.8);
-    box-shadow: 0 0 7px 10px rgba($background-color, 0.8);
-    transition: width 100ms;
-
-    &:before,
-    &:after {
-      opacity: 0;
-      animation-play-state: paused;
-    }
-  }
-
-  .bg-loading .container {
-    width: 100%;
+    width: 47.21435316vw; // 1.618 | 2 | 1.618
+    min-width: 500px;
+    background: $background-color-large-screens;
+    transition: width 400ms;
   }
 
   .content {
+    justify-content: flex-start;
     padding-bottom: 2rem;
   }
 

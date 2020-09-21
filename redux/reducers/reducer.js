@@ -10,15 +10,36 @@ import initialState from 'redux/initialState';
 // create a simple reducer
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case 'LOAD_COMPLETE_BG':
+        case 'IMAGE_LOAD_COMPLETE_BG':
           return {
             ...state,
-            loadCompleteBG: true,
+            imageLoadCompleteBG: true,
+          }
+        case 'IMAGE_LOAD_COMPLETE_CONTENT':
+          return {
+            ...state,
+            imageLoadCompleteContent: true,
           }
         case 'LOAD_COMPLETE_CONTENT':
           return {
             ...state,
             loadCompleteContent: true,
+          }
+        case 'LOAD_COMPLETE_PROFILE_IMAGE':
+          return {
+            ...state,
+            loadCompleteProfileImage: true,
+          }
+        case 'REVERSE_BACKGROUND_DIRECTION':
+          return {
+            ...state,
+            backgroundDirection: state.backgroundDirection === 'forward' ? 'reverse' : 'forward',
+          }
+        case 'SET_BACKGROUND_TRANSLATEY':
+          return {
+            ...state,
+            backgroundTranslateY: action.payload,
+            backgroundDirection: parseFloat(action.payload) > parseFloat(state.backgroundTranslateY) ? 'forward' : 'reverse',
           }
         case 'SET_HOVER_GITHUB':
           return {
@@ -30,11 +51,6 @@ const reducer = (state = initialState, action) => {
             ...state,
             hoverResume: action.payload,
           }
-        case 'SET_CONTENT_ANIMATING':
-            return {
-              ...state,
-              contentAnimating: action.payload,
-            }
         case 'WIGGLE':
             return {
               ...state,

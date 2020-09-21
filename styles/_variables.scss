@@ -2,7 +2,8 @@
 $content-min-width: 300px;
 $large-screen-size: 800px;
 $background-color: #fff;
-$text-color: #4d8ca0;
+$background-color-large-screens: rgba($background-color, 0.6);
+$text-color: rgba(14, 11, 19, 0.6);
 
 // Dots
 $dot-colors: (
@@ -21,4 +22,6 @@ $button-hover-color: $background-color;
 $button-hover-background: $text-color;
 
 // Profile
-$profile-border-color: #afc2ca;
+$loading-dot-color: rgba(14, 11, 19, 0.6);
+$profile-overlay-text-color: rgba(14, 11, 19, 0.6);
+$profile-overlay-text-outline-color: rgba(255, 255, 255, 0.6);

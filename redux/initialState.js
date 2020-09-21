@@ -1,9 +1,11 @@
 export default {
-  backgroundScroll: true,
-  contentAnimating: true,
-  loadCompleteBG: false,
-  loadCompleteContent: false,
+  backgroundDirection: 'forward',
+  backgroundTranslateY: '-120vh',
   hoverResume: false,
   hoverGithub: false,
+  imageLoadCompleteBG: false,
+  imageLoadCompleteContent: false,
+  loadCompleteContent: false,
+  loadCompleteProfileImage: false,
   wiggle: false,
 }
