@@ -219,7 +219,6 @@ function ProfileText() {
         delay: 0.4,
         duration: 0.4,
         when: "beforeChildren",
-        staggerChildren: 0.4,
       },
     },
     hidden: {
@@ -229,6 +228,13 @@ function ProfileText() {
       },
     },
   };
+  // Firefox adjustments -- no staggerChildren and shorter duration to hide lag
+  if(!isFirefox) {
+    profileVariants.load.transition.staggerChildren = 0.4;
+  } else {
+    profileVariants.load.transition.duration = 0.2;
+  }
+
   const profileItemVariants = {
     load: {
       opacity: 1,
