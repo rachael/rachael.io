@@ -42,13 +42,13 @@ function ProfileText() {
       '-58vh': -windowHeight * 0.58,
       '12vh': windowHeight * 0.12,
       '17vh': windowHeight * 0.17,
-      '27vh': windowHeight * 0.27,
+      '28vh': windowHeight * 0.28,
       '100vh': windowHeight,
       '300vh': windowHeight * 3,
       '7.5vw': windowWidth * 0.075,
       '10.8vw': windowWidth * 0.108,
       '15vw': windowWidth * 0.15,
-      '17.4vw': windowWidth * 0.174,
+      '17.8vw': windowWidth * 0.178,
       '47.21435316vw': windowWidth * 0.4721435316,
       '90vw': windowWidth * 0.9,
       '100vw': windowWidth,
@@ -63,7 +63,7 @@ function ProfileText() {
   const updatePositions = () => {
     setPositions({
       min: {
-        nameTextLength: '270px',
+        nameTextLength: 270,
         descriptionLine1Y: '2.8rem',
         descriptionLine2Y: '4.2rem',
         buttonsY: '7rem',
@@ -77,38 +77,38 @@ function ProfileText() {
         breakpoint: '(min-width: 300px) and (max-width: 499px)',
       },
       '500': {
-        nameTextLength: '450px',
+        nameTextLength: 450,
         descriptionLine1Y: '4.6rem',
         descriptionLine2Y: '6.5rem',
         buttonsY: '10.3rem',
         breakpoint: '(min-width: 500px) and (max-width: 799px)',
       },
       '800portrait': {
-        nameTextLength: '503px',
+        nameTextLength: 503,
         descriptionLine1Y: absoluteUnits['7.5vw'],
         descriptionLine2Y: absoluteUnits['10.8vw'],
-        buttonsY: absoluteUnits['17.4vw'],
+        buttonsY: absoluteUnits['17.8vw'],
         breakpoint: '(min-width: 800px) and (max-width: 1059px) and (max-aspect-ratio: 3/2)',
       },
       '800landscape': {
-        nameTextLength: '503px',
+        nameTextLength: 503,
         descriptionLine1Y: absoluteUnits['12vh'],
         descriptionLine2Y: absoluteUnits['17vh'],
-        buttonsY: absoluteUnits['27vh'],
+        buttonsY: absoluteUnits['28vh'],
         breakpoint: '(min-width: 800px) and (max-width: 1059px) and (min-aspect-ratio: 3/2)',
       },
       '1060portrait': {
         nameTextLength: absoluteUnits['47.21435316vw'] + 3,
         descriptionLine1Y: absoluteUnits['7.5vw'],
         descriptionLine2Y: absoluteUnits['10.8vw'],
-        buttonsY: absoluteUnits['17.4vw'],
+        buttonsY: absoluteUnits['17.8vw'],
         breakpoint: '(min-width: 1060px) and (max-aspect-ratio: 3/2)',
       },
       '1060landscape': {
         nameTextLength: absoluteUnits['47.21435316vw'] + 3,
         descriptionLine1Y: absoluteUnits['12vh'],
         descriptionLine2Y: absoluteUnits['17vh'],
-        buttonsY: absoluteUnits['27vh'],
+        buttonsY: absoluteUnits['28vh'],
         breakpoint: '(min-width: 1060px) and (min-aspect-ratio: 3/2)',
       },
     });
@@ -148,7 +148,7 @@ function ProfileText() {
     // constant
     setNameTextLength(undefined);
     const namePos = nameRef.current.getBoundingClientRect();
-    const nameScale = parseFloat(positions[position].nameTextLength)/namePos.width;
+    const nameScale = (positions[position].nameTextLength)/namePos.width;
     setNameTextLength(positions[position].nameTextLength);
     setNameTextLengthScale(nameScale);
 
