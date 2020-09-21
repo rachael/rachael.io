@@ -219,14 +219,15 @@ function ProfileImg() {
 
   // Mouse enter
   const isLoadCompleteProfileImage = useSelector(state => state.loadCompleteProfileImage);
+  const wiggle = useSelector(state => state.wiggle);
   const mouseEnterPulse = useCallback(() => {
-    if(isLoadCompleteProfileImage && !isFirefox && scaleAnimationsEnabled()) {
+    if(isLoadCompleteProfileImage && !wiggle && !isFirefox && scaleAnimationsEnabled()) {
       borderControls.start('reset')
         .then(() => borderControls.start('mouseEnterPulse'))
         .then(() => borderControls.start('fadeInAndBreathe'))
         .then(() => borderControls.start('breathe'));
     }
-  }, [isLoadCompleteProfileImage, windowWidth]);
+  }, [isLoadCompleteProfileImage, windowWidth, wiggle]);
 
   // Animations
   const backgroundTranslateY = useSelector(state => state.backgroundTranslateY);
