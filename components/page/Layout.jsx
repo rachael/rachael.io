@@ -186,7 +186,7 @@ function Layout({
         onLoad={setLoadCompleteCB}
       />
       <AnimatePresence>
-        {windowWidth > 800 && isImageLoadCompleteBG && <motion.div
+        {windowWidth >= 800 && isImageLoadCompleteBG && <motion.div
           key="bg"
           className={styles['background-image']}
           variants={bgVariants}
