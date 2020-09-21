@@ -32,7 +32,11 @@ function ProfileText() {
     setWindowSize([window.innerWidth, window.innerHeight]);
   }
 
-  // vh/vw to absolute units hash
+  // vh/vw to absolute units hash.
+  // Quickest way I could think of to do lookups for the absolute equivalents
+  // to the vw/vh units I wanted, and preserve a nicely formatted version of the
+  // original value where it's used, without doing expensive/unnecessary string
+  // conversions and math every time.
   const updateAbsoluteUnits = () => {
     setAbsoluteUnits({
       '-58vh': -windowHeight * 0.58,
@@ -174,8 +178,10 @@ function ProfileText() {
     }
   }, [loadCompleteProfileImage]);
 
+  // Track profile's offsetY to pass to buttons to help position underline
   // Set height of SVG to include buttons, otherwise buttons are uninteractable
   // in Safari
+  const [profileOffsetY, setProfileOffsetY] = useState();
   const [profileHeight, setProfileHeight] = useState();
   const buttonsRef = useRef();
   const profileRef = useRef();
@@ -184,6 +190,7 @@ function ProfileText() {
     const buttonsPos = buttonsRef.current.getBoundingClientRect();
     const profilePos = profileRef.current.getBoundingClientRect();
     setProfileHeight(buttonsPos.bottom - profilePos.top);
+    setProfileOffsetY(profilePos.y);
   }
 
   useEffect(() => {
@@ -351,6 +358,7 @@ function ProfileText() {
             onMouseLeave={() => dispatch(setHoverResume(false))}
             position="left"
             y={buttonsY}
+            profileOffsetY={profileOffsetY}
           >
               Resume
           </ProfileButton>
@@ -360,6 +368,7 @@ function ProfileText() {
             onMouseLeave={() => dispatch(setHoverGithub(false))}
             position="right"
             y={buttonsY}
+            profileOffsetY={profileOffsetY}
           >
               Github
           </ProfileButton>
