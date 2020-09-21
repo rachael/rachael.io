@@ -54,6 +54,7 @@ function Layout({
   const backgroundTranslateY = useMotionValue('-120vh');
   const bgControls = useAnimation();
   const [backgroundInitialStarted, setBackgroundInitialStarted] = useState();
+  const [backgroundInitialDone, setBackgroundInitialDone] = useState();
 
   useEffect(() => {
     const unsubscribeBackgroundTranslateY = backgroundTranslateY.onChange(
@@ -66,32 +67,34 @@ function Layout({
 
   useEffect(() => {
     if(!backgroundInitialStarted && isImageLoadCompleteBG) {
-      bgControls.start('visible');
+      bgControls.start('visible').then(() => setBackgroundInitialDone(true));
       setBackgroundInitialStarted(true);
     }
   }, [isImageLoadCompleteBG]);
 
   const bgStartScroll = useCallback(() => {
     if(!loadCompleteContent) setMouseOverBackground(true);
-    if(loadCompleteContent && !isFirefox) {
+    if(loadCompleteContent && backgroundInitialDone && !isFirefox) {
       bgControls.start('scrollToEnd').then(() => {
         dispatch(reverseBackgroundDirection());
         bgControls.start('scroll');
       });
     }
-  }, [loadCompleteContent]);
+  }, [loadCompleteContent, backgroundInitialDone]);
 
   const bgStopScroll = useCallback(() => {
     setMouseOverBackground(false);
-    bgControls.stop();
-  });
+    if(backgroundInitialDone) {
+      bgControls.stop();
+    }
+  }, [backgroundInitialDone]);
 
   useEffect(() => {
-    if(loadCompleteContent && mouseOverBackground && !initialScrollStarted && !isFirefox) {
+    if(loadCompleteContent && backgroundInitialDone && mouseOverBackground && !initialScrollStarted && !isFirefox) {
       bgControls.start('scroll');
       setInitialScrollStarted(true);
     }
-  }, [loadCompleteContent]);
+  }, [loadCompleteContent, backgroundInitialDone]);
 
   // content appear animation
   const bgVariants = {
