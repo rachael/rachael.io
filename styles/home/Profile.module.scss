@@ -28,12 +28,6 @@
     overflow: visible;
 }
 
-.profile-name,
-.profile-description-line1,
-.profile-description-line2 {
-  transition: font-size 400ms;
-}
-
 .profile-name {
   font-size: 2.8rem;
   height: 2.8rem;
@@ -55,13 +49,11 @@
   min-height: 15rem;
   min-width: 15rem;
   margin-bottom: 1rem;
-  transition: width 400ms, height 400ms;
 
   img {
     height: 100%;
     width: 100%;
     border-radius: 50%;
-    transition: opacity 0.4s;
   }
 
   .profile-img-border {
@@ -86,7 +78,6 @@
 .profile-button {
   font-size: 80%;
   text-transform: uppercase;
-  transition: font-size 400ms;
 }
 
 /*******************************************************************************

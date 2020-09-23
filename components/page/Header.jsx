@@ -13,7 +13,7 @@ function Header({ title }) {
       <meta name="theme-color" content="#ffffff" />
       {/* // preload/prefetch */}
       <link rel="preload" href="/fonts/Montserrat-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-      <link rel="preload" href="/fonts/Rowdies-Light.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+      <link rel="preload" href="/fonts/Indie-Flower.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       <link rel="preload" href="/fonts/Sacramento.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       <link rel="preload" href="/images/profile_sm.png" as="image" />
       <link rel="preload" href="/images/bg_postits_blur.png" as="image" media="(min-width: 800px)" />
