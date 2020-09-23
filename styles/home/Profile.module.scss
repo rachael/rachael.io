@@ -86,6 +86,7 @@
 .profile-button {
   font-size: 80%;
   text-transform: uppercase;
+  transition: font-size 400ms;
 }
 
 /*******************************************************************************
@@ -156,7 +157,6 @@
     position: absolute;
     top: 0;
     left: 0;
-    transition: filter 400ms;
   }
 
   .profile-img-github,
@@ -252,7 +252,8 @@
   }
 }
 
-// animate fill on mobile only
+// animate fill on mobile only (on desktop fill is animated by framer based on
+// the position of the background image in layout)
 @keyframes profile-fill {
   0% {
     transform: translateY(-120vh);
@@ -273,6 +274,8 @@
 *******************************************************************************/
 @media(min-width: $large-screen-size) {
   .profile {
+    // profile must be fixed 100% width in order to simplify positioning of
+    // background fill.
     position: fixed;
     width: 100%;
     top: 58vh;
@@ -314,6 +317,7 @@
   }
 }
 
+// portrait styles
 @media (min-width: $large-screen-size) and (max-aspect-ratio: "3/2") {
   .profile-name {
     font-size: 7.5vw;
@@ -333,12 +337,9 @@
   }
 }
 
-// Maximum overlay text size
-@media(min-height: 1080px) {
-  .profile-img {
-    .profile-img-github,
-    .profile-img-resume {
-      font-size: 3.4rem;
-    }
+// scale profile buttons on large screens or they get super tiny
+@media (min-width: 1060px) and (min-height: 800px) {
+  .profile-button {
+    font-size: 1.8vh;
   }
 }
