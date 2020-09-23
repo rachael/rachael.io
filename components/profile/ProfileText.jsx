@@ -321,6 +321,7 @@ function ProfileText() {
             className={profileNameClass}
             x="50%"
             y="1em"
+            dx="1" // font is slightly out of alignment, this fixes it 
             textLength={nameTextLength}
             fontFamily="Indie Flower"
             textAnchor="middle"
