@@ -20,10 +20,6 @@ function Layout({
   // All browser detection credit goes to https://stackoverflow.com/questions/49328382/browser-detection-in-reactjs
   const isFirefox = typeof InstallTrigger !== 'undefined';
 
-  // wiggle demo: controls whether dots are rendered or not
-  const wiggleEnabled = useSelector(state => state.wiggle);
-  const wiggleCB = useCallback(() => dispatch(wiggle(!wiggleEnabled)));
-
   // track window width/height for mobile detection
   const [[windowWidth, windowHeight], setWindowSize] = useState([0, 0]);
 
@@ -51,6 +47,7 @@ function Layout({
   const [initialScrollStarted, setInitialScrollStarted] = useState();
   const loadCompleteContent = useSelector(state => state.loadCompleteContent);
   const backgroundDirection = useSelector(state => state.backgroundDirection);
+  const wiggleEnabled = useSelector(state => state.wiggle);
   const backgroundTranslateY = useMotionValue('-120vh');
   const bgControls = useAnimation();
   const [backgroundInitialStarted, setBackgroundInitialStarted] = useState();
@@ -74,13 +71,13 @@ function Layout({
 
   const bgStartScroll = useCallback(() => {
     if(!loadCompleteContent) setMouseOverBackground(true);
-    if(loadCompleteContent && backgroundInitialDone && !isFirefox) {
+    if(loadCompleteContent && backgroundInitialDone && !wiggleEnabled && !isFirefox) {
       bgControls.start('scrollToEnd').then(() => {
         dispatch(reverseBackgroundDirection());
         bgControls.start('scroll');
       });
     }
-  }, [loadCompleteContent, backgroundInitialDone]);
+  }, [loadCompleteContent, backgroundInitialDone, wiggleEnabled]);
 
   const bgStopScroll = useCallback(() => {
     setMouseOverBackground(false);
@@ -95,6 +92,12 @@ function Layout({
       setInitialScrollStarted(true);
     }
   }, [loadCompleteContent, backgroundInitialDone]);
+
+  // wiggle demo: controls whether dots are rendered or not
+  const wiggleCB = useCallback(() => {
+    bgStopScroll();
+    dispatch(wiggle(!wiggleEnabled));
+  });
 
   // content appear animation
   const bgVariants = {

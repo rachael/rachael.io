@@ -15,10 +15,14 @@ function Overlay({
   const overlayVariants = {
     hidden: {
       opacity: 0,
+      transition: {
+        duration: 0.4,
+      }
     },
     visible: {
       opacity: 1,
       transition: {
+        duration: 0.4,
         when: 'beforeChildren',
         staggerChildren: 0.4,
       },
@@ -27,9 +31,15 @@ function Overlay({
   const overlayItemVariants = {
     hidden: {
       opacity: 0,
+      transition: {
+        duration: 0.4,
+      }
     },
     visible: {
       opacity: 1,
+      transition: {
+        duration: 0.4,
+      }
     },
   };
   return (
