@@ -1,0 +1,25 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: circleci/node:stretch
+    environment:
+      MOCHA_FILE: $CIRCLE_TEST_REPORTS/test-results.xml
+
+    steps:
+      - checkout
+
+      - deploy:
+          name: dokku
+          command: |
+            echo -e "Host rachael.io\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+            git remote add dokku dokku@rachael.io:rachael.io
+            git push dokku master
+workflows:
+  version: 2
+  default:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
