@@ -391,7 +391,7 @@ function ProfileText() {
               Resume
           </ProfileButton>
           <ProfileButton
-            href="https://github.rachael.io"
+            href="https://projects.rachael.io"
             onMouseEnter={() => dispatch(setHoverGithub(true))}
             onMouseLeave={() => dispatch(setHoverGithub(false))}
             position="right"
