@@ -12,7 +12,7 @@
     "file-loader": "^6.0.0",
     "framer-motion": "^2.4.2",
     "next": "9.5.0",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^3.1.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-redux": "^7.2.1",
